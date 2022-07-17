@@ -1,0 +1,18 @@
+:root {
+    --main-background: #0e1117;
+    --main-color: white;
+    --button-color: white;
+    --button-border: #31363c;
+    --button-border-hover: #535bf2;
+    --button-background: #22262d;
+    --button-background-hover: linear-gradient(35deg, #535bf2, #22262d);
+    --a-color: #646cff;
+    --a-color-hover: #535bf2;
+    --shadow: #646cff;
+    --alert-message-background: linear-gradient(35deg, #40701d, #535bf2);
+    --checkbox-background: linear-gradient(35deg, #4ea1f9, #3a50e3);
+    --checkbox-background-hover: linear-gradient(35deg, #64bdfa, #588ae9);
+    --input-border: #31363c;
+    --input-border-hover: #646cff;
+    --tips-background: linear-gradient(35deg, #282935, #22262d);
+}

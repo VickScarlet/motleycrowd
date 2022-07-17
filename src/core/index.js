@@ -13,6 +13,8 @@ export default class Core {
     #user;
     get user() { return this.#user; }
 
+    async ping() { return this.#session.ping(); }
+
     async initialize() {
         this.#configure.session.handler = data=>this.serverCommand(data)
         this.#session = new Session(this, this.#configure.session);

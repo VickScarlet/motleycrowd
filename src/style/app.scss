@@ -1,0 +1,157 @@
+@import "./dark.scss";
+
+html {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--main-color);
+  background-color: var(--main-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--a-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--a-color-hover);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  font-weight: 500;
+  width: 16em;
+  height: 2.8em;
+  font-family: inherit;
+  color: var(--button-color);
+  border-color: var(--button-border);
+  background: var(--button-background);
+  cursor: pointer;
+  transition: border-color, border-radius, background-color 0.25s;
+}
+button:hover {
+  border-radius: 4px;
+  border-color: var(--button-border-hover);
+  background: var(--button-background-hover);
+  box-shadow: 0 0 16px -2px var(--shadow);
+  transition: border-color, border-radius, background-color 0.25s;
+}
+input:focus,
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+.checkbox,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border-radius: 8px;
+  border: 1px solid temperature;
+  margin: 0;
+  padding: 0 2em;
+  font-size: 1em;
+  font-weight: 500;
+  width: 12em;
+  height: 2.8em;
+  font-family: inherit;
+  background: var(--button-background);
+}
+
+.checkbox label,
+input {
+  border: 1px solid var(--input-border);
+}
+
+.checkbox label:hover,
+input:hover,
+input:focus {
+  border: 1px solid var(--input-border-hover);
+}
+
+.checkbox {
+  display: inline-block;
+  position: relative;
+  background: transparent;
+}
+
+.checkbox input {
+  visibility: hidden;
+}
+
+.checkbox label {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 2.8em;
+  background: var(--button-background);
+  border-radius: 8px;
+  margin: 0;
+  transition: border-color, border-radius, background-color 0.25s;
+}
+
+.checkbox label:hover {
+  background: var(--checkbox-background);
+  border-radius: 4px;
+  transition: border-color, border-radius, background-color 0.25s;
+}
+
+.checkbox input:checked + label {
+  background: var(--checkbox-background);
+}
+
+.checkbox input:checked + label:hover {
+  background: var(--checkbox-background-hover);
+  box-shadow: 0 0 16px -2px var(--shadow);
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}

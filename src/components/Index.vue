@@ -1,19 +1,31 @@
 <template>
     <div class="container">
-        <button type="button" @click="auth">登录/注册</button><br/><br/>
-        <button type="button" @click="guest">游客模式</button>
+        <button type="button" @click="pair(100)">100人排位</button><br/><br/>
+        <button type="button" @click="pair(10)">10人排位</button><br/><br/>
+        <button type="button" @click="custom">好友房</button><br/><br/>
+        <button type="button" @click="logout">登出</button>
     </div>
 </template>
 
 <script>
 export default {
     methods: {
-        auth() {
-            $page('Authentication', 'hello');
+        pair(type) {
+            console.debug('pair', type);
         },
-        guest() {
-            // TODO: guest
-        }
+        custom() {
+            console.debug('custom');
+        },
+        async logout() {
+            $.ui.loading = true;
+            const result = await $.core.user.logout();
+            $.ui.loading = false;
+            if (result.r) {
+                $.ui.switch('Welcome');
+            } else {
+                $.ui.alert(result.e);
+            }
+        },
     }
 }
 </script>

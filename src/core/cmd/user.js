@@ -13,3 +13,7 @@ commands.set('guest', (command) => {
     return command('user.guest');
 });
 
+commands.set('logout', (command) => {
+    return command('user.logout');
+});
+
