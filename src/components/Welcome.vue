@@ -1,9 +1,10 @@
 <template>
-    <div class="container">
-        <button type="button" @click="auth">登录/注册</button><br/><br/>
-        <button type="button" @click="guest">游客模式</button><br/><br/>
-        <button type="button" @click="test">测试按钮</button>
-    </div>
+    <ul class="container">
+        <li><h1>乌合之众</h1></li>
+        <li><button type="button" @click="auth">登录/注册</button></li>
+        <li><button type="button" @click="guest">游客模式</button></li>
+        <li><button type="button" @click="test">测试按钮</button></li>
+    </ul>
 </template>
 
 <script>
@@ -18,8 +19,16 @@ export default {
         auth() {
             $.ui.switch('Authentication', 'hello');
         },
-        guest() {
+        async guest() {
             $.ui.loading = true;
+            const result = await $.core.user.guest();
+            $.ui.loading = false;
+            if (result.r) {
+                $.ui.switch('Index');
+            } else {
+                $.ui.alert(result.e);
+            }
+
             setTimeout(() => {
                 $.ui.loading = false;
                 $.ui.switch('Index');

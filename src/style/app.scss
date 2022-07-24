@@ -6,6 +6,9 @@ html {
   line-height: 24px;
   font-weight: 400;
 
+  margin: 0;
+  padding: 0;
+
   color-scheme: light dark;
   color: var(--main-color);
   background-color: var(--main-background);
@@ -80,6 +83,7 @@ button:focus-visible {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
+  color: var(--input-color);
   border-radius: 8px;
   border: 1px solid temperature;
   margin: 0;
@@ -148,6 +152,23 @@ input:focus {
   background: var(--checkbox-background-hover);
   box-shadow: 0 0 16px -2px var(--shadow);
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul > li {
+  margin: 0;
+  padding: 0;
+  margin-top: 1em;
+}
+
+ul > li:first-child {
+  margin-top: 0;
+}
+
 
 #app {
   max-width: 1280px;

@@ -1,6 +1,17 @@
 import { IModule } from "./imodule.js";
 import pako from "pako";
+import { v4 as uuidGenerator } from 'uuid';
+
 export default class Session extends IModule {
+    constructor(parent, configure, {
+        connect, boardcast, message,
+    }) {
+        super(parent, configure);
+        this.#onconnect = connect;
+        this.#callbacks.set(this.#BORDERCAST, boardcast);
+        this.#callbacks.set(this.#MESSAGE, message);
+    }
+
     #CONNECT = 0;
     #PING = 1;
     #PONG = 2;
@@ -13,10 +24,11 @@ export default class Session extends IModule {
     #port;
     #ws = null;
     #callbacks = new Map();
-    #handler;
     #online = NaN;
     #delay = NaN;
     #lastping = 0;
+    #onconnect;
+    #suid;
 
     get #needping() {
         return Date.now() - this.#lastping > 60000;
@@ -24,12 +36,14 @@ export default class Session extends IModule {
     get online() { return this.#online; }
     get delay() { return this.#delay; }
     async initialize() {
-        const {protocol='ws', host, port, handler} = this.configure;
+        const {protocol='ws', host, port} = this.configure;
         this.#protocol = protocol;
         this.#host = host;
         this.#port = port;
-        this.#handler = handler;
-        await this.#connect();
+    }
+
+    async start() {
+        return this.#connect();
     }
 
     get #url() {
@@ -41,31 +55,30 @@ export default class Session extends IModule {
     }
 
     async #connect() {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             const start = Date.now();
-            const done = (data, online)=>{
+            const done = async (data, [online, suid])=>{
                 this.#delay = Date.now() - start;
                 this.#online = online;
-                console.debug("[Session|conn] [delay:%dms] [online:%d] info:", this.#delay, online, data);
+                console.debug("[Session|conn] [delay:%dms] [online:%d] [uuid:%s] info:", this.#delay, online, suid, data);
+                this.#suid = suid;
+                await this.#onconnect(data, online);
                 resolve();
             }
             this.#callbacks.set(this.#CONNECT, done);
             this.#ws = new WebSocket(this.#url);
             this.#ws.onmessage = event => this.#onmessage(event.data);
             this.#ws.onclose = ({code, reason}) => this.#onclose(code, reason);
+            this.#ws.onerror = e => reject(e);
         });
     }
 
     async #onmessage(message) {
-        let data;
-        try {
-            data = JSON.parse(message);
-        } catch(e) {
-            const arrayBuffer = await message.arrayBuffer();
-            message = pako.inflate(arrayBuffer, { to: 'string' });
-            data = JSON.parse(message);
-        }
-        const [guid, content, attach] = data;
+        const [guid, content, attach] = JSON.parse(
+            message instanceof Blob
+            ? pako.inflate(await message.arrayBuffer(), { to: 'string' })
+            : message
+        );
         console.debug('[Session|<<<<] [guid:%s] content:', guid, content, 'attach:', attach);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
@@ -79,10 +92,12 @@ export default class Session extends IModule {
             case this.#PONG:
                 callback(this.#PING);
                 break;
-            case this.#CONNECT:
             case this.#MESSAGE:
-            case this.#REPLY:
             case this.#BORDERCAST:
+                this.#callbacks.get(guid)(content, attach);
+                break;
+            case this.#CONNECT:
+            case this.#REPLY:
             default:
                 callback(guid);
                 break;
@@ -124,7 +139,7 @@ export default class Session extends IModule {
     async command(command, data) {
         console.debug('[Session|>>>>] [command:%s] data:', command, data);
         return new Promise(resolve => {
-            const guidF = crypto.randomUUID();
+            const guidF = uuidGenerator();
             const L = guidF.length;
             for(let i = 1; i<=L; i++) {
                 const guid = guidF.substring(0, i)

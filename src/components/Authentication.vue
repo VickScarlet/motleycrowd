@@ -1,36 +1,29 @@
 <template>
     <a @click="back" class="back">&lt; 返回</a>
     <form v-show="isauth" @submit="auth">
-        <input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username"/><br />
-        <br />
-        <input type="password" placeholder="密码" autoComplete="current-password" v-model.trim="password"/><br />
-        <br />
-        <div class="checkbox">
-            <input id="autologin1" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
-            <label for="autologin1">下次自动登录</label>
-        </div><br />
-        <br />
-        <button type="submit">登录</button><br />
-        <br />
-        <a @click="this.isauth=false">没有账号? 立即注册.</a>
+        <ul>
+            <li><input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username"/></li>
+            <li><input type="password" placeholder="密码" autoComplete="current-password" v-model.trim="password"/></li>
+            <li><div class="checkbox">
+                <input id="autologin1" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
+                <label for="autologin1">下次自动登录</label>
+            </div></li>
+            <li><button type="submit">登录</button></li>
+            <li><a @click="this.isauth=false">没有账号? 立即注册.</a></li>
+        </ul>
     </form>
     <form v-show="!isauth" @submit="regi">
-        <input type="email" placeholder="邮箱" autoComplete="email" v-model.trim="email" /><br />
-        <br />
-        <input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username" /><br />
-        <br />
-        <input type="password" placeholder="密码" autoComplete="new-password" v-model.trim="password" /><br />
-        <br />
-        <input type="password" placeholder="重复密码" autoComplete="new-password" v-model.trim="check"/><br />
-        <br />
-        <div class="checkbox">
-            <input id="autologin2" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
-            <label for="autologin2">下次自动登录</label>
-        </div><br />
-        <br />
-        <button type="submit">注册</button><br />
-        <br />
-        <a @click="this.isauth=true">已有账号? 马上登录.</a>
+        <ul>
+            <li><input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username" /></li>
+            <li><input type="password" placeholder="密码" autoComplete="new-password" v-model.trim="password" /></li>
+            <li><input type="password" placeholder="重复密码" autoComplete="new-password" v-model.trim="check"/></li>
+            <li><div class="checkbox">
+                <input id="autologin2" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
+                <label for="autologin2">下次自动登录</label>
+            </div></li>
+            <li><button type="submit">注册</button><br /></li>
+            <li><a @click="this.isauth=true">已有账号? 马上登录.</a></li>
+        </ul>
     </form>
 </template>
 
@@ -40,7 +33,6 @@ export default {
         return {
             autologin: true,
             isauth: true,
-            email: '',
             username: '',
             password: '',
             check: '',
@@ -64,9 +56,9 @@ export default {
         },
         async regi(e) {
             e.returnValue = false;
-            const { email, username, password, check, autologin } = this;
+            const { username, password, check, autologin } = this;
             $.ui.loading = true;
-            const result = await $.core.user.register(username, password, check, email, autologin);
+            const result = await $.core.user.register(username, password, check, autologin);
             $.ui.loading = false;
             if (result.r) {
                 $.ui.switch('Index');

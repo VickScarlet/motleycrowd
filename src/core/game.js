@@ -6,8 +6,8 @@ export default class Game extends IModule {
     #private = false;
     #gaming = false;
 
-    async random() {
-        return this.core.cmd('game.random');
+    async pair(type) {
+        return this.core.cmd('game.pair', type);
     }
 
     async create(limit) {

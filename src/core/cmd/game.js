@@ -1,8 +1,8 @@
 const commands = new Map();
 export default commands;
 
-commands.set('random', (command, ) => {
-    return command('game.random');
+commands.set('pair', (command, type) => {
+    return command('game.pair', {type});
 });
 
 commands.set('create', (command, limit) => {
