@@ -36,7 +36,7 @@ export default class Session extends IModule {
     get online() { return this.#online; }
     get delay() { return this.#delay; }
     async initialize() {
-        const {protocol='ws', host, port} = this.configure;
+        const {protocol='ws', host, port} = this.$configure;
         this.#protocol = protocol;
         this.#host = host;
         this.#port = port;
@@ -94,11 +94,13 @@ export default class Session extends IModule {
                 break;
             case this.#MESSAGE:
             case this.#BORDERCAST:
+                this.#online = attach;
                 this.#callbacks.get(guid)(content, attach);
                 break;
             case this.#CONNECT:
             case this.#REPLY:
             default:
+                this.#online = attach;
                 callback(guid);
                 break;
         }
@@ -151,8 +153,8 @@ export default class Session extends IModule {
         });
     }
 
-    async ping() { 
-        if(this.#needping) {
+    async ping() {
+        if(this.#ws && this.#needping) {
             this.#lastping = Date.now();
             return this.#ping();
         }

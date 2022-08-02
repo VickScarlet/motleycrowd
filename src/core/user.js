@@ -5,22 +5,22 @@ export default class User extends IModule {
     #authenticated = false;
     #isguest = false;
 
-    get #autologin() { return !!this.core.storage.get('autologin'); }
-    set #autologin(v) { this.core.storage.set('autologin', !!v); }
+    get #autologin() { return !!this.$core.storage.get('autologin'); }
+    set #autologin(v) { this.$core.storage.set('autologin', !!v); }
 
-    get username() { return this.core.storage.get('username'); }
-    set username(v) { this.core.storage.set('username', v); }
+    get username() { return this.$core.storage.get('username'); }
+    set username(v) { this.$core.storage.set('username', v); }
 
-    get #password() { return this.core.storage.get('password'); }
-    set #password(v) { this.core.storage.set('password', v); }
+    get #password() { return this.$core.storage.get('password'); }
+    set #password(v) { this.$core.storage.set('password', v); }
 
     get authenticated() { return !!this.#authenticated; }
     get isguest() { return !!this.#isguest; }
 
     async authenticate(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const result = await this.core.cmd(
-            'user.authenticate', username, password
+        const result = await this.$core.command(
+            'user.authenticate', {username, password}
         );
         this.#authenticated = result.r;
         this.#isguest = !result.r;
@@ -34,8 +34,8 @@ export default class User extends IModule {
 
     async register(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const result = await this.core.cmd(
-            'user.register', username, password
+        const result = await this.$core.command(
+            'user.register', {username, password}
         );
         this.#authenticated = result.r;
         this.#isguest = !result.r;
@@ -48,7 +48,7 @@ export default class User extends IModule {
     }
 
     async guest() {
-        const result = await this.core.cmd('user.guest');
+        const result = await this.$core.command('user.guest');
         this.#authenticated =
         this.#isguest = result.r;
         return result;
@@ -56,7 +56,7 @@ export default class User extends IModule {
 
     async logout() {
         if(!this.#authenticated) return {r: true};
-        const result = await this.core.cmd('user.logout');
+        const result = await this.$core.command('user.logout');
         this.#authenticated =
         this.#isguest =
         this.#autologin = !result.r;
@@ -65,17 +65,18 @@ export default class User extends IModule {
 
     async autologin() {
         if(!this.#autologin) return {r: false, _: true};
-        const result = await await this.core.cmd(
-            'user.authenticate',
-            this.username,
-            this.#password,
+        const result = await await this.$core.command(
+            'user.authenticate', {
+                username: this.username,
+                password: this.#password,
+            }
         )
         this.#autologin =
         this.#authenticated = result.r;
         this.#isguest = !result.r;
         return result;
     }
-    
+
     #passwordEncrypt (password) {
         const CMap = 'tz4l/abUX3HDVhwG.pqcrLmsN@Yk+SAEdRBvxy2$7WPog8uFO19jJCZIinQf0MKT';
         const binaryStr = cryptoJS

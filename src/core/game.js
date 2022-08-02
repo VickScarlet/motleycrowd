@@ -7,24 +7,24 @@ export default class Game extends IModule {
     #gaming = false;
 
     async pair(type) {
-        return this.core.cmd('game.pair', type);
+        return this.$core.command('game.pair', {type});
     }
 
-    async create(limit) {
-        return this.core.cmd('game.create', limit);
+    async create(type) {
+        return this.$core.command('game.create', {type});
     }
 
     async join(room) {
-        return this.core.cmd('game.join', room);
+        return this.$core.command('game.join', {room});
     }
 
     async leave() {
         if(!this.#gaming) return true;
-        return this.core.cmd('game.leave');
+        return this.$core.command('game.leave');
     }
 
     async answer(answer, question) {
-        return this.core.cmd('game.answer', answer, question);
+        return this.$core.command('game.answer', {answer, question});
     }
 
 

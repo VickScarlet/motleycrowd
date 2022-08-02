@@ -1,6 +1,5 @@
 import Storage from "./storage.js";
 import Session from "./session.js";
-import Commander from './cmd/index.js';
 import User from './user.js';
 import Game from './game.js';
 
@@ -12,7 +11,6 @@ export default class Core {
     #configure;
     #storage;
     #session;
-    #commander;
     #user;
     #game;
 
@@ -31,14 +29,10 @@ export default class Core {
             },
             message: data => this.#serverpush(data),
         });
-        this.#commander = new Commander(this, this.#configure.commander,
-            (...args)=>this.#session.command(...args)
-        );
         this.#user = new User(this, this.#configure.user);
         this.#game = new Game(this, this.#configure.game);
 
         await this.#session.initialize();
-        await this.#commander.initialize();
         await this.#user.initialize();
         await this.#game.initialize();
     }
@@ -49,16 +43,18 @@ export default class Core {
 
     async ping() { return this.#session.ping(); }
 
-    cmd(command, ...args) {
-        return this.#commander.do(command, ...args);
+    async command(command, data) {
+        return this.#session.command(command, data);
     }
 
     async #serverpush({c,d}) {
         console.debug('[Server|push] [cmd:%s] data:', c, d);
         switch(c) {
-            case 'question':
-            case 'join':
-            case 'leave':
+            case 'game.user':
+            case 'game.ready':
+            case 'game.question':
+            case 'game.answer':
+            case 'game.settlement':
             default:
                 const result = await $.ui.serverpush(c, d);
                 console.debug('[Local|dopush] [cmd:%s] result:', c, result);

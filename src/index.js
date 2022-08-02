@@ -12,8 +12,10 @@ const core = new Core({
     session: {
         protocol: 'ws',
         // host: "motleycrowdservice.syaro.io",
-        host: "test.syaro.io",
-        // host: "scarlet-mix",
+        // host: "test.syaro.io",
+        // host: "scarlet-mini",
+        // host: "192.168.50.221",
+        host: '127.0.0.1',
         port: 1919,
         // handler
     }

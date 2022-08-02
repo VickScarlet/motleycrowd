@@ -1,8 +1,12 @@
+<script setup>
+import UserCard from './UserCard.vue'
+</script>
+
 <template>
     <div class="container">
         <ul class="userlist">
-            <li v-for="(user, index) in users" :key="index">
-                {{user}}
+            <li v-for="uid in users" :key="uid">
+                <UserCard :user=userInfo.get(uid) />
             </li>
         </ul>
     </div>
@@ -12,19 +16,34 @@
 export default {
     data() {
         return {
-            users: [],
+            users: new Set(),
+            userInfo: new Map(),
         }
     },
     methods: {
         async activated({users}) {
-            this.users = users;
+            this.join(users);
         },
-        join(user) {
-            this.users.push(user);
+        user({join, leave}) {
+            this.join(join);
+            this.leave(leave);
+            return true;
         },
-        leave(user) {
-            this.users.splice(this.users.indexOf(user), 1);
+        join(users) {
+            for(const user of users) {
+                const uid = user.uid;
+                this.users.add(uid);
+                this.userInfo.set(uid, user);
+            }
+            return true;
         },
+        leave(uids) {
+            for(const uid of uids) {
+                this.users.delete(uid);
+                this.userInfo.delete(uid);
+            }
+            return true;
+        }
     }
 }
 </script>

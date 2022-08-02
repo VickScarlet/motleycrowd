@@ -81,7 +81,7 @@ export default {
             const {page, data, done} = this.done.get(_id);
             console.debug('[UI:deactivated] [page:%s] [_id:%s] data:', page, _id, data);
             await callback();
-            await done();
+            await done?.();
         },
         alert(message) {
             this.alertMessage = message;
@@ -124,7 +124,7 @@ export default {
                 if(de.webkitRequestFullScreen) return de.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
                 if(de.msRequestFullScreen) return de.msRequestFullScreen();
                 return this.tips('不支持全屏');
-            } 
+            }
             const d = document;
             if(d.exitFullscreen) return d.exitFullscreen();
             if(d.mozCancelFullScreen) return d.mozCancelFullScreen();
@@ -138,12 +138,14 @@ export default {
         },
         async serverpush(type, data) {
             switch (type) {
-                case 'join':
-                    return this.activatedProxy('Room', proxy=>proxy.join(data));
-                case 'leave':
-                    return this.activatedProxy('Room', proxy=>proxy.leave(data));
+                case 'game.user':
+                    return this.activatedProxy('Room', proxy=>proxy.user(data));
+                case 'game.ready':
+                case 'game.question':
+                case 'game.answer':
+                case 'game.settlement':
                 default:
-                    return {r: false, e: 'unknown type'};
+                    return true;
             }
         }
     },
