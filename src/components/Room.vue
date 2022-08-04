@@ -31,9 +31,11 @@ export default {
         },
         join(users) {
             for(const user of users) {
-                const uid = user.uid;
+                const [uid, guest, username] = user;
                 this.users.add(uid);
-                this.userInfo.set(uid, user);
+                this.userInfo.set(uid, {
+                    uid, guest, username,
+                });
             }
             return true;
         },
@@ -50,27 +52,54 @@ export default {
 
 <style lang="scss" scoped>
 
+.container {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50px;
+    right: 50px;
+    bottom: 0;
+}
+
 .userlist {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    align-content: space-between;
+    justify-content: space-between;
     width: 100%;
-    height: 100%;
+    height: auto;
+    padding-top: 80px;
+    flex-wrap: wrap;
+    min-width: 256px;
+    max-width: 1024px;
 }
 
 .userlist > li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
-    font-size: 1.5em;
-    color: #fff;
-    background-color: #000;
-    border-radius: 5px;
-    padding: 10px;
+    height: 100px;
 }
+
+@media all and (min-width: 612px) {
+    .userlist > li{
+        width: 50%;
+    }
+}
+
+@media all and (min-width: 868px) {
+    .userlist > li{
+        width: 33%;
+    }
+}
+
+@media all and (min-width: 1124px) {
+    .userlist > li{
+        width: 25%;
+    }
+}
+
 
 </style>

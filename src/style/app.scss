@@ -1,7 +1,13 @@
 @import "./dark.scss";
 
 html {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family:PingFangSC, PingFangTC, PingFangHK, PingFangHKSC, PingFang,
+    "Noto Sans Mono CJK SC", "Noto Sans Mono CJK TC", "Noto Sans Mono CJK JP",
+    "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP",
+    "Source Han Sans CN", "Source Han Sans TW", "Source Han Sans HK",
+    "Microsoft YaHei UI", "Microsoft YaHei", "Microsoft JhengHei UI", "Microsoft JhengHei",
+    Inter, Avenir, Helvetica, Arial, sans-serif
+    ;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -37,6 +43,12 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 
 h1 {
