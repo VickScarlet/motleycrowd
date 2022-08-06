@@ -1,4 +1,5 @@
 import Storage from "./storage.js";
+import Question from "./question/index.js";
 import Session from "./session.js";
 import User from './user.js';
 import Game from './game.js';
@@ -10,16 +11,19 @@ export default class Core {
 
     #configure;
     #storage;
+    #question;
     #session;
     #user;
     #game;
 
     get storage() { return this.#storage; }
+    get question() { return this.#question; }
     get user() { return this.#user; }
     get game() { return this.#game; }
 
     async initialize() {
         this.#storage = new Storage(this, this.#configure.storage);
+        this.#question = new Question(this, this.#configure.question);
         this.#session = new Session(this, this.#configure.session, {
             boardcast: (data) => {
                 console.debug('[Server|boardcast]', data);

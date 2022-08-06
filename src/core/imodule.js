@@ -1,5 +1,5 @@
 export class IModule {
-    constructor(core, configure, instance) {
+    constructor(core, configure) {
         this.#core = core;
         this.#configure = configure || {};
     }
