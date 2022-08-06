@@ -31,6 +31,7 @@ import Welcome from './Welcome.vue'
 import Authentication from './Authentication.vue'
 import Index from './Index.vue'
 import Room from './Room.vue'
+import Question from './Question.vue'
 import { getCurrentInstance } from 'vue'
 
 export default {
@@ -40,6 +41,7 @@ export default {
         Authentication,
         Index,
         Room,
+        Question,
     },
     data() {
         return {
@@ -92,6 +94,9 @@ export default {
         },
         async start() {
             this.tips('欢迎来到 [乌合之众]');
+            $.on('game.start', ()=>{
+                this.switch('Question');
+            })
 
             const {r, _} = await $.core.user.autologin();
             if (r) {
@@ -136,18 +141,6 @@ export default {
             if (!proxy) return {r: false, e: 'proxy not found'};
             return callback(proxy);
         },
-        async serverpush(type, data) {
-            switch (type) {
-                case 'game.user':
-                    return this.activatedProxy('Room', proxy=>proxy.user(data));
-                case 'game.ready':
-                case 'game.question':
-                case 'game.answer':
-                case 'game.settlement':
-                default:
-                    return true;
-            }
-        }
     },
 }
 </script>

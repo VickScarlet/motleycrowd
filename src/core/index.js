@@ -9,6 +9,7 @@ export default class Core {
         this.#configure = configure || {};
     }
 
+    #proxy = new Map();
     #configure;
     #storage;
     #question;
@@ -21,17 +22,24 @@ export default class Core {
     get user() { return this.#user; }
     get game() { return this.#game; }
 
+    proxy(proxy, cmds) {
+        if(this.#proxy.has(proxy)) {
+            console.info('[System] proxy <%s> %s', proxy, 'already exists.');
+            return;
+        }
+        const map = new Map();
+        for(const cmd in cmds)
+            map.set(cmd, cmds[cmd]);
+        this.#proxy.set(proxy, map);
+    }
+
     async initialize() {
         this.#storage = new Storage(this, this.#configure.storage);
         this.#question = new Question(this, this.#configure.question);
         this.#session = new Session(this, this.#configure.session, {
-            boardcast: (data) => {
-                console.debug('[Server|boardcast]', data);
-            },
-            connect: ({version}, online) => {
-                console.debug('[Server|connect] [version:%s] [online:%s]', version, online);
-            },
-            message: data => this.#serverpush(data),
+            boardcast: data => this.#serverpush('boardcast', data),
+            connect: data => this.#serverpush('connect', data),
+            message: data => this.#serverpush('message', data),
         });
         this.#user = new User(this, this.#configure.user);
         this.#game = new Game(this, this.#configure.game);
@@ -51,19 +59,22 @@ export default class Core {
         return this.#session.command(command, data);
     }
 
-    async #serverpush({c,d}) {
-        console.debug('[Server|push] [cmd:%s] data:', c, d);
-        switch(c) {
-            case 'game.user':
-            case 'game.ready':
-            case 'game.question':
-            case 'game.answer':
-            case 'game.settlement':
-            default:
-                const result = await $.ui.serverpush(c, d);
-                console.debug('[Local|dopush] [cmd:%s] result:', c, result);
-                break;
+    async #serverpush(type, data) {
+        switch(type) {
+            case 'boardcast':
+            case 'connect':
+                return;
+            case 'message':
+            default: break;
         }
+
+        const {c,d} = data;
+        if(!c) return;
+
+        const [p, cmd] = c.split(".");
+        const proxy = this.#proxy.get(p);
+        if(!proxy || !proxy.has(cmd)) return;
+        proxy.get(cmd)(d);
     }
 
 }

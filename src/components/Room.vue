@@ -5,8 +5,8 @@ import UserCard from './UserCard.vue'
 <template>
     <div class="container">
         <ul class="userlist">
-            <li v-for="uid in users" :key="uid">
-                <UserCard :user=userInfo.get(uid) />
+            <li v-for="user of users" :key="user.uid">
+                <UserCard :user=user />
             </li>
         </ul>
     </div>
@@ -16,36 +16,21 @@ import UserCard from './UserCard.vue'
 export default {
     data() {
         return {
-            users: new Set(),
-            userInfo: new Map(),
+            users: [],
         }
     },
     methods: {
-        async activated({users}) {
-            this.join(users);
+        async activated() {
+            this.update();
+            $.on('game.user', this.update.bind(this));
         },
-        user({join, leave}) {
-            this.join(join);
-            this.leave(leave);
-            return true;
+        async deactivated() {
+            $.off('game.user', this.update.bind(this));
         },
-        join(users) {
-            for(const user of users) {
-                const [uid, guest, username] = user;
-                this.users.add(uid);
-                this.userInfo.set(uid, {
-                    uid, guest, username,
-                });
-            }
-            return true;
+        update() {
+            const users = $.core.game.users;
+            this.users = [...users.values()];
         },
-        leave(uids) {
-            for(const uid of uids) {
-                this.users.delete(uid);
-                this.userInfo.delete(uid);
-            }
-            return true;
-        }
     }
 }
 </script>
