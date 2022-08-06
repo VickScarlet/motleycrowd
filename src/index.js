@@ -1,3 +1,4 @@
+import { on, off, emit } from './events/index.js';
 import Core from './core/index.js'
 import { createApp } from 'vue'
 import './style/app.scss'
@@ -7,6 +8,9 @@ window.onerror = function(msg,source,line,col,error) {
     alert(`${msg}\nat: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
 }
 window.$ = window.$sys = {};
+window.$sys.on = on;
+window.$sys.off = off;
+window.$sys.emit = emit;
 
 const core = new Core({
     session: {
@@ -14,7 +18,9 @@ const core = new Core({
         // host: "motleycrowdservice.syaro.io",
         // host: "test.syaro.io",
         // host: "scarlet-mini",
+        // host: "scarlet-mix",
         // host: "192.168.50.221",
+        // host: "192.168.50.217",
         host: '127.0.0.1',
         port: 1919,
         // handler
