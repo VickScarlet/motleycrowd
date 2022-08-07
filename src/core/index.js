@@ -59,7 +59,7 @@ export default class Core {
         return this.#session.command(command, data);
     }
 
-    async #serverpush(type, data) {
+    async #serverpush(type, message) {
         switch(type) {
             case 'boardcast':
             case 'connect':
@@ -68,13 +68,13 @@ export default class Core {
             default: break;
         }
 
-        const {c,d} = data;
-        if(!c) return;
+        const [sCommand, data] = message;
+        if(!sCommand) return;
 
-        const [p, cmd] = c.split(".");
-        const proxy = this.#proxy.get(p);
-        if(!proxy || !proxy.has(cmd)) return;
-        proxy.get(cmd)(d);
+        const [proxyName, command] = sCommand.split(".");
+        const proxy = this.#proxy.get(proxyName);
+        if(!proxy || !proxy.has(command)) return;
+        proxy.get(command)(data);
     }
 
 }

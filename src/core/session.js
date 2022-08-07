@@ -154,7 +154,9 @@ export default class Session extends IModule {
                     }
                     resolve({ success, code, data: ret });
                 });
-                this.#send([guid, {c: command, d: data}]);
+                const message = [guid,command];
+                if(data!==undefined) message.push(data);
+                this.#send(message);
                 return;
             }
         });
