@@ -37,53 +37,53 @@ export default class Game extends IModule {
     }
 
     async pair(type) {
-        const {r, info} = await this.#command('pair', {type});
-        if(r) {
-            const {users, limit} = info;
+        const {success, data} = await this.#command('pair', {type});
+        if(success) {
+            const {users, limit} = data;
             this.#isPrivate = false;
             this.#limit = limit;
             this.#join(users);
         }
-        return r;
+        return success;
     }
 
     async create(type) {
-        const {r, room, info} = await this.#command('create', {type});
-        if(r) {
-            const {users, limit} = info;
+        const {success, data} = await this.#command('create', {type});
+        if(success) {
+            const {room, info: {users, limit}} = data;
             this.#isPrivate = true;
             this.#room = room;
             this.#limit = limit;
             this.#join(users);
         }
-        return r;
+        return success;
     }
 
     async join(room) {
-        const {r, info} = await this.#command('join', {room});
-        if(r) {
-            const {users, limit} = info;
+        const {success, data} = await this.#command('join', {room});
+        if(success) {
+            const {users, limit} = data;
             this.#isPrivate = true;
             this.#room = room;
             this.#limit = limit;
             this.#join(users);
         }
-        return r;
+        return success;
     }
 
     async leave() {
         if(!this.#isGaming) return true;
-        const {r} = await this.#command('leave');
-        if(r) this.clear();
-        return r;
+        const {success} = await this.#command('leave');
+        if(success) this.clear();
+        return success;
     }
 
     async answer(answer) {
         if(!this.#currentQuestion) return false;
-        const {r} = await this.#command('answer', {
+        const {success} = await this.#command('answer', {
             answer, question: this.#currentQuestion.id
         });
-        return r;
+        return success;
     }
 
     #join(users) {

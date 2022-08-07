@@ -146,12 +146,13 @@ export default class Session extends IModule {
             for(let i = 1; i<=L; i++) {
                 const guid = guidF.substring(0, i)
                 if(this.#callbacks.has(guid)) continue;
-                this.#callbacks.set(guid, ret=>{
+                this.#callbacks.set(guid, ([code, ret])=>{
                     // hook error
-                    if(ret.e) {
-                        console.debug('Command error:', ret.e);
+                    const success = code !== undefined && !code;
+                    if(code) {
+                        console.debug('Command error:', code);
                     }
-                    resolve(ret);
+                    resolve({ success, code, data: ret });
                 });
                 this.#send([guid, {c: command, d: data}]);
                 return;

@@ -23,55 +23,55 @@ export default class User extends IModule {
 
     async authenticate(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const {r} = await this.#command('authenticate', {username, password});
-        this.#authenticated = r;
-        this.#isguest = !r;
-        this.#autologin = r && autologin;
+        const {success} = await this.#command('authenticate', {username, password});
+        this.#authenticated = success;
+        this.#isguest = !success;
+        this.#autologin = success && autologin;
         if(this.autologin) {
             this.username = username;
             this.#password = password;
         }
-        return r;
+        return success;
     }
 
     async register(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const {r} = await this.#command('register', {username, password});
-        this.#authenticated = r;
-        this.#isguest = !r;
-        this.autologin = r && autologin;
+        const {success} = await this.#command('register', {username, password});
+        this.#authenticated = success;
+        this.#isguest = !success;
+        this.autologin = success && autologin;
         if(this.autologin) {
             this.username = username;
             this.#password = password;
         }
-        return r;
+        return success;
     }
 
     async guest() {
-        const {r} = await this.#command('guest');
+        const {success} = await this.#command('guest');
         this.#authenticated =
-        this.#isguest = r;
-        return r;
+        this.#isguest = success;
+        return success;
     }
 
     async logout() {
         if(!this.#authenticated) return {r: true};
-        const {r} = await this.#command('logout');
+        const {success} = await this.#command('logout');
         this.#authenticated =
         this.#isguest =
-        this.#autologin = !r;
-        return r;
+        this.#autologin = !success;
+        return success;
     }
 
     async autologin() {
         if(!this.#autologin) return [false, true];
-        const {r} = await await this.#command('authenticate', {
+        const {success} = await await this.#command('authenticate', {
             username: this.username, password: this.#password,
         });
         this.#autologin =
-        this.#authenticated = r;
-        this.#isguest = !r;
-        return [r];
+        this.#authenticated = success;
+        this.#isguest = !success;
+        return [success];
     }
 
     #passwordEncrypt (password) {
