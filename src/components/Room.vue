@@ -4,6 +4,7 @@ import UserCard from './UserCard.vue'
 
 <template>
     <div class="container">
+        <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
             <li v-for="user of users" :key="user.uid">
                 <UserCard :user=user />
@@ -16,19 +17,26 @@ import UserCard from './UserCard.vue'
 export default {
     data() {
         return {
+            limit: 0,
             users: [],
         }
     },
+    activated() {
+        this.update();
+        $.on('game.user', this.update.bind(this));
+        $.on('game.start', this.start)
+    },
+    deactivated() {
+        $.off('game.user', this.update.bind(this));
+        $.off('game.start', this.start)
+    },
     methods: {
-        async activated() {
-            this.update();
-            $.on('game.user', this.update.bind(this));
-        },
-        async deactivated() {
-            $.off('game.user', this.update.bind(this));
+        start() {
+            $.ui.switch('Question');
         },
         update() {
-            const users = $.core.game.users;
+            const {users, limit} = $.core.game;
+            this.limit = limit;
             this.users = [...users.values()];
         },
     }

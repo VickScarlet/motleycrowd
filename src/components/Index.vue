@@ -23,8 +23,8 @@ export default {
             $.ui.loading = true;
             const result = await $.core.game.pair(type);
             $.ui.loading = false;
-            if (result.r) { 
-                $.ui.switch('Room', result.info);
+            if (result) {
+                $.ui.switch('Room');
             } else {
                 $.ui.alert(result.e);
             }
@@ -36,7 +36,7 @@ export default {
             $.ui.loading = true;
             const result = await $.core.user.logout();
             $.ui.loading = false;
-            if (result.r) {
+            if (result) {
                 $.ui.switch('Welcome');
             } else {
                 $.ui.alert(result.e);

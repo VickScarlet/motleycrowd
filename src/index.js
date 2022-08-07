@@ -31,20 +31,11 @@ await core.initialize();
 
 const app = createApp(App);
 app.mixin({
-    props: ['_id'],
-    activated() {
-        this.$emit('activated', {
-            _id: this._id,
-            proxy: this,
-            callback: data=>this.activated?.(data)
-        });
-    },
-    deactivated() {
-        this.$emit('deactivated', {
-            _id: this._id,
-            proxy: this,
-            callback: ()=>this.deactivated?.()
-        });
+    props: {
+        _data: {
+            type: Object,
+            default: {},
+        },
     },
 });
 const proxy = app.mount('#app');

@@ -48,11 +48,8 @@ export default {
             $.ui.loading = true;
             const result = await $.core.user.authenticate(username, password, autologin);
             $.ui.loading = false;
-            if (result.r) {
-                $.ui.switch('Index');
-            } else {
-                $.ui.alert(result.e);
-            }
+            if (!result) return;
+            $.ui.switch('Index');
         },
         async regi(e) {
             e.returnValue = false;
@@ -60,11 +57,8 @@ export default {
             $.ui.loading = true;
             const result = await $.core.user.register(username, password, check, autologin);
             $.ui.loading = false;
-            if (result.r) {
-                $.ui.switch('Index');
-            } else {
-                $.ui.alert(result.e);
-            }
+            if (!result) return;
+            $.ui.switch('Index');
         },
     }
 }

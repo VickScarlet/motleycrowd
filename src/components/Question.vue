@@ -1,9 +1,6 @@
-<script setup>
-import UserCard from './UserCard.vue'
-</script>
-
 <template>
     <div class="container">
+        <p>{{answerCount}}/{{limit}}</p>
         <h1 class="question">{{question}}</h1>
         <ul class="options">
             <li v-for="{option, text} in options" :key="option">
@@ -15,7 +12,8 @@ import UserCard from './UserCard.vue'
             </li>
         </ul>
         <br />
-        <button @click="answer">提交</button>
+        <button v-if="!answered" @click="answer">提交</button>
+        <button v-if="answered">您已提交选项【{{answeredOption}}】</button>
     </div>
 </template>
 
@@ -23,24 +21,39 @@ import UserCard from './UserCard.vue'
 export default {
     data() {
         return {
+            id: '',
             selected: '',
             question: '',
+            limit: 0,
+            answerCount: 0,
+            answered: false,
+            answeredOption: '',
             options: [],
         }
     },
+    activated() {
+        this.limit = $.core.game.limit;
+        this.update();
+        $.on('game.question', this.update.bind(this));
+        $.on('game.answer', this.updateAnswer.bind(this));
+        $.on('game.settlement', this.settlement);
+    },
+    deactivated() {
+        $.off('game.question', this.update.bind(this));
+        $.off('game.answer', this.updateAnswer.bind(this));
+        $.off('game.settlement', this.settlement);
+    },
     methods: {
-        async activated() {
-            this.update();
-            $.on('game.question', this.update.bind(this));
-        },
-        async deactivated() {
-            $.off('game.question', this.update.bind(this));
-        },
         update() {
             const question = $.core.game.currentQuestion;
             if(!question) return;
+            if(this.id == question.id) return;
+            this.id = question.id;
+            this.answerCount = 0;
             this.question = question.question;
             this.selected = '';
+            this.answeredOption = '';
+            this.answered = false;
             const options = [];
             for(const option in question.options) {
                 options.push({
@@ -50,8 +63,21 @@ export default {
             }
             this.options = options;
         },
+        updateAnswer(count) {
+            this.answerCount = count;
+        },
         async answer() {
-            $.core.game.answer(this.selected);
+            const selected = this.selected;
+            $.ui.loading = true;
+            const result = await $.core.game.answer(selected);
+            $.ui.loading = false;
+            if(!result) return;
+            this.answerCount++;
+            this.answered = true;
+            this.answeredOption = selected;
+        },
+        settlement() {
+            $.ui.switch('Settlement', $.core.game.lastSettlement);
         },
     }
 }

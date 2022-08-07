@@ -1,17 +1,18 @@
 import { IModule } from "./imodule.js";
 export default class Game extends IModule {
 
-    #room;
+    #room = '';
+    #limit = 0;
     #isGaming = false;
     #isPrivate = false;
     #isReady = false;
-    #questions = [];
     #users = new Map();
-    #lastSettlement = null;
     #currentQuestion = null;
     #currentAnswerSize = 0;
+    #lastSettlement = null;
 
     get room() { return this.#room; }
+    get limit() { return this.#limit; }
     get isGaming() { return this.#isGaming; }
     get isPrivate() { return this.#isPrivate; }
     get isReady() { return this.#isReady; }
@@ -36,55 +37,53 @@ export default class Game extends IModule {
     }
 
     async pair(type) {
-        const result = await this.#command('pair', {type});
-        if(result.r) {
-            const {users} = result.info;
+        const {r, info} = await this.#command('pair', {type});
+        if(r) {
+            const {users, limit} = info;
             this.#isPrivate = false;
+            this.#limit = limit;
             this.#join(users);
         }
-        return result;
+        return r;
     }
 
     async create(type) {
-        const result = await this.#command('create', {type});
-        if(result.r) {
-            const {room, info: {users}} = result;
+        const {r, room, info} = await this.#command('create', {type});
+        if(r) {
+            const {users, limit} = info;
             this.#isPrivate = true;
             this.#room = room;
+            this.#limit = limit;
             this.#join(users);
         }
-        return result;
+        return r;
     }
 
     async join(room) {
-        const result = await this.#command('join', {room});
-        if(result.r) {
-            const {users} = result.info;
+        const {r, info} = await this.#command('join', {room});
+        if(r) {
+            const {users, limit} = info;
             this.#isPrivate = true;
             this.#room = room;
+            this.#limit = limit;
             this.#join(users);
         }
-        return result;
+        return r;
     }
 
     async leave() {
         if(!this.#isGaming) return true;
-        const result = await this.#command('leave');
-        if(result.r) {
-            this.#isPrivate = false;
-            this.#isGaming = false;
-            this.#isReady = false;
-            this.#currentQuestion = null;
-            this.#currentAnswerSize = 0;
-            this.#questions = [];
-            this.#users.clear();
-        }
-        return result;
+        const {r} = await this.#command('leave');
+        if(r) this.clear();
+        return r;
     }
 
     async answer(answer) {
-        if(!this.#currentQuestion) return {r: false};
-        return this.#command('answer', {answer, question: this.currentQuestion.id});
+        if(!this.#currentQuestion) return false;
+        const {r} = await this.#command('answer', {
+            answer, question: this.#currentQuestion.id
+        });
+        return r;
     }
 
     #join(users) {
@@ -119,7 +118,6 @@ export default class Game extends IModule {
 
     #question(id) {
         const question = this.$core.question.get(id);
-        this.#questions.push(question);
         this.#currentQuestion = question;
         this.#currentAnswerSize = 0;
         if(!this.#isGaming) {
@@ -137,14 +135,18 @@ export default class Game extends IModule {
     }
 
     #settlement(data) {
+        this.#lastSettlement = data;
+        this.clear();
+        $.emit('game.settlement', data);
+    }
+    clear() {
+        this.#room = '';
+        this.#limit = 0;
         this.#isGaming = false;
         this.#isReady = false;
         this.#isPrivate = false;
         this.#currentQuestion = null;
-        this.#questions = [];
         this.#currentAnswerSize = 0;
-        this.#lastSettlement = data;
         this.#users.clear();
-        $.emit('game.settlement', data);
     }
 }

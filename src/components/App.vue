@@ -1,4 +1,5 @@
 <script setup>
+import { getCurrentInstance } from 'vue'
 import Loading from './Loading.vue'
 import Alert from './Alert.vue'
 import Tips from './Tips.vue'
@@ -7,10 +8,7 @@ defineExpose(getCurrentInstance().proxy);
 
 <template>
     <keep-alive>
-        <component :is="page" :_id="_id"
-            @activated="componentActivated"
-            @deactivated="componentDeactivated"
-        ></component>
+        <component :is="page" :_data="_data"/>
     </keep-alive>
     <p class="serverstat">
         当前延迟: {{delay}}ms<br/>
@@ -26,13 +24,12 @@ defineExpose(getCurrentInstance().proxy);
 </template>
 
 <script>
-import { v4 as uuidGenerator } from 'uuid';
 import Welcome from './Welcome.vue'
 import Authentication from './Authentication.vue'
 import Index from './Index.vue'
 import Room from './Room.vue'
 import Question from './Question.vue'
-import { getCurrentInstance } from 'vue'
+import Settlement from './Settlement.vue'
 
 export default {
     name: 'App',
@@ -42,6 +39,7 @@ export default {
         Index,
         Room,
         Question,
+        Settlement,
     },
     data() {
         return {
@@ -54,36 +52,13 @@ export default {
             tipsMessage: '',
             showTips: false,
             isfullscreen: false,
-            _id: uuidGenerator(),
-            done: new Map(),
-            next: new Map(),
-            proxy: new Map(),
+            _data: null,
         }
     },
     methods: {
-        async switch(page, data) {
-            return new Promise(resolve => {
-                const id = uuidGenerator();
-                this._id = id;
-                this.done.set(id, {page, data, resolve});
-                this.page = page;
-            });
-        },
-        async componentActivated({_id, proxy, callback}) {
-            if (!this.done.has(_id)) return;
-            const {page, data, resolve} = this.done.get(_id);
-            this.proxy.set(page, proxy);
-            this.done.set(_id, {page, data, done: ()=>this.proxy.delete(page)});
-            console.debug('[UI:activated] [page:%s] [_id:%s] data:', page, _id, data);
-            await callback(data);
-            resolve();
-        },
-        async componentDeactivated({_id, callback}) {
-            if (!this.done.has(_id)) return;
-            const {page, data, done} = this.done.get(_id);
-            console.debug('[UI:deactivated] [page:%s] [_id:%s] data:', page, _id, data);
-            await callback();
-            await done?.();
+        switch(page, data) {
+            this._data = data;
+            this.page = page;
         },
         alert(message) {
             this.alertMessage = message;
@@ -94,11 +69,7 @@ export default {
         },
         async start() {
             this.tips('欢迎来到 [乌合之众]');
-            $.on('game.start', ()=>{
-                this.switch('Question');
-            })
-
-            const {r, _} = await $.core.user.autologin();
+            const [r, _] = await $.core.user.autologin();
             if (r) {
                 this.tips('自动登录成功');
                 this.switch('Index');
@@ -135,11 +106,6 @@ export default {
             if(d.mozCancelFullScreen) return d.mozCancelFullScreen();
             if(d.webkitCancelFullScreen) return d.webkitCancelFullScreen();
             if(d.msExitFullscreen) return d.msExitFullscreen();
-        },
-        async activatedProxy(page, callback) {
-            const proxy = this.proxy.get(page);
-            if (!proxy) return {r: false, e: 'proxy not found'};
-            return callback(proxy);
         },
     },
 }
