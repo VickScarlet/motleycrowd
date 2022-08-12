@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     vue(),
     legacy({
-      targets: ['defaults', 'not IE 11']
+      targets: [">0.2%", "not dead", "last 2 versions"]
     }),
     viteStaticCopy({
       targets: [
