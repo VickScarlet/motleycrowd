@@ -15,13 +15,13 @@ window.$sys.emit = emit;
 const core = new Core({
     session: {
         protocol: 'ws',
-        // host: "motleycrowdservice.syaro.io",
+        host: "motleycrowdservice.syaro.io",
         // host: "test.syaro.io",
         // host: "scarlet-mini",
         // host: "scarlet-mix",
         // host: "192.168.50.221",
         // host: "192.168.50.217",
-        host: '127.0.0.1',
+        // host: '127.0.0.1',
         port: 1919,
         // handler
     }
