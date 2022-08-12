@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Set-up Nodes
+        uses: actions/setup-node@v1
+        with:
+          node-version: "latest"
+
+      - run: npm install
+
+      - run: npm run build
+
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: gh-pages
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
