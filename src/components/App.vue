@@ -69,11 +69,11 @@ export default {
         },
         async start() {
             this.tips('欢迎来到 [乌合之众]');
-            const [r, _] = await $.core.user.autologin();
-            if (r) {
+            const [success, notAuto] = await $.core.user.autologin();
+            if (success) {
                 this.tips('自动登录成功');
                 this.switch('Index');
-            } else if (!_) {
+            } else if (!notAuto) {
                 this.tips('自动登录失败');
             }
             const updateStat = async () => {

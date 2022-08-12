@@ -3,12 +3,12 @@
         <p>{{answerCount}}/{{limit}}</p>
         <h1 class="question">{{question}}</h1>
         <ul class="options">
-            <li v-for="{option, text} in options" :key="option">
+            <li v-for="{option, val, type} in options" :key="option">
                 <input type="radio" name="option"
                     :id="option"
                     :value="option"
                     v-model="selected"
-                /><label :for=option><span>{{text}}</span></label>
+                /><label :for=option :class="'option-'+type"><span>{{val}}</span></label>
             </li>
         </ul>
         <br />
@@ -56,10 +56,8 @@ export default {
             this.answered = false;
             const options = [];
             for(const option in question.options) {
-                options.push({
-                    option: option,
-                    text: question.options[option],
-                });
+                const {type, val} = question.options[option];
+                options.push({option, val, type});
             }
             this.options = options;
         },

@@ -27,7 +27,7 @@ export default class Game extends IModule {
             user: ([join, leave])=>this.#user(join, leave),
             ready: wait=>this.#ready(wait),
             pending: size=>this.#pending(size),
-            question: ([idx, id])=>this.#question(idx, id),
+            question: ([idx, id, picked])=>this.#question(idx, id, picked),
             answer: ([idx, size])=>this.#answer(idx, size),
             settlement: data=>this.#settlement(data),
         });
@@ -117,8 +117,8 @@ export default class Game extends IModule {
         $.emit('game.pending');
     }
 
-    #question(idx, id) {
-        const question = this.$core.question.get(id);
+    #question(idx, id, picked) {
+        const question = this.$core.question.get(id, picked);
         this.#index = idx;
         this.#currentQuestion = question;
         this.#currentAnswerSize = 0;
