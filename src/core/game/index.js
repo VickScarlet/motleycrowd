@@ -1,4 +1,5 @@
-import { IModule } from "./imodule.js";
+import { IModule } from "../imodule.js";
+import SettlementData from "./settlementdata.js";
 export default class Game extends IModule {
 
     #room = '';
@@ -136,7 +137,11 @@ export default class Game extends IModule {
     }
 
     #settlement(data) {
-        this.#lastSettlement = data;
+        this.#lastSettlement = new SettlementData(
+            this.$core.question.get,
+            data,
+        );
+
         this.clear();
         $.emit('game.settlement', data);
     }

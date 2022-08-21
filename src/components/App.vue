@@ -8,7 +8,7 @@ defineExpose(getCurrentInstance().proxy);
 
 <template>
     <keep-alive>
-        <component :is="page" :_data="_data"/>
+        <component :is="page" :getData="_data"/>
     </keep-alive>
     <p class="serverstat">
         当前延迟: {{delay}}ms<br/>
@@ -52,12 +52,12 @@ export default {
             tipsMessage: '',
             showTips: false,
             isfullscreen: false,
-            _data: null,
+            _data: ()=>({}),
         }
     },
     methods: {
         switch(page, data) {
-            this._data = data;
+            this._data = ()=>(data||{});
             this.page = page;
         },
         alert(message) {

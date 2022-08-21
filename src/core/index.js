@@ -2,7 +2,7 @@ import Storage from "./storage.js";
 import Question from "./question/index.js";
 import Session from "./session.js";
 import User from './user.js';
-import Game from './game.js';
+import Game from './game/index.js';
 
 export default class Core {
     constructor(configure) {

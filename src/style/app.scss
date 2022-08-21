@@ -29,11 +29,10 @@ html {
 a {
   cursor: pointer;
   font-weight: 500;
-  color: var(--a-color);
   text-decoration: inherit;
-}
-a:hover {
-  color: var(--a-color-hover);
+
+  color: var(--a-color);
+  &:hover { color: var(--a-hover-color); }
 }
 
 body {
@@ -63,7 +62,6 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-radius: 8px;
   border: 1px solid transparent;
   margin: 0;
   padding: 0;
@@ -72,18 +70,21 @@ button {
   width: 16em;
   height: 2.8em;
   font-family: inherit;
+  cursor: pointer;
+  transition: border-color, border-radius, background-color 0.25s;
+
+  border-radius: 8px;
   color: var(--button-color);
   border-color: var(--button-border);
   background: var(--button-background);
-  cursor: pointer;
-  transition: border-color, border-radius, background-color 0.25s;
-}
-button:hover {
-  border-radius: 4px;
-  border-color: var(--button-border-hover);
-  background: var(--button-background-hover);
-  box-shadow: 0 0 16px -2px var(--shadow);
-  transition: border-color, border-radius, background-color 0.25s;
+
+  &:hover {
+    border-radius: 4px;
+    border-color: var(--button-border-hover);
+    background: var(--button-background-hover);
+    box-shadow: 0 0 16px -2px var(--shadow);
+    transition: border-color, border-radius, background-color 0.25s;
+  }
 }
 input:focus,
 button:focus,
@@ -169,18 +170,15 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
-}
 
-ul > li {
-  margin: 0;
-  padding: 0;
-  margin-top: 1em;
-}
+  > li {
+    margin: 0;
+    padding: 0;
 
-ul > li:first-child {
-  margin-top: 0;
+    margin-top: 1em;
+    &:first-child { margin-top: 0; }
+  }
 }
-
 
 #app {
   max-width: 1280px;
