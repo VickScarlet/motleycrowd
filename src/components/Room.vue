@@ -6,7 +6,7 @@ import UserCard from './UserCard.vue'
     <div class="container">
         <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
-            <li v-for="user of users" :key="user.uid">
+            <li v-for="user of users" :key="user.uuid">
                 <UserCard :user=user />
             </li>
         </ul>

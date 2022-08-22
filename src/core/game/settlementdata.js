@@ -1,21 +1,25 @@
 import Answer from "./answer.js";
 
 export default class SettlementData {
-    constructor(getQuestion, {questions, scores}) {
+    constructor(uuid, getQuestion, {questions, scores}) {
+        this.#uuid = uuid;
         this.#questions = questions.map(
             ([qid, picked]) => getQuestion(qid, picked)
         );
 
         this.#indexs = new Array(this.size).fill(1).map((_, i)=>Number(i));
 
-        for(const uid in scores)
-            this.#scores.set(uid, new UScores(uid, scores[uid]));
+        for(const uuid in scores)
+            this.#scores.set(uuid, new UScores(uuid, scores[uuid]));
 
     }
+    #uuid;
     #questions;
     #scores = new Map();
     #cache = new Map();
     #indexs;
+
+    get uuid() { return this.#uuid; }
 
     get size() {
         if(!this.#questions) return -1;
@@ -30,16 +34,19 @@ export default class SettlementData {
         if(!question) return null;
         const total = this.#scores.size;
         const map = {};
-        this.#scores.forEach((uscore, uid) => {
+        this.#scores.forEach((uscore, uuid) => {
             const {answer} = uscore.at(index) || {};
             if(!answer) return;
-            map[uid] = answer;
+            map[uuid] = answer;
         });
         return {question, total, answer: new Answer(question.picked, map)};
     }
 
-    get(uid) {
-        return this.#scores.get(uid);
+    get(uuid) {
+        return this.#scores.get(uuid);
+    }
+    getMine() {
+        return this.#scores.get(this.#uuid);
     }
 
     #crank() {
@@ -98,8 +105,18 @@ class UScores {
 
     get uuid() {return this.#uuid;}
     get score() {return this.#score;}
+    get subs() {return this.#subs;}
+    get length() {return this.#subs.length;}
 
     at(index) {
         return this.#subs.at(index);
+    }
+
+    map(callback) {
+        return this.#subs.map(callback);
+    }
+
+    forEach(callback) {
+        return this.#subs.forEach(callback);
     }
 }

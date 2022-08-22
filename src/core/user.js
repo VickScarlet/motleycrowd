@@ -4,6 +4,9 @@ export default class User extends IModule {
 
     #authenticated = false;
     #isguest = false;
+    #uuid = null;
+
+    get uuid() { return this.#uuid; }
 
     async #command(type, data) {
         return this.$core.command(`user.${type}`, data);
@@ -23,7 +26,8 @@ export default class User extends IModule {
 
     async authenticate(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const {success} = await this.#command('authenticate', {username, password});
+        const {success, data} = await this.#command('authenticate', {username, password});
+        this.#uuid = success ?data.uid :null;
         this.#authenticated = success;
         this.#isguest = !success;
         this.#autologin = success && autologin;
@@ -36,7 +40,8 @@ export default class User extends IModule {
 
     async register(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const {success} = await this.#command('register', {username, password});
+        const {success, data} = await this.#command('register', {username, password});
+        this.#uuid = success ?data.uid :null;
         this.#authenticated = success;
         this.#isguest = !success;
         this.autologin = success && autologin;
@@ -48,7 +53,8 @@ export default class User extends IModule {
     }
 
     async guest() {
-        const {success} = await this.#command('guest');
+        const {success, data} = await this.#command('guest');
+        this.#uuid = success ?data.uid :null;
         this.#authenticated =
         this.#isguest = success;
         return success;
@@ -57,6 +63,7 @@ export default class User extends IModule {
     async logout() {
         if(!this.#authenticated) return {r: true};
         const {success} = await this.#command('logout');
+        if(success) this.#uuid = null;
         this.#authenticated =
         this.#isguest =
         this.#autologin = !success;
@@ -65,9 +72,10 @@ export default class User extends IModule {
 
     async autologin() {
         if(!this.#autologin) return [false, true];
-        const {success} = await await this.#command('authenticate', {
+        const {success, data} = await this.#command('authenticate', {
             username: this.username, password: this.#password,
         });
+        this.#uuid = success ?data.uid :null;
         this.#autologin =
         this.#authenticated = success;
         this.#isguest = !success;

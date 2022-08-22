@@ -4,7 +4,7 @@
             <!-- <span :class=badge(user.style)>测试</span>
             <span>子鼠丑牛寅虎卯兔辰龙巳蛇午马未羊申猴酉鸡戌狗亥猪</span> -->
 
-            <span v-if="user.guest">游客{{user.uid}}</span>
+            <span v-if="user.guest">游客{{user.uuid}}</span>
             <span v-else>{{user.username}}</span>
         </span>
     </div>

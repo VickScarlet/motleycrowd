@@ -90,16 +90,16 @@ export default class Game extends IModule {
 
     #join(users) {
         for(const user of users) {
-            const [uid, guest, username] = user;
-            this.#users.set(uid, {
-                uid, guest, username,
+            const [uuid, guest, username] = user;
+            this.#users.set(uuid, {
+                uuid, guest, username,
             });
         }
     }
 
-    #leave(uids) {
-        for(const uid of uids)
-            this.#users.delete(uid);
+    #leave(uuids) {
+        for(const uuid of uuids)
+            this.#users.delete(uuid);
     }
 
     #user(join, leave) {
@@ -138,6 +138,7 @@ export default class Game extends IModule {
 
     #settlement(data) {
         this.#lastSettlement = new SettlementData(
+            this.$core.user.uuid,
             this.$core.question.get,
             data,
         );

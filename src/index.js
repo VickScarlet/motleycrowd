@@ -16,14 +16,10 @@ const core = new Core({
     session: {
         protocol: 'wss',
         host: "motleycrowdservice.syaro.io",
-        // host: "test.syaro.io",
-        // host: "scarlet-mini",
-        // host: "scarlet-mix",
-        // host: "192.168.50.221",
-        // host: "192.168.50.217",
-        // host: '127.0.0.1',
         port: 443,
-        // handler
+        // protocol: 'ws',
+        // host: '127.0.0.1',
+        // port: 1919,
     }
 });
 window.$sys.core = core;
@@ -32,9 +28,9 @@ await core.initialize();
 const app = createApp(App);
 app.mixin({
     props: {
-        _data: {
-            type: Object,
-            default: {},
+        getData: {
+            type: Function,
+            default: ()=>({}),
         },
     },
 });
