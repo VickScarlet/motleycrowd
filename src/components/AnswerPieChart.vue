@@ -24,6 +24,9 @@ export default {
     }),
     mounted() {
         watch(()=>this.answers, ()=>this.render());
+        watch(()=>this.radius, ()=>this.render());
+        watch(()=>this.innerRadius, ()=>this.render());
+        watch(()=>this.padding, ()=>this.render());
         this.render();
     },
     methods: {

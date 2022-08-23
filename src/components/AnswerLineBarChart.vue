@@ -1,9 +1,12 @@
 <template>
-    <svg :viewBox="`${-left} ${-top} ${width + left + right} ${height + top + bottom}`">
+    <svg :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
         <g class="axis axis-x"></g>
         <g class="axis axis-y"></g>
         <g class="bars">
-            <g v-for="({n, v, x, y, w, h, tx, ty, b}) in bars" :key="n" :win="b">
+            <g v-for="({n, v, x, y, w, h, tx, ty, b}) in bars"
+                :key="n" :win="b"
+                :visibility="v==0?'hidden':'visible'">
+
                 <rect :x="x" :y="y" :width="w" :height="h" ></rect>
                 <text :x="tx" :y="ty" :dy="`${!b?1:-0.2}em`">{{v}}</text>
             </g>
@@ -39,6 +42,13 @@ export default {
         };
     },
     mounted() {
+        watch(()=>this.top, ()=>this.render());
+        watch(()=>this.right, ()=>this.render());
+        watch(()=>this.bottom, ()=>this.render());
+        watch(()=>this.left, ()=>this.render());
+        watch(()=>this.barpadding, ()=>this.render());
+        watch(()=>this.width, ()=>this.render());
+        watch(()=>this.height, ()=>this.render());
         watch(()=>this.answers, ()=>this.render());
         this.render();
     },
@@ -52,15 +62,15 @@ export default {
             });
 
             const xScale = d3.scaleBand()
-                .rangeRound([0, width])
-                .padding(barpadding)
+                .rangeRound([0, 0+width])
+                .padding(0+barpadding)
                 .domain(dataset.map(({name})=>name));
 
             const ymin = d3.min(dataset, ({value, total})=>value>total?total:value);
             const ymax = d3.max(dataset, ({value, total})=>value>total?value:total);
             const ypadding = (ymax - ymin) * 0.02;
             const yScale = d3.scaleLinear()
-                .rangeRound([height, 0])
+                .rangeRound([0+height, 0])
                 .domain([ymin - ypadding, ymax + ypadding]);
 
             const svg = d3.select(this.$el);
@@ -68,11 +78,15 @@ export default {
             // axis-x
             svg.select(".axis-x")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(xScale));
+                .call(d3.axisBottom(xScale))
+                .attr("font-family", null)
+                .attr("font-size", null);
 
             // axis-y
             svg.select(".axis-y")
-                .call(d3.axisLeft(yScale));
+                .call(d3.axisLeft(yScale))
+                .attr("font-family", null)
+                .attr("font-size", null);
 
             const w = xScale.bandwidth();
             const bars = dataset
@@ -85,7 +99,7 @@ export default {
                     cy: yScale(t),
                     tx: xScale(n) + w/2,
                     ty: yScale(0),
-                    b: v>0,
+                    b: v>=0,
                 }));
 
             this.line = d3.line()
@@ -105,6 +119,9 @@ export default {
 svg {
     max-width: 100%;
     height: auto;
+    text {
+        font-size: 1.3em;
+    }
     g {
         &[win="true"] {
             rect { fill: #a56fec; }
@@ -123,10 +140,12 @@ svg {
     .bars text,
     .line text {
         pointer-events: none;
-        font-size: 1.3em;
         font-weight: bold;
         fill: white;
         text-anchor: middle;
+    }
+    .axis text {
+        fill: #dc5d5d;
     }
     .line {
         path {
@@ -146,15 +165,6 @@ svg {
             stroke-opacity: 0.6;
             stroke-width: 0.1;
         }
-    }
-    .axis {
-        text {
-            font-size: 1.3em;
-            fill: #dc5d5d;
-        }
-    }
-    .axis-x text {
-        font-size: 2em;
     }
 }
 </style>

@@ -9,8 +9,8 @@ export default class SettlementData {
 
         this.#indexs = new Array(this.size).fill(1).map((_, i)=>Number(i));
 
-        for(const uuid in scores)
-            this.#scores.set(uuid, new UScores(uuid, scores[uuid]));
+        for(const uid in scores)
+            this.#scores.set(uid, new UScores(uid, scores[uid]));
 
     }
     #uuid;
@@ -39,7 +39,11 @@ export default class SettlementData {
             if(!answer) return;
             map[uuid] = answer;
         });
-        return {question, total, answer: new Answer(question.picked, map)};
+        return {
+            question, total,
+            answer: new Answer(question.picked, map),
+            mine: this.getMine().at(index),
+        };
     }
 
     get(uuid) {

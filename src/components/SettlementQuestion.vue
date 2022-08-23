@@ -3,19 +3,22 @@ import AnswerPieChart from './AnswerPieChart.vue';
 </script>
 <template>
     <div class="container">
-        <p>{{question}}</p>
+        <h3>{{question}}</h3>
         <div class="answer">
-            <div class="pie">
+            <div class="chart">
                 <AnswerPieChart :answers="answers.filter(({value}) => value > 0)"></AnswerPieChart>
             </div>
             <ul>
-                <li v-for="({option, value, description}) in answers" :key="option">
-                    <span>{{option}}</span>
-                    <span>:{{value}}</span>
-                    <span>&nbsp;&nbsp;{{description}}</span>
+                <li v-for="({option, value, description}) in answers"
+                    :key="option" :ismine="option==mine.answer">
+
+                    <span>{{option}}:</span>
+                    <span>{{String(value).padStart(4, ' ')}}人</span>
+                    <span>&nbsp;&nbsp;&nbsp;{{description}}</span>
                 </li>
             </ul>
         </div>
+        <span :class="'alter '+(mine.value>=0?'up':'down')">{{mine.value>0?'+':''}}{{mine.value}}</span>
     </div>
 </template>
 <script>
@@ -26,6 +29,10 @@ export default {
         return {
             question: null,
             answers: [],
+            mine: {
+                value: 0,
+                answer: '',
+            },
         }
     },
     mounted() {
@@ -34,7 +41,8 @@ export default {
     },
     methods: {
         update() {
-            const {question, answer, total} = this.getData();
+            const {question, answer, total, mine} = this.getData();
+            this.mine = mine;
             this.question = question.question;
             const answers = [];
             let sum = 0;
@@ -55,13 +63,21 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-    padding: 15px;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(35deg, #4616844d, #12944a4f);
-    margin: auto;
+    position: relative;
 }
-
+h3 {
+    white-space: pre-wrap;
+    margin: 0 0 1em 0;
+    padding: 1.2em 2em 0.2em 2em;
+    border-bottom: dotted 2px rgba($color: #30b7ff, $alpha: .3);
+}
+.alter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    &.up { color: #68dc68; }
+    &.down { color: #d46d66; }
+}
 .answer {
     width: 100%;
     position: relative;
@@ -70,10 +86,10 @@ export default {
     justify-items: center;
     flex-direction: row;
 }
-.pie {
+.chart {
     position: relative;
     width: 200px;
-    padding: 1em;
+    padding: 0 1em;
     left: 0;
     top: 0;
 }
@@ -86,15 +102,30 @@ ul {
     top: 0;
     text-align: left;
     vertical-align: middle;
+    li {
+        white-space: pre-wrap;
+        margin: 0;
+        margin-top: 0.5em;
+        &:first-child { margin-top: 0; }
+        padding: 0.2em 0.5em;
+        border-radius: 4px;
+        background: rgba($color: #000000, $alpha: 0.2);
+        &[ismine="true"] {
+            background: rgba($color: #ffa600, $alpha: 0.2);
+        }
+        span:nth-child(2) {
+            color: #ffa600;
+        }
+    }
 }
 @media screen and (max-width: 600px) {
     .answer {
         flex-direction: column;
     }
-    .pie {
+    .chart {
         width: 80%;
         max-width: 200px;
-        padding: 1em 0 2em 0;
+        margin-bottom: 1.2em;
         left: 0;
         top: 0;
     }
