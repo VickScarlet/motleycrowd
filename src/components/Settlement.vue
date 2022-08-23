@@ -18,8 +18,8 @@ import SettlementQuestion from './SettlementQuestion.vue'
 </template>
 
 <script>
-import { watch } from 'vue'
-export default {
+import { watch, defineComponent } from 'vue'
+export default defineComponent({
     data() {
         return {
             questions: [],
@@ -41,7 +41,7 @@ export default {
             $.ui.switch('Index');
         }
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

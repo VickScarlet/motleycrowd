@@ -10,9 +10,9 @@ import AnswerLineBarChart from './AnswerLineBarChart.vue'
     </div>
 </template>
 <script>
-import { watch } from 'vue';
+import { watch, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     data() {
         return {
             answers: [],
@@ -32,7 +32,7 @@ export default {
             }));
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

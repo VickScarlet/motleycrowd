@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import { watch } from 'vue';
+import { watch, defineComponent } from 'vue';
 import * as d3 from 'd3'
-export default {
+export default defineComponent({
     props: {
         radius: { type: Number, default: 320 },
         innerRadius: { type: Number, default: 200 },
@@ -39,7 +39,7 @@ export default {
                 .map(v => ({...v.data, d: d(v), t: t(v)}));
         }
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

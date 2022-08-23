@@ -7,7 +7,8 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
     data() {
         return {
             delay: -1,
@@ -26,7 +27,7 @@ export default {
             $.ui.switch('Index');
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

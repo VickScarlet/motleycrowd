@@ -14,7 +14,8 @@ import UserCard from './UserCard.vue'
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
     data() {
         return {
             limit: 0,
@@ -40,7 +41,7 @@ export default {
             this.users = [...users.values()];
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

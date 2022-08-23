@@ -24,6 +24,7 @@ defineExpose(getCurrentInstance().proxy);
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import Welcome from './Welcome.vue'
 import Authentication from './Authentication.vue'
 import Index from './Index.vue'
@@ -31,7 +32,7 @@ import Room from './Room.vue'
 import Question from './Question.vue'
 import Settlement from './Settlement.vue'
 
-export default {
+export default defineComponent({
     name: 'App',
     components: {
         Welcome,
@@ -76,6 +77,22 @@ export default {
             } else if (!notAuto) {
                 this.tips('自动登录失败');
             }
+            const showUrlPage = () => {
+                const match = /\/#\/(([^\/\?]+)\/?)(\?+(.*))?/
+                    .exec(window.location.href);
+                if(!match) return;
+                let [,,page,,data,,query] = match;
+                if(!data) data = {};
+                else data = JSON.parse(decodeURIComponent(data));
+                if(query)
+                    query.split('&').forEach(v=>{
+                        const [key, value] = v.split('=');
+                        data[key] = JSON.parse(decodeURIComponent(value))
+                    });
+                this.switch(page, data);
+            }
+            window.onpopstate = showUrlPage;
+            showUrlPage();
             const updateStat = async () => {
                 const {delay, online} =await $.core.ping();
                 this.delay = delay;
@@ -108,7 +125,7 @@ export default {
             if(d.msExitFullscreen) return d.msExitFullscreen();
         },
     },
-}
+});
 </script>
 
 <style scoped>

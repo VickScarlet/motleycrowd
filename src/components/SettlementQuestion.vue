@@ -22,9 +22,9 @@ import AnswerPieChart from './AnswerPieChart.vue';
     </div>
 </template>
 <script>
-import { watch } from 'vue';
+import { watch, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     data() {
         return {
             question: null,
@@ -58,7 +58,7 @@ export default {
             this.answers = answers;
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

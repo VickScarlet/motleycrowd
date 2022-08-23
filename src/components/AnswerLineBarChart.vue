@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import { watch } from 'vue'
+import { watch, defineComponent } from 'vue'
 import * as d3 from 'd3'
-export default {
+export default defineComponent({
     props: {
         top: { type: Number, default: 40 },
         right: { type: Number, default: 0 },
@@ -111,7 +111,7 @@ export default {
             this.bars = bars;
         }
     }
-}
+});
 </script>
 
 

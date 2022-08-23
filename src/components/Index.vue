@@ -16,7 +16,8 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
     methods: {
         async pair(type) {
             console.debug('pair', type);
@@ -43,7 +44,7 @@ export default {
             }
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

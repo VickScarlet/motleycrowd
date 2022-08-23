@@ -28,7 +28,8 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
     data() {
         return {
             autologin: true,
@@ -61,7 +62,7 @@ export default {
             $.ui.switch('Index');
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

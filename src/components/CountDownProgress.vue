@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { watch } from 'vue'
-export default {
+import { watch, defineComponent } from 'vue'
+export default defineComponent({
     props: {
         init: {
             type: Object,
@@ -56,7 +56,7 @@ export default {
             tick();
         }
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

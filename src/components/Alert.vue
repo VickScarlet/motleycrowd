@@ -8,13 +8,14 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
     methods: {
         hide() {
             this.$emit('hide');
         },
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>
