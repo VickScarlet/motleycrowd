@@ -15,8 +15,7 @@ import CountDownProgress from './CountDownProgress.vue'
                     <input type="radio" name="option"
                         :id="option"
                         :value="option"
-                        v-model="selected"
-                    /><label :for=option :class="'option-'+type"><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
+                    /><label @click="choose(option)" :for=option :class="'option-'+type"><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
                 </li>
             </ul>
             <button v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
@@ -56,6 +55,7 @@ export default {
         $.off('game.settlement', this.settlement);
     },
     methods: {
+        choose(option) { this.selected = option; },
         update() {
             const question = $.core.game.currentQuestion;
             if(!question) return;
