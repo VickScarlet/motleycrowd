@@ -4,20 +4,23 @@ import { meta } from './subjects/meta.js';
 
 
 export class Question {
-    constructor({id, question, options}, picked) {
+    constructor({id, question, options, timeout}, picked) {
         this.#id = id;
         this.#question = question;
         this.#options = options;
+        this.#timeout = timeout;
         if(picked) this.picked = picked;
     }
 
     #id;
     #question;
     #options;
+    #timeout;
     #picked;
 
     get id() {return this.#id;}
     get question() {return this.#question;}
+    get timeout() {return this.#timeout;}
     get picked() {return [...this.#picked].sort().join('');}
     set picked(picked) {
         this.#picked = new Set(picked.split(''));
