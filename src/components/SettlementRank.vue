@@ -28,7 +28,7 @@ import UserCard from './UserCard.vue'
                         :title="`Q${idx+1}: ${answer}`"
                     >
                         <span :style="`opacity: ${
-                            Math.min(1, Math.abs(value/5)) || 0
+                            Math.min(1, Math.abs(value/3)) || 0
                         };`"></span>
                         {{value>0?'+':''}}{{value}}
                     </li>
@@ -126,7 +126,7 @@ ul.rank > li {
         margin-top: 0;
     }
     &[ismine="true"] {
-        background: #00b3ff33;
+        background: rgba($color: #ffa600, $alpha: 0.2);
         border-radius: 2px;
     }
     > div {
