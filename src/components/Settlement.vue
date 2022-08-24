@@ -1,6 +1,7 @@
 <script setup>
 import SettlementMine from './SettlementMine.vue'
 import SettlementQuestion from './SettlementQuestion.vue'
+import SettlementRank from './SettlementRank.vue'
 </script>
 
 <template>
@@ -9,7 +10,10 @@ import SettlementQuestion from './SettlementQuestion.vue'
             <li class="card">
                 <SettlementMine :getData="mine" />
             </li>
-            <li v-for="({idx, get}) in questions" :key="idx" class="card">
+            <li class="card">
+                <SettlementRank :getData="rank" />
+            </li>
+            <li v-for="([idx, get]) in questions" :key="idx" class="card">
                 <SettlementQuestion :getData="get" />
             </li>
         </ul>
@@ -24,6 +28,7 @@ export default defineComponent({
         return {
             questions: [],
             mine: ()=>null,
+            rank: ()=>null,
         }
     },
     mounted() {
@@ -33,9 +38,10 @@ export default defineComponent({
     methods: {
         update() {
             const settlement = this.getData();
-            this.questions = settlement.indexs
-                .map(idx=>({ idx, get: ()=>settlement.at(idx) }));
-            this.mine = ()=>settlement.getMine();
+            const {uuid, indexs, mine, rank} = settlement;
+            this.questions = indexs.map(i=>([i, ()=>settlement.at(i)]));
+            this.mine = ()=>mine;
+            this.rank = ()=>({uuid, rank});
         },
         ok() {
             $.ui.switch('Index');
@@ -46,6 +52,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card {
+    max-width: 960px;
     padding: 10px;
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

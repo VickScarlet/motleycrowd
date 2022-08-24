@@ -46,7 +46,7 @@ export default defineComponent({
 }
 .chart {
     position: relative;
-    min-width: 300px;
+    width: 300px;
     padding: 0;
     left: 0;
     top: 0;

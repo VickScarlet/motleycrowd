@@ -137,10 +137,12 @@ export default class Game extends IModule {
     }
 
     #settlement(data) {
+        const users = new Map(this.#users);
         this.#lastSettlement = new SettlementData(
             this.$core.user.uuid,
             this.$core.question.get,
             data,
+            users,
         );
 
         this.clear();

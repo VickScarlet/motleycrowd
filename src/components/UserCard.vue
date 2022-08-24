@@ -49,12 +49,15 @@ export default defineComponent({
     text-shadow: 0 0 4px rgba(0,0,0,0.5);
     text-align: center;
     position: relative;
-}
-
-.username:first-child, .username:last-child {
-    top: 50%;
-    transform: translateY(-50%);
-    display: inline-block;
+    &:first-child,
+    &:last-child {
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-block;
+    }
+    &:last-child {
+        font-size: 18px;
+    }
 }
 
 .badge {
@@ -65,9 +68,6 @@ export default defineComponent({
     font-size: 14px;
     line-height: 14px;
     margin-right: 4px;
-}
-.username:last-child {
-    font-size: 18px;
 }
 
 .badge-default {
