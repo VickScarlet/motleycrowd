@@ -150,6 +150,7 @@ export default class Session extends IModule {
             this.#MESSAGE,
             this.#BORDERCAST,
         ]);
+        $.emit('network.error');
         const error = new Error(`Network Error`);
         this.#callbacks.forEach((callback, guid) => {
             if(exclude.has(guid)) return;
@@ -208,7 +209,6 @@ export default class Session extends IModule {
                     if(err) {
                         console.error(err);
                         resolve({ success: false, code: -1});
-                        $.emit('network.error');
                         return;
                     }
                     const [code, ret] = result;
