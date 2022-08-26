@@ -60,7 +60,7 @@ export default defineComponent({
     mounted() {
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
-        $.on('game.settlement', ()=>this.switch('Settlement'));
+        $.on('game.settlement', ()=>this.switch('Settlement', $.core.game.lastSettlement));
     },
     methods: {
         switch(page, data) {
