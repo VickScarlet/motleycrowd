@@ -65,7 +65,9 @@ export default class Session extends IModule {
                     const arrayBuffer = await data.arrayBuffer();
                     data = pako.inflate(arrayBuffer, { to: 'string' })
                 }
-                onmessage(JSON.parse(data))
+                data = JSON.parse(data);
+                this.#online = data.pop();
+                onmessage(data);
             });
             ws.addEventListener('close', onclose);
         });
@@ -98,8 +100,7 @@ export default class Session extends IModule {
                 data => {
                     if(data[0]!==this.#RESUME)
                         return this.#onmessage(data);
-                    const [, success, online] = data;
-                    this.#online = online;
+                    const [, success] = data;
                     if(!success)
                         return reject (new Error(`RESUME failed`));
                     this.#client = client;
@@ -111,11 +112,11 @@ export default class Session extends IModule {
         });
     }
 
-    async #onmessage([guid, content, attach]) {
-        console.debug('[Session|<<<<] [guid:%s] content:', guid, content, 'attach:', attach);
+    async #onmessage([guid, content]) {
+        console.debug('[Session|<<<<] [guid:%s] content:', guid, content);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
-            this.#callbacks.get(index)(content, attach);
+            this.#callbacks.get(index)(null, content);
             this.#callbacks.delete(index);
         }
         switch(guid) {
@@ -127,12 +128,10 @@ export default class Session extends IModule {
                 break;
             case this.#MESSAGE:
             case this.#BORDERCAST:
-                this.#online = attach;
-                this.#callbacks.get(guid)(content, attach);
+                this.#callbacks.get(guid)(content);
                 break;
             case this.#REPLY:
             default:
-                this.#online = attach;
                 callback(guid);
                 break;
         }
@@ -143,13 +142,27 @@ export default class Session extends IModule {
         switch(code) {
             case 3000:
             case 3001:
+                $.emit('network.kick');
                 console.debug('[Session|clse] [code:%d] [reason:%s]', code, reason);
                 return;
         }
-        this.#resume()
+        const exclude = new Set([
+            this.#MESSAGE,
+            this.#BORDERCAST,
+        ]);
+        const error = new Error(`Network Error`);
+        this.#callbacks.forEach((callback, guid) => {
+            if(exclude.has(guid)) return;
+            this.#callbacks.delete(guid);
+            callback(error);
+        });
+        const circleResume = ()=>this.#resume()
+            .then(_=>$.emit('network.resume'))
             .catch(e=>{
                 console.error('[Session|resume] ', e);
+                circleResume();
             });
+        circleResume();
     }
 
     #send(data) {
@@ -162,14 +175,18 @@ export default class Session extends IModule {
 
     #ping() {
         console.debug('[Session|ping] ping...');
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             let called = false;
             const start = Date.now();
-            const done = online=>{
+            const done = err=>{
+                const online = this.#online;
+                if(err) {
+                    resolve({online, delay: this.#delay});
+                    return;
+                }
                 if(called) return;
                 called = true;
                 const delay = Date.now() - start;
-                this.#online = online;
                 this.#delay = delay;
                 console.debug('[Session|ping] [delay:%dms] [online:%d]', delay, online);
                 resolve({delay, online});
@@ -187,7 +204,14 @@ export default class Session extends IModule {
             for(let i = 1; i<=L; i++) {
                 const guid = guidF.substring(0, i)
                 if(this.#callbacks.has(guid)) continue;
-                this.#callbacks.set(guid, ([code, ret])=>{
+                this.#callbacks.set(guid, (err, result)=>{
+                    if(err) {
+                        console.error(err);
+                        resolve({ success: false, code: -1});
+                        $.emit('network.error');
+                        return;
+                    }
+                    const [code, ret] = result;
                     // hook error
                     const success = code !== undefined && !code;
                     if(code) {

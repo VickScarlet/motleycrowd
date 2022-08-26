@@ -58,6 +58,18 @@ export default defineComponent({
         }
     },
     mounted() {
+        $.on('network.error', ()=>{
+            this.loading = false;
+            this.tips('当前网络有点小问题，尝试重连中~');
+        });
+        $.on('network.kick', ()=>{
+            this.loading = false;
+            this.tips('你被踢了');
+        });
+        $.on('network.resume', ()=>{
+            this.loading = false;
+            this.tips('重连成功');
+        });
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
         $.on('game.settlement', ()=>this.switch('Settlement', $.core.game.lastSettlement));
