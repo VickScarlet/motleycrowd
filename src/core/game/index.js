@@ -31,6 +31,7 @@ export default class Game extends IModule {
             question: ([idx, id, picked])=>this.#question(idx, id, picked),
             answer: ([idx, size])=>this.#answer(idx, size),
             settlement: data=>this.#settlement(data),
+            resume: data=>this.#resume(data),
         });
     }
 
@@ -85,6 +86,8 @@ export default class Game extends IModule {
         const {success} = await this.#command('answer', [
             this.#index, answer
         ]);
+        if(success)
+            this.#currentQuestion.answer = answer;
         return success;
     }
 
@@ -148,6 +151,24 @@ export default class Game extends IModule {
         this.clear();
         $.emit('game.settlement', data);
     }
+
+    #resume({info, start, question}) {
+        const {users, limit} = info;
+        this.#isPrivate = false;
+        this.#limit = limit;
+        this.#join(users);
+        if(!start)
+            return $.emit('game.resume.room');
+
+        const {idx, id, picked, left, size, answer} = question;
+        question = this.$core.question.get(id, picked, left, answer);
+        this.#currentAnswerSize = size;
+        this.#isGaming = true;
+        this.#index = idx;
+        this.#currentQuestion = question;
+        $.emit('game.resume.question', {question, answer});
+    }
+
     clear() {
         this.#room = '';
         this.#limit = 0;

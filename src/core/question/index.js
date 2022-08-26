@@ -4,20 +4,27 @@ import { meta } from './subjects/meta.js';
 
 
 export class Question {
-    constructor({id, question, options, timeout}, picked) {
+    constructor({id, question, options, timeout}, picked, left, answer) {
         this.#id = id;
         this.#question = question;
         this.#options = options;
         this.#timeout = timeout;
+        this.#left = typeof left === 'number'? left: timeout;
+        this.#answer = answer;
         if(picked) this.picked = picked;
     }
 
     #id;
+    #start = Date.now();
     #question;
     #options;
     #timeout;
     #picked;
+    #left;
+    #answer;
 
+    get answer() { return this.#answer || ''; }
+    set answer(value) { this.#answer = value; }
     get id() {return this.#id;}
     get question() {return this.#question;}
     get timeout() {return this.#timeout;}
@@ -32,6 +39,13 @@ export class Question {
         }
         return options;
     }
+    get left() {
+        const start = this.#start;
+        const left = this.#left;
+        const now = Date.now();
+        const end = start + left;
+        return Math.max(end - now, 0)
+    }
 
     option(option) {
         return this.#options[option];
@@ -39,9 +53,9 @@ export class Question {
 }
 
 export default class QuestionHelper extends IModule {
-    get(question, picked) {
+    get(question, picked, left, answer) {
         const data = meta(question);
         if(!data) return null;
-        return new Question(data, picked);
+        return new Question(data, picked, left, answer);
     }
 }

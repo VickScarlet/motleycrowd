@@ -56,6 +56,10 @@ export default defineComponent({
             _data: ()=>({}),
         }
     },
+    mounted() {
+        $.on('game.resume.room', ()=>this.switch('Room'));
+        $.on('game.resume.question', ()=>this.switch('Question'));
+    },
     methods: {
         switch(page, data) {
             this._data = ()=>(data||{});

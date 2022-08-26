@@ -17,18 +17,19 @@ export default class Session extends IModule {
     #PONG = 2;
     #MESSAGE = 3
     #REPLY = 4;
+    #RESUME = 5;
     #BORDERCAST = 9;
 
     #protocol;
     #host;
     #port;
-    #ws = null;
+    #client = null;
     #callbacks = new Map();
     #online = NaN;
     #delay = NaN;
     #lastping = 0;
     #onconnect;
-    #suid;
+    #sid;
 
     get #needping() {
         return Date.now() - this.#lastping > 60000;
@@ -54,31 +55,63 @@ export default class Session extends IModule {
         return `${this.#protocol}://${window.location.host}`;
     }
 
-    async #connect() {
+    async #ws(onmessage, onclose) {
         return new Promise((resolve, reject) => {
-            const start = Date.now();
-            const done = async (data, [online, suid])=>{
-                this.#delay = Date.now() - start;
-                this.#online = online;
-                console.debug("[Session|conn] [delay:%dms] [online:%d] [uuid:%s] info:", this.#delay, online, suid, data);
-                this.#suid = suid;
-                await this.#onconnect(data, online);
-                resolve();
-            }
-            this.#callbacks.set(this.#CONNECT, done);
-            this.#ws = new WebSocket(this.#url);
-            this.#ws.onmessage = event => this.#onmessage(event.data);
-            this.#ws.onclose = ({code, reason}) => this.#onclose(code, reason);
-            this.#ws.onerror = e => reject(e);
+            const ws = new WebSocket(this.#url);
+            ws.addEventListener('open', _ => resolve(ws));
+            ws.addEventListener('error', e => reject(e));
+            ws.addEventListener('message', async ({data}) => {
+                if(data instanceof Blob) {
+                    const arrayBuffer = await data.arrayBuffer();
+                    data = pako.inflate(arrayBuffer, { to: 'string' })
+                }
+                onmessage(JSON.parse(data))
+            });
+            ws.addEventListener('close', onclose);
         });
     }
 
-    async #onmessage(message) {
-        const [guid, content, attach] = JSON.parse(
-            message instanceof Blob
-            ? pako.inflate(await message.arrayBuffer(), { to: 'string' })
-            : message
-        );
+    async #connect() {
+        return new Promise(async resolve => {
+            const client = await this.#ws(
+                data => {
+                    if(data[0]!==this.#CONNECT)
+                        return this.#onmessage(data);
+                    const [, info, sid, online] = data;
+                    this.#client = client;
+                    this.#online = online;
+                    console.debug("[Session|conn] [online:%d] [sid:%s] info:", online, sid, info);
+                    this.#sid = sid;
+                    this.#onconnect(info, online);
+                    resolve();
+                },
+                ({code, reason}) => this.#onclose(code, reason),
+            );
+            client.send(JSON.stringify([this.#CONNECT]));
+        });
+    }
+
+    async #resume() {
+        console.debug('[Session|resume] [sid:%s]', this.#sid);
+        return new Promise(async (resolve, reject) => {
+            const client = await this.#ws(
+                data => {
+                    if(data[0]!==this.#RESUME)
+                        return this.#onmessage(data);
+                    const [, success, online] = data;
+                    this.#online = online;
+                    if(!success)
+                        return reject (new Error(`RESUME failed`));
+                    this.#client = client;
+                    resolve();
+                },
+                ({code, reason}) => this.#onclose(code, reason),
+            );
+            client.send(JSON.stringify([this.#RESUME, this.#sid]));
+        });
+    }
+
+    async #onmessage([guid, content, attach]) {
         console.debug('[Session|<<<<] [guid:%s] content:', guid, content, 'attach:', attach);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
@@ -97,7 +130,6 @@ export default class Session extends IModule {
                 this.#online = attach;
                 this.#callbacks.get(guid)(content, attach);
                 break;
-            case this.#CONNECT:
             case this.#REPLY:
             default:
                 this.#online = attach;
@@ -107,16 +139,25 @@ export default class Session extends IModule {
     }
 
     #onclose(code, reason) {
-        console.debug('[Session|clse] [code:%d] [reason:%s]', code, reason);
-        this.#ws = null;
+        this.#client = null;
+        switch(code) {
+            case 3000:
+            case 3001:
+                console.debug('[Session|clse] [code:%d] [reason:%s]', code, reason);
+                return;
+        }
+        this.#resume()
+            .catch(e=>{
+                console.error('[Session|resume] ', e);
+            });
     }
 
     #send(data) {
-        this.#ws.send(JSON.stringify(data));
+        this.#client.send(JSON.stringify(data));
     }
 
     close() {
-        this.#ws.close();
+        this.#client.close();
     }
 
     #ping() {
@@ -163,7 +204,7 @@ export default class Session extends IModule {
     }
 
     async ping() {
-        if(this.#ws && this.#needping) {
+        if(this.#client && this.#needping) {
             this.#lastping = Date.now();
             return this.#ping();
         }
