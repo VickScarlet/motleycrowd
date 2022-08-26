@@ -4,7 +4,8 @@ export default class Game extends IModule {
 
     #room = '';
     #limit = 0;
-    #isGaming = false;
+    #isInRoom = false;
+    #isStarted = false;
     #isPrivate = false;
     #isReady = false;
     #users = new Map();
@@ -15,7 +16,8 @@ export default class Game extends IModule {
 
     get room() { return this.#room; }
     get limit() { return this.#limit; }
-    get isGaming() { return this.#isGaming; }
+    get isInRoom() { return this.#isInRoom; }
+    get isStarted() { return this.#isStarted; }
     get isPrivate() { return this.#isPrivate; }
     get isReady() { return this.#isReady; }
     get users() { return this.#users; }
@@ -43,6 +45,7 @@ export default class Game extends IModule {
         const {success, data} = await this.#command('pair', {type});
         if(success) {
             const {users, limit} = data;
+            this.#isInRoom = true;
             this.#isPrivate = false;
             this.#limit = limit;
             this.#join(users);
@@ -54,6 +57,7 @@ export default class Game extends IModule {
         const {success, data} = await this.#command('create', {type});
         if(success) {
             const {room, info: {users, limit}} = data;
+            this.#isInRoom = true;
             this.#isPrivate = true;
             this.#room = room;
             this.#limit = limit;
@@ -66,6 +70,7 @@ export default class Game extends IModule {
         const {success, data} = await this.#command('join', {room});
         if(success) {
             const {users, limit} = data;
+            this.#isInRoom = true;
             this.#isPrivate = true;
             this.#room = room;
             this.#limit = limit;
@@ -75,7 +80,7 @@ export default class Game extends IModule {
     }
 
     async leave() {
-        if(!this.#isGaming) return true;
+        if(!this.#isInRoom) return true;
         const {success} = await this.#command('leave');
         if(success) this.clear();
         return success;
@@ -126,8 +131,8 @@ export default class Game extends IModule {
         this.#index = idx;
         this.#currentQuestion = question;
         this.#currentAnswerSize = 0;
-        if(!this.#isGaming) {
-            this.#isGaming = true;
+        if(!this.#isStarted) {
+            this.#isStarted = true;
             $.emit('game.start');
         }
         $.emit('game.question', question);
@@ -153,6 +158,7 @@ export default class Game extends IModule {
     }
 
     #resume({info, start, question}) {
+        this.#isInRoom = true;
         const {users, limit} = info;
         this.#isPrivate = false;
         this.#limit = limit;
@@ -163,7 +169,7 @@ export default class Game extends IModule {
         const {idx, id, picked, left, size, answer} = question;
         question = this.$core.question.get(id, picked, left, answer);
         this.#currentAnswerSize = size;
-        this.#isGaming = true;
+        this.#isStarted = true;
         this.#index = idx;
         this.#currentQuestion = question;
         $.emit('game.resume.question', {question, answer});
@@ -172,7 +178,8 @@ export default class Game extends IModule {
     clear() {
         this.#room = '';
         this.#limit = 0;
-        this.#isGaming = false;
+        this.#isInRoom = false;
+        this.#isStarted = false;
         this.#isReady = false;
         this.#isPrivate = false;
         this.#currentQuestion = null;

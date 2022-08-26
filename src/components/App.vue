@@ -21,6 +21,7 @@ defineExpose(getCurrentInstance().proxy);
         <input id="fullscreencb" type="checkbox" placeholder="自动登录" @click="fullscreen()" v-model.trim="isfullscreen"/>
         <label for="fullscreencb">{{isfullscreen?'窗口':'全屏'}}</label>
     </div>
+
 </template>
 
 <script>
@@ -59,6 +60,7 @@ export default defineComponent({
     mounted() {
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
+        $.on('game.settlement', ()=>this.switch('Settlement'));
     },
     methods: {
         switch(page, data) {
@@ -133,15 +135,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
-
 .serverstat {
     font-size: 0.8em;
     color: #888;

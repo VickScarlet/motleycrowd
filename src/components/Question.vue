@@ -1,9 +1,11 @@
 <script setup>
 import CountDownProgress from './CountDownProgress.vue'
+import Confirm from './Confirm.vue'
 </script>
 
 <template>
     <div class="container">
+        <button class="exit" @click="back">退出房间</button>
         <div class="progress-bar">
             <CountDownProgress :init="progress"/>
         </div>
@@ -19,10 +21,11 @@ import CountDownProgress from './CountDownProgress.vue'
                     /><label :for=option :class="'option-'+type"><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
                 </li>
             </ul>
-            <button v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
-            <button v-if="answered">您已提交选项【{{answeredOption}}】</button>
+            <button class="submit" v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
+            <button class="submit" v-if="answered">您已提交选项【{{answeredOption}}】</button>
         </div>
     </div>
+    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">真的要退出吗</Confirm>
 </template>
 
 <script>
@@ -30,6 +33,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
     data() {
         return {
+            confirm: false,
             id: '',
             selected: '',
             question: '',
@@ -49,14 +53,23 @@ export default defineComponent({
         this.update();
         $.on('game.question', this.update.bind(this));
         $.on('game.answer', this.updateAnswer.bind(this));
-        $.on('game.settlement', this.settlement);
     },
     deactivated() {
+        this.confirm = false;
         $.off('game.question', this.update.bind(this));
         $.off('game.answer', this.updateAnswer.bind(this));
-        $.off('game.settlement', this.settlement);
     },
     methods: {
+        back() {
+            this.confirm = true;
+        },
+        async doexit(exit) {
+            this.confirm = false;
+            if(!exit) return;
+            const result = await $.core.game.leave();
+            if(result)
+                $.ui.switch('Index');
+        },
         update() {
             const question = $.core.game.currentQuestion;
             if(!question) return;
@@ -87,9 +100,6 @@ export default defineComponent({
             this.answerCount++;
             this.answered = true;
             this.answeredOption = selected;
-        },
-        settlement() {
-            $.ui.switch('Settlement', $.core.game.lastSettlement);
         },
     }
 });
@@ -168,7 +178,7 @@ export default defineComponent({
     }
 }
 
-button {
+button.submit {
     position: relative;
     font-weight: bold;
     font-size: 1.8em;

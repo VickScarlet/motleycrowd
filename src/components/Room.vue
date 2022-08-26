@@ -4,6 +4,7 @@ import UserCard from './UserCard.vue'
 
 <template>
     <div class="container">
+        <button class="exit" @click="back">退出房间</button>
         <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
             <li v-for="user of users" :key="user.uuid">
@@ -32,6 +33,11 @@ export default defineComponent({
         $.off('game.start', this.start)
     },
     methods: {
+        async back() {
+            const result = await $.core.game.leave();
+            if(result)
+                $.ui.switch('Index');
+        },
         start() {
             $.ui.switch('Question');
         },
@@ -48,11 +54,10 @@ export default defineComponent({
 
 .container {
     display: block;
-    position: absolute;
-    top: 0;
-    left: 50px;
-    right: 50px;
-    bottom: 0;
+    position: relative;
+    width: 100%;
+    min-width: 300px;
+    max-width: 1200px;
 }
 
 .userlist {
@@ -61,37 +66,39 @@ export default defineComponent({
     align-items: center;
     align-content: space-between;
     justify-content: space-between;
-    width: 100%;
     height: auto;
-    padding-top: 80px;
+    margin: auto;
     flex-wrap: wrap;
-    min-width: 256px;
-    max-width: 1024px;
-}
-
-.userlist > li {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100px;
-}
-
-@media all and (min-width: 612px) {
-    .userlist > li{
-        width: 50%;
+    > li {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 300px;
+        height: 100px;
     }
 }
 
-@media all and (min-width: 868px) {
-    .userlist > li{
-        width: 33%;
+@media all and (min-width: 300px) {
+    .container {
+        width: 300px;
     }
 }
 
-@media all and (min-width: 1124px) {
-    .userlist > li{
-        width: 25%;
+@media all and (min-width: 600px) {
+    .container {
+        width: 600px;
+    }
+}
+
+@media all and (min-width: 900px) {
+    .container {
+        width: 900px;
+    }
+}
+
+@media all and (min-width: 1200px) {
+    .container {
+        width: 1200px;
     }
 }
 
