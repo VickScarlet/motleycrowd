@@ -35,6 +35,7 @@ export default class Game extends IModule {
             settlement: data=>this.#settlement(data),
             resume: data=>this.#resume(data),
         });
+        this.#debug();
     }
 
     async #command(type, data) {
@@ -146,15 +147,15 @@ export default class Game extends IModule {
 
     #settlement(data) {
         const users = new Map(this.#users);
-        this.#lastSettlement = new SettlementData(
+        const settlement = new SettlementData(
             this.$core.user.uuid,
             this.$core.question.get,
             data,
             users,
         );
-
+        this.#lastSettlement = settlement;
         this.clear();
-        $.emit('game.settlement', data);
+        $.emit('game.settlement', settlement);
     }
 
     #resume({info, start, question}) {
@@ -186,5 +187,20 @@ export default class Game extends IModule {
         this.#index = -1;
         this.#currentAnswerSize = 0;
         this.#users.clear();
+    }
+    #debug() {
+        $.on('debug.game.settlement', data=>{
+            const settlement = new SettlementData(
+                data.users.includes(this.$core.user.uuid)
+                    ?this.$core.user.uuid
+                    :data.users[0],
+                this.$core.question.get,
+                data,
+                new Map(data.users.map(uuid=>([uuid, {
+                    uuid, guest: uuid[0]=="#", username: uuid,
+                }]))),
+            );
+            $.emit('game.settlement', settlement);
+        });
     }
 }

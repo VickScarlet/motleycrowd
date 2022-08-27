@@ -11,6 +11,7 @@ import UserCard from './UserCard.vue'
                 :key="uuid"
                 :ismine="uuid==mine"
                 :ranking="ranking"
+                @click="$emit('ch',uuid)"
             >
                 <div>
                     <div>

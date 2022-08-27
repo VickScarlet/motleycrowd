@@ -11,7 +11,7 @@ import SettlementRank from './SettlementRank.vue'
                 <SettlementMine :getData="mine" />
             </li>
             <li class="card">
-                <SettlementRank :getData="rank" />
+                <SettlementRank :getData="rank" @ch="ch" />
             </li>
             <li v-for="([idx, get]) in questions" :key="idx" class="card">
                 <SettlementQuestion :getData="get" />
@@ -43,6 +43,12 @@ export default defineComponent({
             this.mine = ()=>mine;
             this.rank = ()=>({uuid, rank});
         },
+        ch(uuid) {
+            if(!$.debug) return;
+            const settlement = this.getData();
+            settlement.uuid = uuid;
+            this.update();
+        },
         ok() {
             $.ui.switch('Index');
         }
@@ -51,6 +57,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.container {
+    margin: 10px;
+}
 .card {
     max-width: 960px;
     padding: 10px;

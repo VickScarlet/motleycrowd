@@ -38,6 +38,7 @@ export default class SettlementData {
     #indexs;
 
     get uuid() { return this.#uuid; }
+    set uuid(v) { this.#uuid = v; }
 
     get size() {
         if(!this.#questions) return -1;

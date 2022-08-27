@@ -216,6 +216,7 @@ export default class Session extends IModule {
                     const success = code !== undefined && !code;
                     if(code) {
                         console.debug('Command error:', code);
+                        $.emit('command.error', code);
                     }
                     resolve({ success, code, data: ret });
                 });

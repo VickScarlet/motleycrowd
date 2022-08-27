@@ -72,7 +72,7 @@ export default defineComponent({
         });
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
-        $.on('game.settlement', ()=>this.switch('Settlement', $.core.game.lastSettlement));
+        $.on('game.settlement', data=>this.switch('Settlement', data));
     },
     methods: {
         switch(page, data) {

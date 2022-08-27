@@ -47,6 +47,9 @@ export default class Core {
         await this.#session.initialize();
         await this.#user.initialize();
         await this.#game.initialize();
+        $.on('debug.push', (action, data)=>
+            this.#serverpush('message', [action, data])
+        );
     }
 
     async start() {

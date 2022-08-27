@@ -7,10 +7,22 @@ import App from './components/App.vue'
 window.onerror = function(msg,source,line,col,error) {
     alert(`${msg}\nat: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
 }
-window.$ = window.$sys = {};
+window.$ = window.$sys = {
+    q: {},
+};
 window.$sys.on = on;
 window.$sys.off = off;
 window.$sys.emit = emit;
+
+window.location.search.substring(1).split('&').forEach(item=>{
+    const [key, value] = item.split('=');
+    if(!key) return;
+    if(key==='debug' && value) {
+        window.$sys.debug = !!JSON.parse(value);
+        return;
+    }
+    window.$.q[key] = value;
+});
 
 const core = new Core({
     session: {
