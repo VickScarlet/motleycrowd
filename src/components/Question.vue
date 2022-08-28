@@ -13,12 +13,15 @@ import Confirm from './Confirm.vue'
             <h3 class="question">{{question}}</h3>
             <span class="count">{{answerCount}}/{{limit}}人</span>
             <ul class="options">
-                <li v-for="{key, option, val, type} in options" :key="key">
+                <li v-for="{key, option, val, type} in options"
+                    :key="key"
+                    :type="type"
+                >
                     <input type="radio" name="option"
                         :id="option"
                         :value="option"
                         v-model="selected"
-                    /><label :for=option :class="'option-'+type"><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
+                    /><label :for=option><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
                 </li>
             </ul>
             <button class="submit" v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
@@ -170,7 +173,9 @@ export default defineComponent({
         label {
             display: block;
             padding: 0.2em 1em;
+            padding-right: calc(1em + 20px);
             text-align: center;
+            border: 1px solid #00000000;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 5px;
             span {
@@ -181,6 +186,24 @@ export default defineComponent({
 
         input:checked + label {
             background: linear-gradient(67deg, #ffae0090, #48ff007b);
+        }
+
+        &[type="special"] label {
+            border: 1px solid #6490ff;
+            box-shadow: 0 0 8px #6490ff;
+
+            &::before {
+                content: "稀有!";
+                position: absolute;
+                font-style: italic;
+                top: 0;
+                right: 0;
+                padding: 4px;
+                margin: 0;
+                color: #6490ff;
+                font-size: 10px;
+                line-height: 10px;;
+            }
         }
     }
 }
