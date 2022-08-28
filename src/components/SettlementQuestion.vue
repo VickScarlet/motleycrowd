@@ -12,7 +12,7 @@ import AnswerPieChart from './AnswerPieChart.vue';
                 <li v-for="({option, value, description}) in answers"
                     :key="option" :ismine="option==mine.answer">
 
-                    <span>{{option}}:</span>
+                    <span>{{option?option:'未选'}}:</span>
                     <span>{{String(value).padStart(4, ' ')}}人</span>
                     <span>&nbsp;&nbsp;&nbsp;{{description}}</span>
                 </li>
@@ -53,7 +53,7 @@ export default defineComponent({
                 });
             });
             if (sum < total) {
-                answers.push({option: '未选', value: total - sum});
+                answers.push({option: '', value: total - sum});
             }
             this.answers = answers;
         },

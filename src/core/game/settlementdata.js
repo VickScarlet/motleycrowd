@@ -96,7 +96,7 @@ class UScores {
 
         this.#subs = subs.map(sub=>{
             if(!Array.isArray(sub))
-                return { value: sub };
+                return { value: sub, answer: '' };
             const [value, answer] = sub;
             return { value, answer };
         });
