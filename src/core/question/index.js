@@ -1,44 +1,35 @@
 import { IModule } from '../imodule.js';
 import { clone } from '../../functions/index.js';
-import { meta } from './subjects/meta.js';
+import { Question } from './subjects/index.js';
 
-
-export class Question {
-    constructor({id, question, options, timeout}, picked, left, answer) {
-        this.#id = id;
-        this.#question = question;
-        this.#options = options;
-        this.#timeout = timeout;
-        this.#left = typeof left === 'number'? left: timeout;
+export class ClientQuestion {
+    constructor(id, picked, left, answer, size) {
+        this.#question = Question.get(id, picked);
+        this.#left = typeof left === 'number'
+            ? left: this.timeout;
         this.#answer = answer;
-        if(picked) this.picked = picked;
+        this.#size = size;
     }
 
-    #id;
     #start = Date.now();
     #question;
-    #options;
-    #timeout;
-    #picked;
     #left;
     #answer;
+    #size;
+
+    get id() {return this.#question.id;}
+    get question() {return this.#question.question;}
+    get timeout() {return this.#question.timeout;}
+    get options() {return clone(this.#question.options);}
+    get picked() {return this.#question.picked;}
+    set picked(picked) {
+        this.#question = Question.get(this.id, picked);
+    }
+    get size() {return this.#size || 0;}
+    set size(size) {this.#size = size;}
 
     get answer() { return this.#answer || ''; }
     set answer(value) { this.#answer = value; }
-    get id() {return this.#id;}
-    get question() {return this.#question;}
-    get timeout() {return this.#timeout;}
-    get picked() {return [...this.#picked].sort().join('');}
-    set picked(picked) {
-        this.#picked = new Set(picked.split(''));
-    }
-    get options() {
-        const options = {};
-        for(const option of this.#picked) {
-            options[option] = clone(this.#options[option]);
-        }
-        return options;
-    }
     get left() {
         const start = this.#start;
         const left = this.#left;
@@ -48,14 +39,12 @@ export class Question {
     }
 
     option(option) {
-        return this.#options[option];
+        return clone(this.#question.option(option));
     }
 }
 
 export default class QuestionHelper extends IModule {
-    get(question, picked, left, answer) {
-        const data = meta(question);
-        if(!data) return null;
-        return new Question(data, picked, left, answer);
+    get(qid, picked, left, answer) {
+        return new ClientQuestion(qid, picked, left, answer);
     }
 }

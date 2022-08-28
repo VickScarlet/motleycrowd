@@ -21,19 +21,26 @@ window.location.search.substring(1).split('&').forEach(item=>{
         window.$sys.debug = !!JSON.parse(value);
         return;
     }
-    window.$.q[key] = value;
+    window.$sys.q[key] = value;
 });
 
-const core = new Core({
-    session: {
-        protocol: 'wss',
-        host: "motleycrowdservice.syaro.io",
-        port: 443,
-        // protocol: 'ws',
-        // host: '127.0.0.1',
-        // port: 1919,
-    }
-});
+const session = {
+    protocol: 'wss',
+    host: "motleycrowdservice.syaro.io",
+    port: 443,
+};
+
+if(window.$sys.debug) {
+    const q = window.$sys.q;
+    if(q.protocol)
+        session.protocol = q.protocol;
+    if(q.host)
+        session.host = q.host;
+    if(q.port)
+        session.port = Number(q.port) || 443;
+}
+
+const core = new Core({session});
 window.$sys.core = core;
 await core.initialize();
 

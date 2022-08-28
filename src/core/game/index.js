@@ -11,7 +11,6 @@ export default class Game extends IModule {
     #users = new Map();
     #currentQuestion = null;
     #index = -1;
-    #currentAnswerSize = 0;
     #lastSettlement = null;
 
     get room() { return this.#room; }
@@ -22,7 +21,6 @@ export default class Game extends IModule {
     get isReady() { return this.#isReady; }
     get users() { return this.#users; }
     get currentQuestion() { return this.#currentQuestion; }
-    get currentAnswerSize() { return this.#currentAnswerSize; }
     get lastSettlement() { return this.#lastSettlement; }
 
     async initialize() {
@@ -89,11 +87,11 @@ export default class Game extends IModule {
 
     async answer(answer) {
         if(!this.#currentQuestion) return false;
+        const question = this.#currentQuestion;
         const {success} = await this.#command('answer', [
             this.#index, answer
         ]);
-        if(success)
-            this.#currentQuestion.answer = answer;
+        if(success) question.answer = answer;
         return success;
     }
 
@@ -131,7 +129,6 @@ export default class Game extends IModule {
         const question = this.$core.question.get(id, picked);
         this.#index = idx;
         this.#currentQuestion = question;
-        this.#currentAnswerSize = 0;
         if(!this.#isStarted) {
             this.#isStarted = true;
             $.emit('game.start');
@@ -141,7 +138,8 @@ export default class Game extends IModule {
 
     #answer(idx, size) {
         if(idx != this.#index) return;
-        this.#currentAnswerSize = size;
+        const question = this.#currentQuestion;
+        if(question) question.size = size;
         $.emit('game.answer', size);
     }
 
@@ -169,7 +167,7 @@ export default class Game extends IModule {
 
         const {idx, id, picked, left, size, answer} = question;
         question = this.$core.question.get(id, picked, left, answer);
-        this.#currentAnswerSize = size;
+        question.size = size;
         this.#isStarted = true;
         this.#index = idx;
         this.#currentQuestion = question;
@@ -185,7 +183,6 @@ export default class Game extends IModule {
         this.#isPrivate = false;
         this.#currentQuestion = null;
         this.#index = -1;
-        this.#currentAnswerSize = 0;
         this.#users.clear();
     }
     #debug() {

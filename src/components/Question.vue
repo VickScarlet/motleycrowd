@@ -75,11 +75,11 @@ export default defineComponent({
             if(!question) return;
             if(this.id == question.id) return;
             this.id = question.id;
-            this.answerCount = 0;
+            this.answerCount = question.size;
             this.question = question.question;
             this.selected = '';
             this.answeredOption = question.answer;
-            this.answered = false;
+            this.answered = !!question.answer;
             this.progress = {total: question.timeout, left: question.left};
             const options = [];
             for(const option in question.options) {
