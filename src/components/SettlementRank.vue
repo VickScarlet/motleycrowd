@@ -48,6 +48,7 @@ export default defineComponent({
         return {
             mine: '',
             iscollapsed: true,
+            rank: [],
         }
     },
     mounted() {

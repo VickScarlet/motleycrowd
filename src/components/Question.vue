@@ -13,7 +13,7 @@ import Confirm from './Confirm.vue'
             <h3 class="question">{{question}}</h3>
             <span class="count">{{answerCount}}/{{limit}}人</span>
             <ul class="options">
-                <li v-for="{option, val, type} in options" :key="option">
+                <li v-for="{key, option, val, type} in options" :key="key">
                     <input type="radio" name="option"
                         :id="option"
                         :value="option"
@@ -71,32 +71,39 @@ export default defineComponent({
                 $.ui.switch('Index');
         },
         update() {
-            const question = $.core.game.currentQuestion;
-            if(!question) return;
-            if(this.id == question.id) return;
-            this.id = question.id;
-            this.answerCount = question.size;
-            this.question = question.question;
+            const q = $.core.game.currentQuestion;
+            if(!q) return;
+            const { id, question, size, left,
+                answer, timeout: total, options
+            } = q;
+            if(this.id == id) return;
+            this.id = id;
+            this.answerCount = size;
+            this.question = question;
             this.selected = '';
-            this.answeredOption = question.answer;
-            this.answered = !!question.answer;
-            this.progress = {total: question.timeout, left: question.left};
-            const options = [];
-            for(const option in question.options) {
-                const {type, val} = question.options[option];
-                options.push({option, val, type});
+            this.answeredOption = answer;
+            this.answered = !!answer;
+            this.progress = {total, left};
+            const opts = [];
+            for(const option in options) {
+                const {type, val} = options[option];
+                const key = `${id}-${option}`
+                opts.push({key, option, val, type});
             }
-            this.options = options;
+            this.options = opts;
         },
         updateAnswer(count) {
             this.answerCount = count;
         },
         async answer() {
+            const id = this.id;
             const selected = this.selected;
             $.ui.loading = true;
             const result = await $.core.game.answer(selected);
             $.ui.loading = false;
             if(!result) return;
+            const q = $.core.game.currentQuestion;
+            if(!q || id != q.id) return;
             this.answerCount++;
             this.answered = true;
             this.answeredOption = selected;
