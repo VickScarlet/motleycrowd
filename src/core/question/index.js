@@ -20,7 +20,14 @@ export class ClientQuestion {
     get id() {return this.#question.id;}
     get question() {return this.#question.question;}
     get timeout() {return this.#question.timeout;}
-    get options() {return clone(this.#question.options);}
+    get options() {
+        const options = {};
+        for(const option of [...this.picked]) {
+            options[option] = this.option(option);
+        }
+        return options;
+    }
+
     get picked() {return this.#question.picked;}
     set picked(picked) {
         this.#question = Question.get(this.id, picked);
@@ -30,6 +37,7 @@ export class ClientQuestion {
 
     get answer() { return this.#answer || ''; }
     set answer(value) { this.#answer = value; }
+
     get left() {
         const start = this.#start;
         const left = this.#left;
