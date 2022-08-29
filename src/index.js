@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import './style/app.scss'
 import App from './components/App.vue'
 
+(async ()=>{
+
 window.onerror = function(msg,source,line,col,error) {
     alert(`${msg}\nat: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
 }
@@ -65,3 +67,5 @@ try {
     proxy.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
 }
 proxy.loading = false;
+
+})();
