@@ -161,66 +161,67 @@ export default class Session extends IModule {
         circleResume();
     }
 
-    #send(data) {
-        this.#client.send(JSON.stringify(data));
-    }
-
-    close() {
-        this.#client.close();
-    }
-
-    #ping() {
-        console.debug('[Session|ping] ping...');
-        return new Promise(resolve => {
-            let called = false;
-            const start = Date.now();
-            const done = err=>{
-                const online = this.#online;
-                if(err) {
-                    resolve({online, delay: this.#delay});
-                    return;
+    async #send(id, ...others) {
+        if(!this.#client) throw new Error('Network Error');
+        switch(id) {
+            case this.#PONG:
+                this.#client.send(JSON.stringify([id, ...others]));
+                return true;
+            case this.#PING:
+                break;
+            default:
+                if(this.#callbacks.has(id)) {
+                    throw new Error('Duplicate id');
                 }
-                if(called) return;
-                called = true;
-                const delay = Date.now() - start;
-                this.#delay = delay;
-                console.debug('[Session|ping] [delay:%dms] [online:%d]', delay, online);
-                resolve({delay, online});
-            }
-            this.#callbacks.set(this.#PING, done);
-            this.#send([this.#PING]);
+        }
+        return new Promise((resolve, reject) => {
+            this.#callbacks.set(id, (err, result)=>{
+                if(err) return reject(err);
+                resolve(result);
+            });
+            this.#client.send(JSON.stringify([id, ...others]));
         });
+    }
+
+    async #ping() {
+        console.debug('[Session|ping] ping...');
+        const start = Date.now();
+        await this.#send(this.#PING);
+        const delay = Date.now() - start;
+        this.#delay = delay;
+        const online = this.#online;
+        console.debug('[Session|ping] [delay:%dms] [online:%d]', delay, online);
+        return {delay, online};
+    }
+
+    #genMessageId() {
+        const guidF = uuidGenerator();
+        const L = guidF.length;
+        for(let i = 1; i<=L; i++) {
+            const guid = guidF.substring(0, i)
+            if(this.#callbacks.has(guid)) continue;
+            return guid;
+        }
     }
 
     async command(command, data) {
         console.debug('[Session|>>>>] [command:%s] data:', command, data);
-        return new Promise(resolve => {
-            const guidF = uuidGenerator();
-            const L = guidF.length;
-            for(let i = 1; i<=L; i++) {
-                const guid = guidF.substring(0, i)
-                if(this.#callbacks.has(guid)) continue;
-                this.#callbacks.set(guid, (err, result)=>{
-                    if(err) {
-                        console.error(err);
-                        resolve({ success: false, code: -1});
-                        return;
-                    }
-                    const [code, ret] = result;
-                    // hook error
-                    const success = code !== undefined && !code;
-                    if(code) {
-                        console.debug('Command error:', code);
-                        $.emit('command.error', code);
-                    }
-                    resolve({ success, code, data: ret });
-                });
-                const message = [guid,command];
-                if(data!==undefined) message.push(data);
-                this.#send(message);
-                return;
+        try {
+            const [code, ret] =
+                await this.#send(this.#genMessageId(), command, data);
+            if(code) {
+                console.debug('Command error:', code);
+                $.emit('command.error', code);
             }
-        });
+            return {
+                success: code !== undefined && !code,
+                code, data: ret
+            };
+        } catch (err) {
+            console.error(err);
+            $.emit('command.error', -1);
+            return { success: false, code: -1};
+        }
     }
 
     async ping() {
