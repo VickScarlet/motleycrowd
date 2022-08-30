@@ -18,7 +18,7 @@ export default class Database extends IModule {
             const request = window.indexedDB.open(dbName, version);
             request.onerror = event=>reject(event.target.error);
             request.onsuccess = event=>resolve(event.target.result);
-            request.onupgradeneeded = async event=>this.#onupgradeneeded(event.target.result);
+            request.onupgradeneeded = event=>this.#onupgradeneeded(event.target.result);
         });
         this.#kv = new KV(db);
         this.#user = new User(db);
@@ -39,9 +39,9 @@ export default class Database extends IModule {
      * @private
      * @param {IDBDatabase} db
      */
-    async #onupgradeneeded(db) {
-        await this.#scheme(db, KV.Collection, KV.Scheme);
-        await this.#scheme(db, User.Collection, User.Scheme);
+    #onupgradeneeded(db) {
+        this.#scheme(db, KV.Collection, KV.Scheme);
+        this.#scheme(db, User.Collection, User.Scheme);
     }
 
     /**
@@ -53,14 +53,12 @@ export default class Database extends IModule {
      * @param {string} scheme.keyPath
      * @param {Object<string, {unique: boolean}>} scheme.indexs
      */
-    async #scheme(db, collection, {keyPath, indexs}) {
-        return new Promise(resolve => {
-            const store = db.createObjectStore(collection, {keyPath});
-            for(const index in indexs) {
-                store.createIndex(index, index, indexs[index]);
-            }
-            store.transaction.oncomplete = resolve
-        }).catch(_=>false);
+    #scheme(db, collection, {keyPath, indexs}) {
+        if(db.objectStoreNames.contains(collection)) return;
+        const store = db.createObjectStore(collection, {keyPath});
+        for(const index in indexs) {
+            store.createIndex(index, index, indexs[index]);
+        }
     }
 
 }
