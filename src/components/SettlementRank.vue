@@ -7,7 +7,7 @@ import UserCard from './UserCard.vue'
         <button @click="toggle" collapse v-if="!iscollapsed">收&nbsp;&nbsp;&nbsp;&nbsp;起</button>
         <h3>排 行 榜</h3>
         <ul class="rank">
-            <li v-for="({uuid, info, ranking, answers, total}) in rank"
+            <li v-for="({uuid, ranking, answers, total}) in rank"
                 :key="uuid"
                 :ismine="uuid==mine"
                 :ranking="ranking"
@@ -19,7 +19,7 @@ import UserCard from './UserCard.vue'
                         <span :gt0="total>0">{{total}}</span>
                     </div>
                     <div>
-                        <UserCard :user="info" />
+                        <UserCard :uuid="uuid" />
                     </div>
                 </div>
                 <ul>
@@ -60,12 +60,11 @@ export default defineComponent({
             const data = this.getData();
             if(!data) return;
             this.mine = data.uuid;
-            this.rank = data.rank.map(({uuid, score, ranking, subs, info})=>({
+            this.rank = data.rank.map(({uuid, score, ranking, subs})=>({
                 uuid,
                 ranking,
                 total: score,
                 answers: subs,
-                info,
             }));
         },
         toggle() {

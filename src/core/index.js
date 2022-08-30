@@ -1,4 +1,4 @@
-import Storage from "./storage.js";
+import Database from "./database/index.js";
 import Question from "./question/index.js";
 import Session from "./session.js";
 import User from './user.js';
@@ -11,13 +11,13 @@ export default class Core {
 
     #proxy = new Map();
     #configure;
-    #storage;
+    #database;
     #question;
     #session;
     #user;
     #game;
 
-    get storage() { return this.#storage; }
+    get database() { return this.#database; }
     get question() { return this.#question; }
     get user() { return this.#user; }
     get game() { return this.#game; }
@@ -34,7 +34,7 @@ export default class Core {
     }
 
     async initialize() {
-        this.#storage = new Storage(this, this.#configure.storage);
+        this.#database = new Database(this, this.#configure.database);
         this.#question = new Question(this, this.#configure.question);
         this.#session = new Session(this, this.#configure.session, {
             boardcast: data => this.#serverpush('boardcast', data),
@@ -44,9 +44,11 @@ export default class Core {
         this.#user = new User(this, this.#configure.user);
         this.#game = new Game(this, this.#configure.game);
 
-        await this.#session.initialize();
+        await this.#database.initialize();
+        await this.#question.initialize();
         await this.#user.initialize();
         await this.#game.initialize();
+        await this.#session.initialize();
         $.on('debug.push', (action, data)=>
             this.#serverpush('message', [action, data])
         );

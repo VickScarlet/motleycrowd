@@ -1,7 +1,7 @@
 import Answer from "./answer.js";
 
 export default class SettlementData {
-    constructor(uuid, getQuestion, {questions, scores}, users) {
+    constructor(uuid, getQuestion, {questions, scores}) {
         this.#uuid = uuid;
         this.#questions = questions.map(
             ([qid, picked]) => getQuestion(qid, picked)
@@ -28,7 +28,6 @@ export default class SettlementData {
                     score,
                     ranking(idx, score),
                     subs,
-                    users.get(uid)
                 )
             ));
     }
@@ -88,11 +87,10 @@ export default class SettlementData {
 }
 
 class UScores {
-    constructor(uuid, score, ranking, subs, info) {
+    constructor(uuid, score, ranking, subs) {
         this.#uuid = uuid;
         this.#score = score;
         this.#ranking = ranking;
-        this.#info = info;
 
         this.#subs = subs.map(sub=>{
             if(!Array.isArray(sub))
@@ -106,13 +104,11 @@ class UScores {
     #score;
     #ranking;
     #subs;
-    #info;
 
     get uuid() {return this.#uuid;}
     get score() {return this.#score;}
     get ranking() {return this.#ranking;}
     get subs() {return this.#subs;}
-    get info() {return this.#info;}
     get length() {return this.#subs.length;}
 
     at(index) {

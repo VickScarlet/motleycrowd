@@ -4,22 +4,40 @@
             <!-- <span :class=badge(user.style)>测试</span>
             <span>子鼠丑牛寅虎卯兔辰龙巳蛇午马未羊申猴酉鸡戌狗亥猪</span> -->
 
-            <span v-if="user.guest">游客{{user.uuid}}</span>
-            <span v-else>{{user.username}}</span>
+            <span v-if="guest">游客{{uuid}}</span>
+            <span v-else>{{username}}</span>
         </span>
     </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { watch, defineComponent } from 'vue'
 export default defineComponent({
     props: {
-        user: {
-            type: Object,
+        uuid: {
+            type: String,
             required: true,
         },
     },
+    data() {
+        return {
+            username: '',
+            guest: false,
+        }
+    },
+    mounted() {
+        watch(()=>this.uuid, ()=>this.update());
+        this.update();
+    },
     methods: {
+        async update() {
+            const {uuid} = this;
+            const user = await $.core.user.get(uuid);
+            if(user) {
+                this.username = user.username;
+                this.guest = !!user.guest;
+            }
+        },
         badge(style) {
             return 'badge badge-default';
         },

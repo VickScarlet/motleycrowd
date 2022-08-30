@@ -1,4 +1,4 @@
-import { IModule } from '../imodule.js';
+import IModule from '../imodule.js';
 import { clone } from '../../functions/index.js';
 import { Question } from './subjects/index.js';
 

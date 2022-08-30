@@ -8,7 +8,7 @@ import UserCard from './UserCard.vue'
             <AnswerLineBarChart :answers="answers" :width="330" :height="330"/>
         </div>
         <ul class="info">
-            <li><UserCard :user="info" /></li>
+            <li><UserCard :uuid="uuid" /></li>
             <li>排名: {{ranking}}</li>
             <li>得分: {{score}}</li>
         </ul>
@@ -23,7 +23,7 @@ export default defineComponent({
             answers: [],
             ranking: -1,
             score: 0,
-            info: {},
+            uuid: '',
         }
     },
     mounted() {
@@ -34,7 +34,7 @@ export default defineComponent({
         update() {
             const mine = this.getData();
             if(!mine) return;
-            this.info = mine.info;
+            this.uuid = mine.uuid;
             this.ranking = mine.ranking;
             this.score = mine.score;
             this.answers = mine.map(({value, answer}, index)=>({

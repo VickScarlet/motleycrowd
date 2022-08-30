@@ -7,8 +7,8 @@ import UserCard from './UserCard.vue'
         <button class="exit" @click="back">退出房间</button>
         <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
-            <li v-for="user of users" :key="user.uuid">
-                <UserCard :user=user />
+            <li v-for="uuid of users" :key="uuid">
+                <UserCard :uuid=uuid />
             </li>
         </ul>
     </div>
@@ -44,7 +44,7 @@ export default defineComponent({
         update() {
             const {users, limit} = $.core.game;
             this.limit = limit;
-            this.users = [...users.values()];
+            this.users = [...users];
         },
     }
 });

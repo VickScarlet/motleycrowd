@@ -1,4 +1,4 @@
-import { IModule } from "../imodule.js";
+import IModule from "../imodule.js";
 import SettlementData from "./settlementdata.js";
 export default class Game extends IModule {
 
@@ -8,7 +8,7 @@ export default class Game extends IModule {
     #isStarted = false;
     #isPrivate = false;
     #isReady = false;
-    #users = new Map();
+    #users = new Set();
     #currentQuestion = null;
     #index = -1;
     #lastSettlement = null;
@@ -95,13 +95,11 @@ export default class Game extends IModule {
         return success;
     }
 
-    #join(users) {
-        for(const user of users) {
-            const [uuid, guest, username] = user;
-            this.#users.set(uuid, {
-                uuid, guest, username,
-            });
+    async #join(uuids) {
+        for(const uuid of uuids) {
+            this.#users.add(uuid);
         }
+        await this.$core.user.gets(this.#users);
     }
 
     #leave(uuids) {
@@ -109,8 +107,8 @@ export default class Game extends IModule {
             this.#users.delete(uuid);
     }
 
-    #user(join, leave) {
-        this.#join(join);
+    async #user(join, leave) {
+        await this.#join(join);
         this.#leave(leave);
         $.emit('game.user', this.#users);
     }
@@ -144,24 +142,22 @@ export default class Game extends IModule {
     }
 
     #settlement(data) {
-        const users = new Map(this.#users);
         const settlement = new SettlementData(
             this.$core.user.uuid,
             this.$core.question.get,
             data,
-            users,
         );
         this.#lastSettlement = settlement;
         this.clear();
         $.emit('game.settlement', settlement);
     }
 
-    #resume({info, start, question}) {
+    async #resume({info, start, question}) {
         this.#isInRoom = true;
         const {users, limit} = info;
         this.#isPrivate = false;
         this.#limit = limit;
-        this.#join(users);
+        await this.#join(users);
         if(!start)
             return $.emit('game.resume.room');
 
@@ -193,9 +189,6 @@ export default class Game extends IModule {
                     :data.users[0],
                 this.$core.question.get,
                 data,
-                new Map(data.users.map(uuid=>([uuid, {
-                    uuid, guest: uuid[0]=="#", username: uuid,
-                }]))),
             );
             $.emit('game.settlement', settlement);
         });

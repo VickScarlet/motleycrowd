@@ -1,4 +1,4 @@
-export class IModule {
+export default class IModule {
     constructor(core, configure) {
         this.#core = core;
         this.#configure = configure || {};
@@ -9,7 +9,7 @@ export class IModule {
 
     get $core() { return this.#core; }
     get $configure() { return this.#configure; }
-    initialize() {
+    async initialize() {
         // empty
     }
 }

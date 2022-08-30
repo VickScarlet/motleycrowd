@@ -42,7 +42,13 @@ if(window.$sys.debug) {
         session.port = Number(q.port) || 443;
 }
 
-const core = new Core({session});
+const core = new Core({
+    session,
+    database: {
+        dbName: 'motleycrowd',
+        version: 5,
+    }
+});
 window.$sys.core = core;
 await core.initialize();
 
