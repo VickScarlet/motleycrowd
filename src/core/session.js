@@ -55,61 +55,56 @@ export default class Session extends IModule {
         return `${this.#protocol}://${window.location.host}`;
     }
 
-    async #ws(onmessage, onclose) {
+    async #ws(first) {
         return new Promise((resolve, reject) => {
+            let message, close;
             const ws = new WebSocket(this.#url);
-            ws.addEventListener('open', _ => resolve(ws));
+            ws.addEventListener('open', _ => {
+                message = async data => {
+                    message = this.#onmessage.bind(this);
+                    close = ({code, reason}) => this.#onclose(code, reason);
+                    this.#client = ws;
+                    resolve({ws, data});
+                };
+                ws.send(JSON.stringify(first));
+            });
             ws.addEventListener('error', e => reject(e));
             ws.addEventListener('message', async ({data}) => {
+                if(!message) return;
                 if(data instanceof Blob) {
                     const arrayBuffer = await data.arrayBuffer();
                     data = pako.inflate(arrayBuffer, { to: 'string' })
                 }
                 data = JSON.parse(data);
                 this.#online = data.pop();
-                onmessage(data);
+                message(data);
             });
-            ws.addEventListener('close', onclose);
+            ws.addEventListener('close', e => close?.(e));
         });
     }
 
     async #connect() {
-        return new Promise(async resolve => {
-            const client = await this.#ws(
-                data => {
-                    if(data[0]!==this.#CONNECT)
-                        return this.#onmessage(data);
-                    const [, info, sid, online] = data;
-                    this.#client = client;
-                    this.#online = online;
-                    console.debug("[Session|conn] [online:%d] [sid:%s] info:", online, sid, info);
-                    this.#sid = sid;
-                    this.#onconnect(info, online);
-                    resolve();
-                },
-                ({code, reason}) => this.#onclose(code, reason),
-            );
-            client.send(JSON.stringify([this.#CONNECT]));
-        });
+        return this.#ws([this.#CONNECT])
+            .then(({data: [, info, sid]}) => {
+                console.debug("[Session|conn] [sid:%s] info:", sid, info);
+                this.#sid = sid;
+                this.#onconnect(info);
+                return true;
+            });
     }
 
     async #resume() {
-        console.debug('[Session|resume] [sid:%s]', this.#sid);
-        return new Promise(async (resolve, reject) => {
-            const client = await this.#ws(
-                data => {
-                    if(data[0]!==this.#RESUME)
-                        return this.#onmessage(data);
-                    const [, success] = data;
-                    if(!success)
-                        return reject (new Error(`RESUME failed`));
-                    this.#client = client;
-                    resolve();
-                },
-                ({code, reason}) => this.#onclose(code, reason),
-            );
-            client.send(JSON.stringify([this.#RESUME, this.#sid]));
-        });
+        if(!this.#sid) return this.#connect();
+        console.debug('[Session|resume] trying [sid:%s]', this.#sid);
+        return this.#ws([this.#RESUME, this.#sid])
+            .then(_=>{
+                console.debug("[Session|resume] resumed.");
+                return true;
+            })
+            .catch(_=>{
+                console.debug('[Session|resume] faild.');
+                return false;
+            });
     }
 
     async #onmessage([guid, content]) {
@@ -158,9 +153,9 @@ export default class Session extends IModule {
             callback(error);
         });
         const circleResume = ()=>this.#resume()
-            .then(_=>$.emit('network.resume'))
-            .catch(e=>{
-                console.error('[Session|resume] ', e);
+            .then(success=>{
+                if(success)
+                    return $.emit('network.resume');
                 circleResume();
             });
         circleResume();
