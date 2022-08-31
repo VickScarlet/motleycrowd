@@ -1,17 +1,10 @@
 import Base from '../base.js';
 export default class KVData extends Base {
     static Collection = 'kvdata';
-    static Scheme = {
-        keyPath: 'key',
-        indexs: {},
-    };
+    static Scheme = {keyPath: 'key'};
     #cache={};
 
     async initialize() {
-        await this.#fullcache();
-    }
-
-    async #fullcache() {
         const list = await this.$getAll();
         for(const {key, value} of list) {
             this.#cache[key] = value;
@@ -26,5 +19,4 @@ export default class KVData extends Base {
         this.#cache[key] = value;
         return this.$put({key, value});
     }
-
 }

@@ -1,6 +1,5 @@
 import cryptoJS from "crypto-js";
 import IModule from "./imodule.js";
-import { clone } from "../functions/index.js";
 export default class User extends IModule {
 
     #authenticated = false;
@@ -84,7 +83,11 @@ export default class User extends IModule {
     }
 
     async #get(uuids) {
-        const {success, data} = await this.#command('get', {uids: uuids});
+        const uids = [...new Set(uuids)];
+        if(!uids.length) return {};
+        const {success, data} = await this.#command(
+            'get', {uids}
+        );
         if(!success) return null;
         const $update = Date.now();
         for(const uuid in data) {
@@ -97,6 +100,7 @@ export default class User extends IModule {
     }
 
     async get(uuid, onlylocal=false) {
+        uuid = ''+uuid;
         if(this.isGuest(uuid)) return { uuid, guest: true };
         const now = Date.now();
         const local = await this.$core.database.user.get(uuid);
@@ -110,6 +114,8 @@ export default class User extends IModule {
     }
 
     async gets(uuids) {
+        uuids = [...uuids].map(uuid => ''+uuid);
+        uuids = [...new Set(uuids)].filter(uuid => !this.isGuest(uuid));
         const data = {};
         const notLocal = [];
         for(const uuid of uuids) {

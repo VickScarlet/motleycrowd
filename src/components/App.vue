@@ -70,6 +70,8 @@ export default defineComponent({
             this.loading = false;
             this.tips('重连成功');
         });
+        $.on('game.start', ()=>this.switch('Question'));
+        $.on('game.question', ()=>this.switch('Question'));
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
         $.on('game.settlement', data=>this.switch('Settlement', data));
@@ -77,6 +79,7 @@ export default defineComponent({
     methods: {
         switch(page, data) {
             this._data = ()=>(data||{});
+            if(this.page == page) return;
             this.page = page;
         },
         alert(message) {
