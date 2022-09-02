@@ -1,6 +1,9 @@
 <template>
     <ul class="container">
-        <li><h1><img src="../assets/title.svg" alt="乌合之众"/></h1></li>
+        <li>
+            <img src="../assets/title.svg" alt="乌合之众"/>
+            <h3 class="subtitle">群体博奕研究</h3>
+        </li>
         <li><button type="button" @click="pair(100)">100人排位</button></li>
         <li><button type="button" @click="pair(10)">10人排位</button></li>
         <li><button type="button" @click="custom">好友房</button></li>
