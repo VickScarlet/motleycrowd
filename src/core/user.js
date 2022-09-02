@@ -107,7 +107,7 @@ export default class User extends IModule {
         if(local && now - local.$update < 30 * 60 * 1000 ) {
             return local;
         }
-        if(onlylocal) return null;
+        if(!uuid || onlylocal) return null;
         const remote = await this.#get([uuid]);
         if(!remote) return null;
         return remote[uuid];
@@ -115,7 +115,7 @@ export default class User extends IModule {
 
     async gets(uuids) {
         uuids = [...uuids].map(uuid => ''+uuid);
-        uuids = [...new Set(uuids)].filter(uuid => !this.isGuest(uuid));
+        uuids = [...new Set(uuids)].filter(uuid => uuid&&!this.isGuest(uuid));
         const data = {};
         const notLocal = [];
         for(const uuid of uuids) {

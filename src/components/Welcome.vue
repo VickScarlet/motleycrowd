@@ -1,6 +1,6 @@
 <template>
     <ul class="container">
-        <li><h1>乌合之众</h1></li>
+        <li><h1><img src="../assets/title.svg" alt="乌合之众"/></h1></li>
         <li><button type="button" @click="auth">登录/注册</button></li>
         <li><button type="button" @click="guest">游客模式</button></li>
     </ul>

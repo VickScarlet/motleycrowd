@@ -1,17 +1,10 @@
 <template>
     <ul class="container">
-        <li>
-            <button type="button" @click="pair(100)">100人排位</button>
-        </li>
-        <li>
-            <button type="button" @click="pair(10)">10人排位</button>
-        </li>
-        <li>
-            <button type="button" @click="custom">好友房</button>
-        </li>
-        <li>
-            <button type="button" @click="logout">登出</button>
-        </li>
+        <li><h1><img src="../assets/title.svg" alt="乌合之众"/></h1></li>
+        <li><button type="button" @click="pair(100)">100人排位</button></li>
+        <li><button type="button" @click="pair(10)">10人排位</button></li>
+        <li><button type="button" @click="custom">好友房</button></li>
+        <li><button type="button" @click="logout">登出</button></li>
     </ul>
 </template>
 
