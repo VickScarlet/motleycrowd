@@ -1,7 +1,7 @@
 <template>
     <ul class="container">
         <li>
-            <img src="../assets/title.svg" alt="乌合之众"/>
+            <h1>乌合之众</h1>
             <h3 class="subtitle">群体博奕研究</h3>
         </li>
         <li><button type="button" @click="auth">登录/注册</button></li>
