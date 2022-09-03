@@ -23,7 +23,8 @@ export class ClientQuestion {
     get options() {
         const options = {};
         for(const option of [...this.picked]) {
-            options[option] = this.option(option);
+            const data = this.option(option);
+            if(data) options[option] = data;
         }
         return options;
     }

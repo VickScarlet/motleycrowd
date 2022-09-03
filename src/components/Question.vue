@@ -89,7 +89,9 @@ export default defineComponent({
             this.progress = {total, left};
             const opts = [];
             for(const option in options) {
-                const {type, val} = options[option];
+                const data = options[option];
+                if(!data) continue;
+                const {type, val} = data;
                 const key = `${id}-${option}`
                 opts.push({key, option, val, type});
             }

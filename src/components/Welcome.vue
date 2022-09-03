@@ -2,7 +2,7 @@
     <ul class="container">
         <li>
             <h1>乌合之众</h1>
-            <h3 class="subtitle">群体博奕研究</h3>
+            <h3 class="subtitle">群体博弈研究</h3>
         </li>
         <li><button type="button" @click="auth">登录/注册</button></li>
         <li><button type="button" @click="guest">游客模式</button></li>
