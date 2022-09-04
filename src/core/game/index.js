@@ -23,8 +23,8 @@ export default class Game extends IModule {
     get currentQuestion() { return this.#currentQuestion; }
     get lastSettlement() { return this.#lastSettlement; }
 
-    async initialize() {
-        this.$core.proxy('game', {
+    proxy() {
+        return {
             user: ([join, leave])=>this.#user(join, leave),
             ready: wait=>this.#ready(wait),
             pending: size=>this.#pending(size),
@@ -32,7 +32,10 @@ export default class Game extends IModule {
             answer: ([idx, size])=>this.#answer(idx, size),
             settlement: data=>this.#settlement(data),
             resume: data=>this.#resume(data),
-        });
+        };
+    }
+
+    async initialize() {
         this.#debug();
     }
 
@@ -99,7 +102,7 @@ export default class Game extends IModule {
         for(const uuid of uuids) {
             this.#users.add(uuid);
         }
-        await this.$core.user.gets(this.#users);
+        await this.$user.gets(this.#users);
     }
 
     #leave(uuids) {
@@ -141,10 +144,11 @@ export default class Game extends IModule {
         $.emit('game.answer', size);
     }
 
-    #settlement(data) {
+    async #settlement(data) {
+        await this.$db.settlement.set(data);
         const settlement = new SettlementData(
-            this.$core.user.uuid,
-            this.$core.question.get,
+            this.$user.uuid,
+            this.$question.get,
             data,
         );
         this.#lastSettlement = settlement;
@@ -162,7 +166,7 @@ export default class Game extends IModule {
             return $.emit('game.resume.room');
 
         const {idx, id, picked, left, size, answer} = question;
-        question = this.$core.question.get(id, picked, left, answer);
+        question = this.$question.get(id, picked, left, answer);
         question.size = size;
         this.#isStarted = true;
         this.#index = idx;
@@ -184,10 +188,10 @@ export default class Game extends IModule {
     #debug() {
         $.on('debug.game.settlement', data=>{
             const settlement = new SettlementData(
-                data.users.includes(this.$core.user.uuid)
-                    ?this.$core.user.uuid
+                data.users.includes(this.$user.uuid)
+                    ?this.$user.uuid
                     :data.users[0],
-                this.$core.question.get,
+                this.$question.get,
                 data,
             );
             $.emit('game.settlement', settlement);

@@ -12,14 +12,14 @@ export default class User extends IModule {
         return this.$core.command(`user.${type}`, data);
     }
 
-    get #autologin() { return !!this.$core.database.kv.get('autologin'); }
-    set #autologin(v) { this.$core.database.kv.set('autologin', !!v); }
+    get #autologin() { return !!this.$db.kv.get('autologin'); }
+    set #autologin(v) { this.$db.kv.set('autologin', !!v); }
 
-    get username() { return this.$core.database.kv.get('username'); }
-    set username(v) { this.$core.database.kv.set('username', v); }
+    get username() { return this.$db.kv.get('username'); }
+    set username(v) { this.$db.kv.set('username', v); }
 
-    get #password() { return this.$core.database.kv.get('password'); }
-    set #password(v) { this.$core.database.kv.set('password', v); }
+    get #password() { return this.$db.kv.get('password'); }
+    set #password(v) { this.$db.kv.set('password', v); }
 
     get authenticated() { return !!this.#authenticated; }
     get isguest() { return !!this.#isguest; }
@@ -82,52 +82,47 @@ export default class User extends IModule {
         return [success];
     }
 
-    async #get(uuids) {
-        const uids = [...new Set(uuids)];
-        if(!uids.length) return {};
-        const {success, data} = await this.#command(
-            'get', {uids}
-        );
-        if(!success) return null;
-        const $update = Date.now();
-        for(const uuid in data) {
-            const [username, meta] = data[uuid];
-            const d = {uuid, username, meta, $update};
-            await this.$core.database.user.set(d);
-            data[uuid] = d;
-        }
-        return data;
+    #isexpired(update) {
+        return Date.now() - 60*60*1000 > update;
     }
 
-    async get(uuid, onlylocal=false) {
-        uuid = ''+uuid;
-        if(this.isGuest(uuid)) return { uuid, guest: true };
-        const now = Date.now();
-        const local = await this.$core.database.user.get(uuid);
-        if(local && now - local.$update < 30 * 60 * 1000 ) {
-            return local;
+    async #gets(uuids) {
+        const remote = [];
+        const users = {};
+        for(const uuid of uuids) {
+            if(this.isGuest(uuid)) {
+                users[uuid] = { uuid, guest: true };
+                continue;
+            }
+            const local = await this.$db.user.get(uuid);
+            if(local && !this.#isexpired(local.$update))
+                users[uuid] = local;
+            else
+                remote.push(uuid);
         }
-        if(!uuid || onlylocal) return null;
-        const remote = await this.#get([uuid]);
-        if(!remote) return null;
-        return remote[uuid];
+        if(remote.length) {
+            const {success, data} = await this.#command('get', remote);
+            if(!success) return list;
+            const $update = Date.now();
+            for(const uuid in data) {
+                const [username, meta] = data[uuid];
+                const d = {uuid, username, meta, $update};
+                await this.$db.user.set(d);
+                users[uuid] = d;
+            }
+        }
+        return users;
+    }
+
+    async get(uuid) {
+        if(!uuid) return null;
+        const users = await this.#gets([''+uuid]);
+        return users[uuid] || null;
     }
 
     async gets(uuids) {
-        uuids = [...uuids].map(uuid => ''+uuid);
-        uuids = [...new Set(uuids)].filter(uuid => uuid&&!this.isGuest(uuid));
-        const data = {};
-        const notLocal = [];
-        for(const uuid of uuids) {
-            const local = await this.get(uuid, true);
-            if(local) data[uuid] = local;
-            else notLocal.push(uuid);
-        }
-        if(notLocal.length) {
-            const remote = await this.#get(notLocal);
-            if(remote) Object.assign(data, remote);
-        }
-        return data;
+        uuids = [...uuids].filter(v=>!!v).map(v=>''+v);
+        return this.#gets([...new Set(uuids)]);
     }
 
     #passwordEncrypt (password) {

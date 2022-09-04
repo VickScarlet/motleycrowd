@@ -9,27 +9,10 @@ export default class SettlementData {
 
         this.#indexs = new Array(this.size).fill(1).map((_, i)=>Number(i));
 
-        let last = null;
-        let lastR = 0;
-        const ranking = (idx, score)=>{
-            const l = last;
-            last = score;
-            if(score==l) return lastR;
-            if(!idx) lastR = 1
-            else lastR = idx + 1;
-            return lastR;
+        for(const uid in scores) {
+            const [score, subs, ranking] = scores[uid];
+            this.#scores.set(uid, new UScores(uid,score,ranking,subs));
         }
-
-        Object.entries(scores)
-            .sort(([,[a]],[,[b]])=>b-a)
-            .forEach(([uid, [score, subs]], idx)=>this.#scores.set(
-                uid, new UScores(
-                    uid,
-                    score,
-                    ranking(idx, score),
-                    subs,
-                )
-            ));
     }
     #uuid;
     #questions;

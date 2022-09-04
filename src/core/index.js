@@ -3,6 +3,7 @@ import Question from "./question/index.js";
 import Session from "./session.js";
 import User from './user.js';
 import Game from './game/index.js';
+import Rank from './rank.js';
 
 export default class Core {
     constructor(configure) {
@@ -16,21 +17,20 @@ export default class Core {
     #session;
     #user;
     #game;
+    #rank;
 
     get database() { return this.#database; }
     get question() { return this.#question; }
     get user() { return this.#user; }
     get game() { return this.#game; }
+    get rank() { return this.#rank; }
 
-    proxy(proxy, cmds) {
-        if(this.#proxy.has(proxy)) {
-            console.info('[System] proxy <%s> %s', proxy, 'already exists.');
-            return;
-        }
+    #setProxy(module, proxy) {
+        if(!proxy) return;
         const map = new Map();
-        for(const cmd in cmds)
-            map.set(cmd, cmds[cmd]);
-        this.#proxy.set(proxy, map);
+        for(const name in proxy)
+            map.set(name, proxy[name]);
+        this.#proxy.set(module, map);
     }
 
     async initialize() {
@@ -43,11 +43,15 @@ export default class Core {
         });
         this.#user = new User(this, this.#configure.user);
         this.#game = new Game(this, this.#configure.game);
+        this.#rank = new Rank(this, this.#configure.rank);
+
+        this.#setProxy('game', this.#game.proxy());
 
         await this.#database.initialize();
         await this.#question.initialize();
         await this.#user.initialize();
         await this.#game.initialize();
+        await this.#rank.initialize();
         await this.#session.initialize();
         $.on('debug.push', (action, data)=>
             this.#serverpush('message', [action, data])

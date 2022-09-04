@@ -46,7 +46,7 @@ const core = new Core({
     session,
     database: {
         dbName: 'motleycrowd',
-        version: 6,
+        version: 8,
     }
 });
 window.$sys.core = core;

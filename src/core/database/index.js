@@ -1,14 +1,20 @@
 import IModule from "../imodule.js";
 import KV from './model/KVData.js';
 import User from './model/User.js';
+import Rank from './model/Rank.js';
+import Settlement from './model/Settlement.js';
 
 export default class Database extends IModule {
 
     #user;
     #kv;
+    #rank;
+    #settlement;
 
     get user() {return this.#user;}
     get kv() {return this.#kv;}
+    get rank() {return this.#rank;}
+    get settlement() {return this.#settlement;}
 
     async initialize() {
         const {dbName, version} = this.$configure;
@@ -22,9 +28,13 @@ export default class Database extends IModule {
         });
         this.#kv = new KV(db);
         this.#user = new User(db);
+        this.#rank = new Rank(db);
+        this.#settlement = new Settlement(db);
 
         await this.#kv.initialize();
         await this.#user.initialize();
+        await this.#rank.initialize();
+        await this.#settlement.initialize();
 
         const ls = window.localStorage.getItem('storage');
         if(!ls) return;
@@ -42,6 +52,8 @@ export default class Database extends IModule {
     #onupgradeneeded(db) {
         this.#scheme(db, KV.Collection, KV.Scheme);
         this.#scheme(db, User.Collection, User.Scheme);
+        this.#scheme(db, Rank.Collection, Rank.Scheme);
+        this.#scheme(db, Settlement.Collection, Settlement.Scheme);
     }
 
     /**
