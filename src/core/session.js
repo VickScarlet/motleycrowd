@@ -52,7 +52,7 @@ export default class Session extends IModule {
             if(this.#port) return `${this.#protocol}://${this.#host}:${this.#port}`;
             return `${this.#protocol}://${this.#host}`;
         }
-        return `${this.#protocol}://${window.location.host}`;
+        return `${this.#protocol}://${globalThis.location.host}`;
     }
 
     async #ws(first) {
@@ -97,18 +97,19 @@ export default class Session extends IModule {
         if(!this.#sid) return this.#connect();
         console.debug('[Session|resume] trying [sid:%s]', this.#sid);
         return this.#ws([this.#RESUME, this.#sid])
-            .then(_=>{
+            .then(({data: [, isAuth]})=>{
                 console.debug("[Session|resume] resumed.");
-                return true;
+                return [true, isAuth];
             })
             .catch(_=>{
                 console.debug('[Session|resume] faild.');
-                return false;
+                return [false];
             });
     }
 
-    async #onmessage([guid, content]) {
-        console.debug('[Session|<<<<] [guid:%s] content:', guid, content);
+    async #onmessage([guid, content, sync]) {
+        if(sync) await this.$core.sync(sync);
+        console.debug('[Session|<<<<] [guid:%s]', guid, content, sync);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
             this.#callbacks.get(index)(null, content);
@@ -153,9 +154,9 @@ export default class Session extends IModule {
             callback(error);
         });
         const circleResume = ()=>this.#resume()
-            .then(success=>{
+            .then(([success, isAuth])=>{
                 if(success)
-                    return $.emit('network.resume');
+                    return $.emit('network.resume', isAuth);
                 circleResume();
             });
         circleResume();
@@ -204,6 +205,16 @@ export default class Session extends IModule {
         }
     }
 
+    /**
+     *
+     * @param {string} command
+     * @param {any} data
+     * @return {Promise<{
+     *      success: boolean,
+     *      code: number,
+     *      data?: any,
+     * }>}
+     */
     async command(command, data) {
         console.debug('[Session|>>>>] [command:%s] data:', command, data);
         try {

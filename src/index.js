@@ -4,26 +4,26 @@ import { createApp } from 'vue'
 import './style/app.scss'
 import App from './components/App.vue'
 
-(async ()=>{
+(async (namespace, search)=>{
 
-window.onerror = function(msg,source,line,col,error) {
+/**
+ * @memberof namespace
+ */
+const $sys = { on, off, emit, q: {} };
+namespace.$ = namespace.$sys = $sys;
+namespace.onerror = (msg,source,line,col,error) =>{
     alert(`${msg}\nat: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
 }
-window.$ = window.$sys = {
-    q: {},
-};
-window.$sys.on = on;
-window.$sys.off = off;
-window.$sys.emit = emit;
 
-window.location.search.substring(1).split('&').forEach(item=>{
+
+search.substring(1).split('&').forEach(item=>{
     const [key, value] = item.split('=');
     if(!key) return;
     if(key==='debug' && value) {
-        window.$sys.debug = !!JSON.parse(value);
+        $sys.debug = !!JSON.parse(value);
         return;
     }
-    window.$sys.q[key] = value;
+    $sys.q[key] = value;
 });
 
 const session = {
@@ -32,8 +32,8 @@ const session = {
     port: 443,
 };
 
-if(window.$sys.debug) {
-    const q = window.$sys.q;
+if($sys.debug) {
+    const q = $sys.q;
     if(q.protocol)
         session.protocol = q.protocol;
     if(q.host)
@@ -46,10 +46,10 @@ const core = new Core({
     session,
     database: {
         dbName: 'motleycrowd',
-        version: 8,
+        version: 9,
     }
 });
-window.$sys.core = core;
+$sys.core = core;
 await core.initialize();
 
 const app = createApp(App);
@@ -62,8 +62,8 @@ app.mixin({
     },
 });
 const proxy = app.mount('#app');
-window.$sys.app = app;
-window.$sys.ui = window.$sys.proxy = proxy;
+$sys.app = app;
+$sys.ui = $sys.proxy = proxy;
 
 proxy.loading = true;
 try {
@@ -74,4 +74,7 @@ try {
 }
 proxy.loading = false;
 
-})();
+})(
+    globalThis,
+    globalThis.location.search
+);

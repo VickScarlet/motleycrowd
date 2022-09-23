@@ -1,3 +1,4 @@
+import { objUpdate } from "../../functions/index.js";
 export default class Base {
     constructor(db) {
         this.#db = db;
@@ -65,5 +66,23 @@ export default class Base {
             request.onsuccess = ()=>resolve(true);
         }, "readwrite")
         .catch(false);
+    }
+
+    async get(uuid) {
+        return this.$get(uuid);
+    }
+
+    async set(data) {
+        if(!data.uuid) return false;
+        return this.$put(data);
+    }
+
+    async sync(uuid, update) {
+        update.$update = Date.now();
+        update.uuid = update.uid || uuid;
+        uuid = update.uuid;
+        delete update.uid;
+        const original = await this.get(uuid);
+        await this.set(objUpdate(original, update));
     }
 }

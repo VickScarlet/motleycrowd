@@ -24,14 +24,28 @@ export default class User extends IModule {
     get authenticated() { return !!this.#authenticated; }
     get isguest() { return !!this.#isguest; }
 
+    async initialize() {
+        $.on('network.resume', isAuth=>{
+            if(isAuth) return;
+            this.#uuid = null;
+            this.#authenticated = false;
+            this.#isguest = false;
+        })
+    }
+
+
     async authenticate(username, password, autologin) {
         password = this.#passwordEncrypt(password);
-        const {success, data} = await this.#command('authenticate', {username, password});
+        const sync = await this.$db.gsync(username);
+        const {success, data} = await this.#command(
+            'authenticate',
+            {username, password, sync}
+        );
         this.#uuid = success ?data.uid :null;
         this.#authenticated = success;
         this.#isguest = !success;
         this.#autologin = success && autologin;
-        if(this.autologin) {
+        if(this.#autologin) {
             this.username = username;
             this.#password = password;
         }
@@ -44,8 +58,8 @@ export default class User extends IModule {
         this.#uuid = success ?data.uid :null;
         this.#authenticated = success;
         this.#isguest = !success;
-        this.autologin = success && autologin;
-        if(this.autologin) {
+        this.#autologin = success && autologin;
+        if(this.#autologin) {
             this.username = username;
             this.#password = password;
         }
@@ -72,9 +86,13 @@ export default class User extends IModule {
 
     async autologin() {
         if(!this.#autologin) return [false, true];
-        const {success, data} = await this.#command('authenticate', {
-            username: this.username, password: this.#password,
-        });
+        const username = this.username;
+        const password = this.#password;
+        const sync = await this.$db.gsync(username)
+        const {success, data} = await this.#command(
+            'authenticate',
+            { username, password, sync }
+        );
         this.#uuid = success ?data.uid :null;
         this.#autologin =
         this.#authenticated = success;
@@ -95,10 +113,15 @@ export default class User extends IModule {
                 continue;
             }
             const local = await this.$db.user.get(uuid);
-            if(local && !this.#isexpired(local.$update))
-                users[uuid] = local;
-            else
-                remote.push(uuid);
+            if(local) {
+                if( local.uuid === this.#uuid ||
+                    !this.#isexpired(local.$update)
+                ) {
+                    users[uuid] = local;
+                    continue;
+                }
+            }
+            remote.push(uuid);
         }
         if(remote.length) {
             const {success, data} = await this.#command('get', remote);

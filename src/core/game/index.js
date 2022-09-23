@@ -50,7 +50,7 @@ export default class Game extends IModule {
             this.#isInRoom = true;
             this.#isPrivate = false;
             this.#limit = limit;
-            this.#join(users);
+            await this.#join(users);
         }
         return success;
     }

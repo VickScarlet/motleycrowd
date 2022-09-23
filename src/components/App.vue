@@ -66,15 +66,31 @@ export default defineComponent({
             this.loading = false;
             this.tips('你被踢了');
         });
-        $.on('network.resume', ()=>{
+        $.on('network.resume', async isAuth=>{
             this.loading = false;
-            this.tips('重连成功');
+            if(isAuth) {
+                this.tips('重连成功');
+                return;
+            }
+            this.tips('掉线太久，已经被踢了, 请尝试重新登录');
+            this.switch('Welcome');
+            const [success] = await $.core.user.autologin();
+            if (success) {
+                this.tips('自动重新登录成功');
+                this.switch('Index');
+            }
         });
         $.on('game.start', ()=>this.switch('Question'));
         $.on('game.question', ()=>this.switch('Question'));
         $.on('game.resume.room', ()=>this.switch('Room'));
         $.on('game.resume.question', ()=>this.switch('Question'));
         $.on('game.settlement', data=>this.switch('Settlement', data));
+
+        $.on('command.error', code=>{
+            this.loading = false;
+            const message = $.core.errMsg(code);
+            this.tips(message);
+        });
     },
     methods: {
         switch(page, data) {
@@ -100,7 +116,7 @@ export default defineComponent({
             }
             const showUrlPage = () => {
                 const match = /\/#\/(([^\/\?]+)\/?)(\?+(.*))?/
-                    .exec(window.location.href);
+                    .exec(globalThis.location.href);
                 if(!match) return;
                 let [,,page,,data,,query] = match;
                 if(!data) data = {};
@@ -112,7 +128,7 @@ export default defineComponent({
                     });
                 this.switch(page, data);
             }
-            window.onpopstate = showUrlPage;
+            globalThis.onpopstate = showUrlPage;
             showUrlPage();
             const updateStat = async () => {
                 const {delay, online} =await $.core.ping();

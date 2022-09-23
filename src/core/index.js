@@ -1,3 +1,4 @@
+import { ErrorCode, ErrorMessage } from "./error.js";
 import Database from "./database/index.js";
 import Question from "./question/index.js";
 import Session from "./session.js";
@@ -12,18 +13,32 @@ export default class Core {
 
     #proxy = new Map();
     #configure;
+    /** @type {Database} */
     #database;
+    /** @type {Question} */
     #question;
+    /** @type {Session} */
     #session;
+    /** @type {User} */
     #user;
+    /** @type {Game} */
     #game;
+    /** @type {Rank} */
     #rank;
+    #err = ErrorCode;
 
+    /** @readonly */
     get database() { return this.#database; }
+    /** @readonly */
     get question() { return this.#question; }
+    /** @readonly */
     get user() { return this.#user; }
+    /** @readonly */
     get game() { return this.#game; }
+    /** @readonly */
     get rank() { return this.#rank; }
+    /** @readonly */
+    get err() { return this.#err; }
 
     #setProxy(module, proxy) {
         if(!proxy) return;
@@ -86,4 +101,13 @@ export default class Core {
         proxy.get(command)(data);
     }
 
+    errMsg(errorcode) {
+        return ErrorMessage[errorcode] || '未知错误';
+    }
+
+    async sync(sync) {
+        const uuid = this.#user.uuid;
+        if(!uuid) return false;
+        return this.#database.sync(uuid, sync);
+    }
 }

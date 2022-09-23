@@ -3,12 +3,7 @@ export default class User extends Base {
     static Collection = 'user';
     static Scheme = {keyPath: 'uuid'};
 
-    async get(uuid) {
-        return this.$get(uuid);
-    }
-
-    async set(data) {
-        if(!data.uuid) return false;
-        return this.$put(data);
+    async getByUsername(username) {
+        return this.$get(username, 'username');
     }
 }
