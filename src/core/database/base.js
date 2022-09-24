@@ -78,11 +78,10 @@ export default class Base {
     }
 
     async sync(uuid, update) {
-        update.$update = Date.now();
         update.uuid = update.uid || uuid;
         uuid = update.uuid;
         delete update.uid;
         const original = await this.get(uuid);
-        await this.set(objUpdate(original, update));
+        return this.set(objUpdate(original, update));
     }
 }

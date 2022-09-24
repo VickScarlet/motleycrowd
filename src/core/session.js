@@ -108,11 +108,11 @@ export default class Session extends IModule {
     }
 
     async #onmessage([guid, content, sync]) {
-        if(sync) await this.$core.sync(sync);
+        await this.$core.sync(sync);
         console.debug('[Session|<<<<] [guid:%s]', guid, content, sync);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
-            this.#callbacks.get(index)(null, content);
+            this.#callbacks.get(index)(null, {content, sync});
             this.#callbacks.delete(index);
         }
         switch(guid) {
@@ -218,20 +218,20 @@ export default class Session extends IModule {
     async command(command, data) {
         console.debug('[Session|>>>>] [command:%s] data:', command, data);
         try {
-            const [code, ret] =
-                await this.#send(this.#genMessageId(), command, data);
+            const { content: [code, ret], sync }
+                = await this.#send(this.#genMessageId(), command, data);
             if(code) {
                 console.debug('Command error:', code);
                 $.emit('command.error', code);
             }
             return {
                 success: code !== undefined && !code,
-                code, data: ret
+                code, data: ret, sync,
             };
         } catch (err) {
             console.error(err);
             $.emit('command.error', -1);
-            return { success: false, code: -1};
+            return { success: false, code: -1 };
         }
     }
 

@@ -1,3 +1,4 @@
+import * as fn from './functions/index.js';
 import { on, off, emit } from './events/index.js';
 import Core from './core/index.js'
 import { createApp } from 'vue'
@@ -9,7 +10,7 @@ import App from './components/App.vue'
 /**
  * @memberof namespace
  */
-const $sys = { on, off, emit, q: {} };
+const $sys = { fn, on, off, emit, q: {} };
 namespace.$ = namespace.$sys = $sys;
 namespace.onerror = (msg,source,line,col,error) =>{
     alert(`${msg}\nat: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
@@ -46,7 +47,7 @@ const core = new Core({
     session,
     database: {
         dbName: 'motleycrowd',
-        version: 9,
+        version: 10,
     }
 });
 $sys.core = core;

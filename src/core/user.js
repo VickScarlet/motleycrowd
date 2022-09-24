@@ -33,23 +33,29 @@ export default class User extends IModule {
         })
     }
 
-
-    async authenticate(username, password, autologin) {
-        password = this.#passwordEncrypt(password);
+    async #authenticate(username, password) {
         const sync = await this.$db.gsync(username);
-        const {success, data} = await this.#command(
+        const {success, data, sync: s} = await this.#command(
             'authenticate',
             {username, password, sync}
         );
         this.#uuid = success ?data.uid :null;
         this.#authenticated = success;
         this.#isguest = !success;
-        this.#autologin = success && autologin;
+        await this.$core.sync(s);
+        return success;
+    }
+
+
+    async authenticate(username, password, autologin) {
+        password = this.#passwordEncrypt(password);
+        const result = await this.#authenticate(username, password);
+        this.#autologin = result && autologin;
         if(this.#autologin) {
             this.username = username;
             this.#password = password;
         }
-        return success;
+        return result;
     }
 
     async register(username, password, autologin) {
@@ -86,18 +92,9 @@ export default class User extends IModule {
 
     async autologin() {
         if(!this.#autologin) return [false, true];
-        const username = this.username;
-        const password = this.#password;
-        const sync = await this.$db.gsync(username)
-        const {success, data} = await this.#command(
-            'authenticate',
-            { username, password, sync }
-        );
-        this.#uuid = success ?data.uid :null;
-        this.#autologin =
-        this.#authenticated = success;
-        this.#isguest = !success;
-        return [success];
+        return [await this.#authenticate(
+            this.username, this.#password
+        )];
     }
 
     #isexpired(update) {

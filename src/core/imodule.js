@@ -36,4 +36,8 @@ export default class IModule {
     }
 
     proxy() { return null; }
+
+    $i(configure) {
+        //empty
+    }
 }

@@ -1,3 +1,4 @@
+import { clone } from "../functions/index.js";
 import { ErrorCode, ErrorMessage } from "./error.js";
 import Database from "./database/index.js";
 import Question from "./question/index.js";
@@ -86,7 +87,14 @@ export default class Core {
     async #serverpush(type, message) {
         switch(type) {
             case 'boardcast':
+                return;
             case 'connect':
+                this.#database.$i(message.database);
+                this.#question.$i(message.question);
+                this.#user.$i(message.user);
+                this.#game.$i(message.game);
+                this.#rank.$i(message.rank);
+                this.#session.$i(message.session);
                 return;
             case 'message':
             default: break;
@@ -106,8 +114,11 @@ export default class Core {
     }
 
     async sync(sync) {
+        if(!sync) return false;
         const uuid = this.#user.uuid;
-        if(!uuid) return false;
-        return this.#database.sync(uuid, sync);
+        if(!uuid || sync?.$done) return false;
+        await this.#database.sync(uuid, clone(sync));
+        sync.$done = true;
+        return true;
     }
 }

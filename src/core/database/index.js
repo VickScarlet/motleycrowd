@@ -4,6 +4,7 @@ import User from './model/User.js';
 import Rank from './model/Rank.js';
 import Settlement from './model/Settlement.js';
 import Asset from './model/Asset.js';
+import Record from './model/Record.js';
 
 export default class Database extends IModule {
 
@@ -12,12 +13,15 @@ export default class Database extends IModule {
     #rank;
     #settlement;
     #asset;
+    #record;
+    #gsync;
 
     get user() {return this.#user;}
     get kv() {return this.#kv;}
     get rank() {return this.#rank;}
     get settlement() {return this.#settlement;}
     get asset() {return this.#asset;}
+    get record() {return this.#record;}
 
     async initialize() {
         const {dbName, version} = this.$configure;
@@ -34,12 +38,14 @@ export default class Database extends IModule {
         this.#rank = new Rank(db);
         this.#settlement = new Settlement(db);
         this.#asset = new Asset(db);
+        this.#record = new Record(db);
 
         await this.#kv.initialize();
         await this.#user.initialize();
         await this.#rank.initialize();
         await this.#settlement.initialize();
         await this.#asset.initialize();
+        await this.#record.initialize();
 
         const ls = globalThis.localStorage.getItem('storage');
         if(!ls) return;
@@ -60,6 +66,7 @@ export default class Database extends IModule {
         this.#scheme(db, Rank.Collection, Rank.Scheme);
         this.#scheme(db, Settlement.Collection, Settlement.Scheme);
         this.#scheme(db, Asset.Collection, Asset.Scheme);
+        this.#scheme(db, Record.Collection, Record.Scheme);
     }
 
     /**
@@ -79,29 +86,40 @@ export default class Database extends IModule {
         }
     }
 
+    get(model) {
+        switch(model) {
+            case 'user': return this.user;
+            case 'rank': return this.rank;
+            case 'settlement': return this.settlement;
+            case 'asset': return this.asset;
+            case 'record': return this.record;
+            case 'kv': return this.kv;
+            default: return null;
+        }
+    }
+
     async sync(uuid, datas) {
         return Promise.all(Object.entries(datas)
-            .map(([key, update]) => {
-                let model;
-                switch(key) {
-                    case 'user':
-                        model = this.user; break;
-                    case 'asset':
-                        model = this.asset; break;
-                    default: return false;
-                }
-                return model.sync(uuid, update);
-            }));
+            .map(([model, update]) =>
+                this.get(model)?.sync(uuid, update)
+            ));
     }
 
     async gsync(username) {
         const data = await this.user.getByUsername(username);
         if(!data) return null;
-        const {uuid, $update} = data;
-        const sync = { user: new Date($update) };
-        const asset = await this.asset.get(uuid);
-        if(asset) sync.asset = new Date(asset.updated);
-        return { uid:uuid, sync };
+        const {uuid} = data;
+
+        const sync = {};
+        for(const model of this.#gsync) {
+            const updated = (await this.get(model)?.get(uuid))?.updated;
+            if(updated) sync[model] = new Date(updated);
+        }
+        return { uid: uuid, sync };
+    }
+
+    $i(configure) {
+        this.#gsync = configure.gsync;
     }
 }
 
