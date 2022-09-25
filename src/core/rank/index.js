@@ -1,4 +1,4 @@
-import IModule from "./imodule.js";
+import IModule from "../imodule.js";
 export default class Rank extends IModule {
     #isexpired(update) {
         const target = new Date(update).getTime();

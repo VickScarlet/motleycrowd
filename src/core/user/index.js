@@ -1,5 +1,5 @@
 import cryptoJS from "crypto-js";
-import IModule from "./imodule.js";
+import IModule from "../imodule.js";
 export default class User extends IModule {
 
     #authenticated = false;

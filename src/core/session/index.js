@@ -1,4 +1,4 @@
-import IModule from "./imodule.js";
+import IModule from "../imodule.js";
 import pako from "pako";
 import { v4 as uuidGenerator } from 'uuid';
 

@@ -2,10 +2,10 @@ import { clone } from "../functions/index.js";
 import { ErrorCode, ErrorMessage } from "./error.js";
 import Database from "./database/index.js";
 import Question from "./question/index.js";
-import Session from "./session.js";
-import User from './user.js';
+import Session from "./session/index.js";
+import User from './user/index.js';
 import Game from './game/index.js';
-import Rank from './rank.js';
+import Rank from './rank/index.js';
 
 export default class Core {
     constructor(configure) {
