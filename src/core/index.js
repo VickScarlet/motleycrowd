@@ -39,6 +39,8 @@ export default class Core {
     /** @readonly */
     get rank() { return this.#rank; }
     /** @readonly */
+    get session() { return this.#session; }
+    /** @readonly */
     get err() { return this.#err; }
 
     #setProxy(module, proxy) {
@@ -111,14 +113,5 @@ export default class Core {
 
     errMsg(errorcode) {
         return ErrorMessage[errorcode] || '未知错误';
-    }
-
-    async sync(sync) {
-        if(!sync) return false;
-        const uuid = this.#user.uuid;
-        if(!uuid || sync?.$done) return false;
-        await this.#database.sync(uuid, clone(sync));
-        sync.$done = true;
-        return true;
     }
 }

@@ -11,14 +11,14 @@ export default class Session extends IModule {
         this.#callbacks.set(this.#BORDERCAST, boardcast);
         this.#callbacks.set(this.#MESSAGE, message);
     }
-
-    #CONNECT = 0;
-    #PING = 1;
-    #PONG = 2;
-    #MESSAGE = 3
-    #REPLY = 4;
+    #PING = 0;
+    #PONG = 1;
+    #MESSAGE = 2;
+    #BORDERCAST = 3;
+    #CONNECT = 4;
     #RESUME = 5;
-    #BORDERCAST = 9;
+    #AUTH = 8;
+    #LOGOUT = 9;
 
     #protocol;
     #host;
@@ -96,10 +96,11 @@ export default class Session extends IModule {
     async #resume() {
         if(!this.#sid) return this.#connect();
         console.debug('[Session|resume] trying [sid:%s]', this.#sid);
-        return this.#ws([this.#RESUME, this.#sid])
-            .then(({data: [, isAuth]})=>{
-                console.debug("[Session|resume] resumed.");
-                return [true, isAuth];
+        return this.#ws([this.#RESUME, this.#sid, this.$user.uuid])
+            .then(({data: [, success, sid]})=>{
+                console.debug("[Session|resume] resumed [sid:%s] [success:%s]", sid, success);
+                this.#sid = sid;
+                return [true, success];
             })
             .catch(_=>{
                 console.debug('[Session|resume] faild.');
@@ -108,11 +109,11 @@ export default class Session extends IModule {
     }
 
     async #onmessage([guid, content, sync]) {
-        await this.$core.sync(sync);
+        await this.$db.sync(sync);
         console.debug('[Session|<<<<] [guid:%s]', guid, content, sync);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
-            this.#callbacks.get(index)(null, {content, sync});
+            this.#callbacks.get(index)(null, content);
             this.#callbacks.delete(index);
         }
         switch(guid) {
@@ -126,7 +127,6 @@ export default class Session extends IModule {
             case this.#BORDERCAST:
                 this.#callbacks.get(guid)(content);
                 break;
-            case this.#REPLY:
             default:
                 callback(guid);
                 break;
@@ -217,16 +217,19 @@ export default class Session extends IModule {
      */
     async command(command, data) {
         console.debug('[Session|>>>>] [command:%s] data:', command, data);
+        return this.#command(this.#genMessageId(), command, data);
+    }
+
+    async #command(...args) {
         try {
-            const { content: [code, ret], sync }
-                = await this.#send(this.#genMessageId(), command, data);
+            const [code, ret] = await this.#send(...args);
             if(code) {
                 console.debug('Command error:', code);
                 $.emit('command.error', code);
             }
             return {
                 success: code !== undefined && !code,
-                code, data: ret, sync,
+                code, data: ret,
             };
         } catch (err) {
             console.error(err);
@@ -242,5 +245,41 @@ export default class Session extends IModule {
         }
         const {delay, online} = this;
         return {delay, online};
+    }
+
+    #AUTH_REGISTER = 0;
+    #AUTH_LOGIN = 1;
+    #AUTH_GUEST = 2;
+    async authenticate(username, password) {
+        const gsync = await this.$db.gsync(username);
+        return this.#command(
+            this.#AUTH,
+            this.#AUTH_LOGIN,
+            username,
+            password,
+            gsync,
+        ).then(({data})=>data||null);
+    }
+
+    async register(username, password) {
+        return this.#command(
+            this.#AUTH,
+            this.#AUTH_REGISTER,
+            username,
+            password,
+        ).then(({data})=>data||null);
+    }
+
+    async guest() {
+        return this.#command(
+            this.#AUTH,
+            this.#AUTH_GUEST,
+        ).then(({data})=>data||null);
+    }
+
+    async logout() {
+        return this.#command(
+            this.#LOGOUT
+        ).then(({success})=>success);
     }
 }

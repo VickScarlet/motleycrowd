@@ -1,5 +1,6 @@
 import IModule from "../imodule.js";
 import KV from './model/KVData.js';
+import Auth from './model/Auth.js';
 import User from './model/User.js';
 import Rank from './model/Rank.js';
 import Settlement from './model/Settlement.js';
@@ -8,6 +9,7 @@ import Record from './model/Record.js';
 
 export default class Database extends IModule {
 
+    #auth;
     #user;
     #kv;
     #rank;
@@ -16,6 +18,7 @@ export default class Database extends IModule {
     #record;
     #gsync;
 
+    get auth() {return this.#auth;}
     get user() {return this.#user;}
     get kv() {return this.#kv;}
     get rank() {return this.#rank;}
@@ -34,6 +37,7 @@ export default class Database extends IModule {
             request.onupgradeneeded = event=>this.#onupgradeneeded(event.target.result);
         });
         this.#kv = new KV(db);
+        this.#auth = new Auth(db);
         this.#user = new User(db);
         this.#rank = new Rank(db);
         this.#settlement = new Settlement(db);
@@ -41,6 +45,7 @@ export default class Database extends IModule {
         this.#record = new Record(db);
 
         await this.#kv.initialize();
+        await this.#auth.initialize();
         await this.#user.initialize();
         await this.#rank.initialize();
         await this.#settlement.initialize();
@@ -62,6 +67,7 @@ export default class Database extends IModule {
      */
     #onupgradeneeded(db) {
         this.#scheme(db, KV.Collection, KV.Scheme);
+        this.#scheme(db, Auth.Collection, Auth.Scheme);
         this.#scheme(db, User.Collection, User.Scheme);
         this.#scheme(db, Rank.Collection, Rank.Scheme);
         this.#scheme(db, Settlement.Collection, Settlement.Scheme);
@@ -88,6 +94,7 @@ export default class Database extends IModule {
 
     get(model) {
         switch(model) {
+            case 'auth': return this.auth;
             case 'user': return this.user;
             case 'rank': return this.rank;
             case 'settlement': return this.settlement;
@@ -98,15 +105,20 @@ export default class Database extends IModule {
         }
     }
 
-    async sync(uuid, datas) {
-        return Promise.all(Object.entries(datas)
-            .map(([model, update]) =>
-                this.get(model)?.sync(uuid, update)
-            ));
+    async sync(sync) {
+        if(!sync) return;
+        const [uuid, datas] = sync;
+        const tasks = [];
+        for(let i = 0; i<datas.length; i+=2) {
+            const model = datas[i];
+            const data = datas[i+1];
+            tasks.push(this.get(model)?.sync(uuid, data));
+        }
+        return Promise.all(tasks);
     }
 
     async gsync(username) {
-        const data = await this.user.getByUsername(username);
+        const data = await this.auth.get(username);
         if(!data) return null;
         const {uuid} = data;
 
