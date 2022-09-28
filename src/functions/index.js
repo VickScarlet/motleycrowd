@@ -158,3 +158,31 @@ export function objUpdate(original, update) {
     }
     return original;
 }
+
+/**
+ * @param {any} obj
+ * @param {number} [depth=Infinity]
+ * @param {boolean} [flatArray=false]
+ * @return {any}
+ */
+export function flat(obj, depth=Infinity, flatArray=false) {
+    const flat = (o, d)=> {
+        if( d <= 0
+            || typeof o !== 'object'
+            || Array.isArray(o) && !flatArray
+        ) return [o, false];
+
+        const r = {};
+        for (const k in o) {
+            const [v, n] = flat(o[k], d-1);
+            if(!n) {
+                r[k] = v;
+                continue;
+            }
+            for(const s in v)
+                r[`${k}.${s}`] = v[s];
+        }
+        return [r, true];
+    }
+    return flat(obj, depth+1)[0];
+}

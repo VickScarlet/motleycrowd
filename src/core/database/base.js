@@ -82,6 +82,14 @@ export default class Base {
         uuid = update.uuid;
         delete update.uid;
         const original = await this.get(uuid);
-        return this.set(objUpdate(original, update));
+        return this.set(objUpdate(original, update))
+            .then(async ret=>{
+                if(ret) await this.postSync(update);
+                return ret;
+            });
+    }
+
+    async postSync(data) {
+        // empty
     }
 }
