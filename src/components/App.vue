@@ -77,6 +77,7 @@ export default defineComponent({
             const [success] = await $core.user.autologin();
             if (success) {
                 this.tips('自动重新登录成功');
+                if ($core.game.isInRoom) return;
                 this.switch('Index');
             }
         });
@@ -110,6 +111,7 @@ export default defineComponent({
             const [success, notAuto] = await $core.user.autologin();
             if (success) {
                 this.tips('自动登录成功');
+                if ($core.game.isInRoom) return;
                 this.switch('Index');
             } else if (!notAuto) {
                 this.tips('自动登录失败');

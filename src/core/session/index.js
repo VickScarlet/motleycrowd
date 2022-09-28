@@ -106,9 +106,9 @@ export default class Session extends IModule {
             });
     }
 
-    async #onmessage([guid, content, sync]) {
-        await this.$db.sync(sync);
-        console.debug('[Session|<<<<] [guid:%s]', guid, content, sync);
+    async #onmessage([guid, content, attach]) {
+        await this.$core.attach(attach);
+        console.debug('[Session|<<<<] [guid:%s]', guid, content, attach);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
             this.#callbacks.get(index)(null, content);

@@ -105,13 +105,11 @@ export default class Database extends IModule {
         }
     }
 
-    async sync(sync) {
-        if(!sync) return;
-        const [uuid, datas] = sync;
+    async sync(uuid, sync) {
         const tasks = [];
-        for(let i = 0; i<datas.length; i+=2) {
-            const model = datas[i];
-            const data = datas[i+1];
+        for(let i = 0; i<sync.length; i+=2) {
+            const model = sync[i];
+            const data = sync[i+1];
             tasks.push(this.get(model)?.sync(uuid, data));
         }
         return Promise.all(tasks);

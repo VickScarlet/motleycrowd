@@ -50,6 +50,7 @@ export default defineComponent({
             const result = await $core.user.authenticate(username, password, autologin);
             $ui.loading = false;
             if (!result) return;
+            if ($core.game.isInRoom) return;
             $ui.switch('Index');
         },
         async regi(e) {
@@ -59,6 +60,7 @@ export default defineComponent({
             const result = await $core.user.register(username, password, check, autologin);
             $ui.loading = false;
             if (!result) return;
+            if ($core.game.isInRoom) return;
             $ui.switch('Index');
         },
     }

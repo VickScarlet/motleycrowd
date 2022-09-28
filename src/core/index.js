@@ -114,4 +114,29 @@ export default class Core {
     errMsg(errorcode) {
         return ErrorMessage[errorcode] || '未知错误';
     }
+
+    async attach(attach) {
+        if(!attach) return;
+        const [uuid, datas] = attach;
+        if(datas.sync)
+            await this.#database.sync(uuid, datas.sync);
+
+        for(const type in datas) {
+            if(type === 'sync') continue;
+            await this.#attach(uuid, type, datas[type]);
+        }
+    }
+
+    async #attach(uuid, type, data) {
+        switch(type) {
+            case 0:
+            case 'game.resume':
+                break;
+            default: return;
+        }
+        await this.#serverpush(
+            'message', [type, data]
+        );
+    }
+
 }
