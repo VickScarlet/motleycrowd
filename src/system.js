@@ -25,8 +25,12 @@ async function configure(mods, lists) {
 }
 
 async function initDebug(configure) {
+    if(!configure) return;
     window.$.debug = configure.on;
     window.$debug = configure.on;
+    if($debug && configure.patch) {
+        await configure.patch();
+    }
 }
 
 async function initLogger(configure) {
@@ -95,6 +99,7 @@ export async function start(cfgList) {
         await $core.start()
         await $ui.start();
         $ui.loading = false;
+        $emit('system.start');
     } catch(e) {
         $ui.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
     }
