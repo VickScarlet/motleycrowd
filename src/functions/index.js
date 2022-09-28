@@ -54,8 +54,6 @@ export function batch(bpart, time, apart) {
     return fn;
 }
 
-const toString = Object.prototype.toString;
-
 export function getType(value) {
     const name = value?.constructor?.name;
     if(name) return name;

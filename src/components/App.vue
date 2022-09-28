@@ -58,15 +58,15 @@ export default defineComponent({
         }
     },
     mounted() {
-        $.on('network.error', ()=>{
+        $on('network.error', ()=>{
             this.loading = false;
             this.tips('当前网络有点小问题，尝试重连中~');
         });
-        $.on('network.kick', ()=>{
+        $on('network.kick', ()=>{
             this.loading = false;
             this.tips('你被踢了');
         });
-        $.on('network.resume', async isAuth=>{
+        $on('network.resume', async isAuth=>{
             this.loading = false;
             if(isAuth) {
                 this.tips('重连成功');
@@ -74,21 +74,21 @@ export default defineComponent({
             }
             this.tips('掉线太久，已经被踢了, 请尝试重新登录');
             this.switch('Welcome');
-            const [success] = await $.core.user.autologin();
+            const [success] = await $core.user.autologin();
             if (success) {
                 this.tips('自动重新登录成功');
                 this.switch('Index');
             }
         });
-        $.on('game.start', ()=>this.switch('Question'));
-        $.on('game.question', ()=>this.switch('Question'));
-        $.on('game.resume.room', ()=>this.switch('Room'));
-        $.on('game.resume.question', ()=>this.switch('Question'));
-        $.on('game.settlement', data=>this.switch('Settlement', data));
+        $on('game.start', ()=>this.switch('Question'));
+        $on('game.question', ()=>this.switch('Question'));
+        $on('game.resume.room', ()=>this.switch('Room'));
+        $on('game.resume.question', ()=>this.switch('Question'));
+        $on('game.settlement', data=>this.switch('Settlement', data));
 
-        $.on('command.error', code=>{
+        $on('command.error', code=>{
             this.loading = false;
-            const message = $.core.errMsg(code);
+            const message = $core.errMsg(code);
             this.tips(message);
         });
     },
@@ -107,7 +107,7 @@ export default defineComponent({
         },
         async start() {
             this.tips('欢迎来到 [乌合之众]');
-            const [success, notAuto] = await $.core.user.autologin();
+            const [success, notAuto] = await $core.user.autologin();
             if (success) {
                 this.tips('自动登录成功');
                 this.switch('Index');
@@ -131,7 +131,7 @@ export default defineComponent({
             globalThis.onpopstate = showUrlPage;
             showUrlPage();
             const updateStat = async () => {
-                const {delay, online} =await $.core.ping();
+                const {delay, online} =await $core.ping();
                 this.delay = delay;
                 this.online = online;
             }

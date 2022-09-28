@@ -71,7 +71,7 @@ export default class Core {
         await this.#game.initialize();
         await this.#rank.initialize();
         await this.#session.initialize();
-        $.on('debug.push', (action, data)=>
+        $on('debug.push', (action, data)=>
             this.#serverpush('message', [action, data])
         );
     }

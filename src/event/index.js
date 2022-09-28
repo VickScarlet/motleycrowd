@@ -1,16 +1,18 @@
-const eventMap = new Map();
-export function on(event, callback) {
-    if(!eventMap.has(event))
-        eventMap.set(event, new Set());
-    eventMap.get(event).add(callback);
+const listeners = new Map();
+export function on(event, listener) {
+    if(!listeners.has(event))
+        listeners.set(event, new Set());
+    listeners.get(event).add(listener);
 }
 
-export function off(event, callback) {
-    if(!eventMap.has(event)) return;
-    eventMap.get(event).delete(callback);
+export function off(event, listener) {
+    if(!listeners.has(event)) return;
+    listeners.get(event).delete(listener);
 }
 
 export function emit(event, ...args) {
-    if(!eventMap.has(event)) return;
-    eventMap.get(event).forEach(callback=>callback(...args));
+    if(!listeners.has(event)) return;
+    listeners.get(event).forEach(
+        listener=>listener(...args)
+    );
 }

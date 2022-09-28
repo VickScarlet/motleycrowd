@@ -25,19 +25,19 @@ export default defineComponent({
     },
     activated() {
         this.update();
-        $.on('game.user', this.update.bind(this));
+        $on('game.user', this.update.bind(this));
     },
     deactivated() {
-        $.off('game.user', this.update.bind(this));
+        $off('game.user', this.update.bind(this));
     },
     methods: {
         async back() {
-            const result = await $.core.game.leave();
+            const result = await $core.game.leave();
             if(result)
-                $.ui.switch('Index');
+                $ui.switch('Index');
         },
         update() {
-            const {users, limit} = $.core.game;
+            const {users, limit} = $core.game;
             this.limit = limit;
             this.users = [...users];
         },

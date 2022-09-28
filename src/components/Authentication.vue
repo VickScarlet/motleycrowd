@@ -41,25 +41,25 @@ export default defineComponent({
     },
     methods: {
         back() {
-            $.ui.switch('Welcome');
+            $ui.switch('Welcome');
         },
         async auth(e) {
             e.returnValue = false;
             const { username, password, autologin } = this;
-            $.ui.loading = true;
-            const result = await $.core.user.authenticate(username, password, autologin);
-            $.ui.loading = false;
+            $ui.loading = true;
+            const result = await $core.user.authenticate(username, password, autologin);
+            $ui.loading = false;
             if (!result) return;
-            $.ui.switch('Index');
+            $ui.switch('Index');
         },
         async regi(e) {
             e.returnValue = false;
             const { username, password, check, autologin } = this;
-            $.ui.loading = true;
-            const result = await $.core.user.register(username, password, check, autologin);
-            $.ui.loading = false;
+            $ui.loading = true;
+            const result = await $core.user.register(username, password, check, autologin);
+            $ui.loading = false;
             if (!result) return;
-            $.ui.switch('Index');
+            $ui.switch('Index');
         },
     }
 });

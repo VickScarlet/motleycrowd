@@ -29,7 +29,7 @@ export default defineComponent({
     methods: {
         async update() {
             const {uuid} = this;
-            const user = await $.core.user.get(uuid);
+            const user = await $core.user.get(uuid);
             if(user) {
                 this.username = user.username;
                 this.guest = !!user.guest;

@@ -25,7 +25,7 @@ export default class User extends IModule {
     get isguest() { return !!this.#isguest; }
 
     async initialize() {
-        $.on('network.resume', isAuth=>{
+        $on('network.resume', isAuth=>{
             if(isAuth) return;
             this.#uuid = null;
             this.#authenticated = false;

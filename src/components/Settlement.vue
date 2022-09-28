@@ -44,13 +44,13 @@ export default defineComponent({
             this.rank = ()=>({uuid, rank});
         },
         ch(uuid) {
-            if(!$.debug) return;
+            if(!$debug) return;
             const settlement = this.getData();
             settlement.uuid = uuid;
             this.update();
         },
         ok() {
-            $.ui.switch('Index');
+            $ui.switch('Index');
         }
     }
 });

@@ -52,15 +52,15 @@ export default defineComponent({
         }
     },
     activated() {
-        this.limit = $.core.game.limit;
+        this.limit = $core.game.limit;
         this.update();
-        $.on('game.question', this.update.bind(this));
-        $.on('game.answer', this.updateAnswer.bind(this));
+        $on('game.question', this.update.bind(this));
+        $on('game.answer', this.updateAnswer.bind(this));
     },
     deactivated() {
         this.confirm = false;
-        $.off('game.question', this.update.bind(this));
-        $.off('game.answer', this.updateAnswer.bind(this));
+        $off('game.question', this.update.bind(this));
+        $off('game.answer', this.updateAnswer.bind(this));
     },
     methods: {
         back() {
@@ -69,12 +69,12 @@ export default defineComponent({
         async doexit(exit) {
             this.confirm = false;
             if(!exit) return;
-            const result = await $.core.game.leave();
+            const result = await $core.game.leave();
             if(result)
-                $.ui.switch('Index');
+                $ui.switch('Index');
         },
         update() {
-            const q = $.core.game.currentQuestion;
+            const q = $core.game.currentQuestion;
             if(!q) return;
             const { id, question, size, left,
                 answer, timeout: total, options
@@ -103,11 +103,11 @@ export default defineComponent({
         async answer() {
             const id = this.id;
             const selected = this.selected;
-            $.ui.loading = true;
-            const result = await $.core.game.answer(selected);
-            $.ui.loading = false;
+            $ui.loading = true;
+            const result = await $core.game.answer(selected);
+            $ui.loading = false;
             if(!result) return;
-            const q = $.core.game.currentQuestion;
+            const q = $core.game.currentQuestion;
             if(!q || id != q.id) return;
             this.answerCount++;
             this.answered = true;
