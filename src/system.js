@@ -101,6 +101,7 @@ export async function start(cfgList) {
         $ui.loading = false;
         $emit('system.start');
     } catch(e) {
+        console.error(e);
         $ui.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
     }
 }

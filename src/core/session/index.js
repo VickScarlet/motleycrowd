@@ -58,9 +58,8 @@ export default class Session extends IModule {
     async #ws(first) {
         return new Promise((resolve, reject) => {
             const ws = new WebSocket(this.#url);
-            ws.addEventListener('open', _ => ws.send(JSON.stringify(first)));
-            ws.addEventListener('error', e => reject(e));
-            ws.addEventListener('message', async ({data}) => {
+            const open = _ => ws.send(JSON.stringify(first));
+            const message = async ({data}) => {
                 if(data instanceof Blob) {
                     const arrayBuffer = await data.arrayBuffer();
                     data = pako.inflate(arrayBuffer, { to: 'string' })
@@ -74,10 +73,21 @@ export default class Session extends IModule {
                     return;
                 }
                 this.#onmessage(data);
-            });
-            ws.addEventListener('close',
-                ({code, reason}) => this.#onclose(code, reason)
-            );
+            };
+            const close = ({code, reason}) => this.#onclose(code, reason)
+            const error = e => {
+                ws.removeEventListener('error', error);
+                ws.removeEventListener('open', open);
+                ws.removeEventListener('message', message);
+                ws.removeEventListener('close', close);
+                ws.close();
+                reject(e);
+            };
+
+            ws.addEventListener('error', error);
+            ws.addEventListener('open', open);
+            ws.addEventListener('message', message);
+            ws.addEventListener('close', close);
         });
     }
 
