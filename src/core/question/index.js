@@ -1,5 +1,4 @@
 import IModule from '../imodule.js';
-import { clone } from '../../functions/index.js';
 import { Question } from './subjects/index.js';
 
 export class ClientQuestion {
@@ -48,7 +47,9 @@ export class ClientQuestion {
     }
 
     option(option) {
-        return clone(this.#question.option(option));
+        return $utils.clone(
+            this.#question.option(option)
+        );
     }
 }
 

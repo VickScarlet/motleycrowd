@@ -1,5 +1,5 @@
-import { clone } from "../functions/index.js";
 import { ErrorCode, ErrorMessage } from "./error.js";
+import Sheet from "./sheet/index.js";
 import Database from "./database/index.js";
 import Question from "./question/index.js";
 import Session from "./session/index.js";
@@ -15,6 +15,8 @@ export default class Core {
     #proxy = new Map();
     #configure;
     /** @type {Database} */
+    #sheet;
+    /** @type {Sheet} */
     #database;
     /** @type {Question} */
     #question;
@@ -28,6 +30,8 @@ export default class Core {
     #rank;
     #err = ErrorCode;
 
+    /** @readonly */
+    get sheet() { return this.#sheet; }
     /** @readonly */
     get database() { return this.#database; }
     /** @readonly */
@@ -52,19 +56,22 @@ export default class Core {
     }
 
     async initialize() {
-        this.#database = new Database(this, this.#configure.database);
-        this.#question = new Question(this, this.#configure.question);
-        this.#session = new Session(this, this.#configure.session, {
+        const cfgs = this.#configure;
+        this.#sheet = new Sheet(this, cfgs.sheet);
+        this.#database = new Database(this, cfgs.database);
+        this.#question = new Question(this, cfgs.question);
+        this.#session = new Session(this, cfgs.session, {
             boardcast: data => this.#serverpush('boardcast', data),
             connect: data => this.#serverpush('connect', data),
             message: data => this.#serverpush('message', data),
         });
-        this.#user = new User(this, this.#configure.user);
-        this.#game = new Game(this, this.#configure.game);
-        this.#rank = new Rank(this, this.#configure.rank);
+        this.#user = new User(this, cfgs.user);
+        this.#game = new Game(this, cfgs.game);
+        this.#rank = new Rank(this, cfgs.rank);
 
         this.#setProxy('game', this.#game.proxy());
 
+        await this.#sheet.initialize();
         await this.#database.initialize();
         await this.#question.initialize();
         await this.#user.initialize();

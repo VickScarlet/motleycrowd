@@ -13,7 +13,7 @@ async function configure(mods, lists) {
         configure[mod] = {};
     }
     await Promise
-        .all(lists.map(p=>import(p).catch(_=>null)))
+        .all(lists.map(p=>import(`./config/${p}.js`).catch(_=>null)))
         .then(modules=>modules.forEach(m => {
             if(!m) return;
             for (const mod of mods) {

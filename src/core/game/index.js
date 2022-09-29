@@ -145,7 +145,9 @@ export default class Game extends IModule {
     }
 
     async #settlement(data) {
-        await this.$db.settlement.set(data);
+        await this.$db.settlement.set(
+            $utils.clone(data)
+        );
         const settlement = new SettlementData(
             this.$user.uuid,
             this.$question.get,

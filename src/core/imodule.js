@@ -17,6 +17,8 @@ export default class IModule {
     /** @readonly */
     get $configure() { return this.#configure; }
     /** @readonly */
+    get $sheet() { return this.#core.sheet; }
+    /** @readonly */
     get $db() { return this.#core.database; }
     /** @readonly */
     get $user() { return this.#core.user; }

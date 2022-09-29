@@ -1,4 +1,3 @@
-import { objUpdate } from "../../functions/index.js";
 export default class Base {
     constructor(db) {
         this.#db = db;
@@ -82,11 +81,12 @@ export default class Base {
         uuid = update.uuid;
         delete update.uid;
         const original = await this.get(uuid);
-        return this.set(objUpdate(original, update))
-            .then(async ret=>{
-                if(ret) await this.postSync(update);
-                return ret;
-            });
+        return this.set(
+            $utils.objUpdate(original, update)
+        ).then(async ret=>{
+            if(ret) await this.postSync(update);
+            return ret;
+        });
     }
 
     async postSync(data) {
