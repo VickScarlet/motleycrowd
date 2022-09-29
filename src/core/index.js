@@ -6,6 +6,7 @@ import Session from "./session/index.js";
 import User from './user/index.js';
 import Game from './game/index.js';
 import Rank from './rank/index.js';
+import Achievement from './achievement/index.js';
 
 export default class Core {
     constructor(configure) {
@@ -28,6 +29,8 @@ export default class Core {
     #game;
     /** @type {Rank} */
     #rank;
+    /** @type {Achievement} */
+    #achievement;
     #err = ErrorCode;
 
     /** @readonly */
@@ -44,6 +47,8 @@ export default class Core {
     get rank() { return this.#rank; }
     /** @readonly */
     get session() { return this.#session; }
+    /** @readonly */
+    get achievement() { return this.#achievement; }
     /** @readonly */
     get err() { return this.#err; }
 
@@ -68,6 +73,7 @@ export default class Core {
         this.#user = new User(this, cfgs.user);
         this.#game = new Game(this, cfgs.game);
         this.#rank = new Rank(this, cfgs.rank);
+        this.#achievement = new Achievement(this, cfgs.achievement);
 
         this.#setProxy('game', this.#game.proxy());
 
@@ -77,6 +83,7 @@ export default class Core {
         await this.#user.initialize();
         await this.#game.initialize();
         await this.#rank.initialize();
+        await this.#achievement.initialize();
         await this.#session.initialize();
         $on('debug.push', (action, data)=>
             this.#serverpush('message', [action, data])
@@ -104,6 +111,7 @@ export default class Core {
                 this.#game.$i(message.game);
                 this.#rank.$i(message.rank);
                 this.#session.$i(message.session);
+                this.#achievement.$i(message.achievement);
                 return;
             case 'message':
             default: break;

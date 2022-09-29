@@ -31,6 +31,8 @@ export default class IModule {
     /** @readonly */
     get $session() { return this.#core.session; }
     /** @readonly */
+    get $achiv() { return this.#core.achievement; }
+    /** @readonly */
     get $err() { return this.#core.err; }
 
     async initialize() {

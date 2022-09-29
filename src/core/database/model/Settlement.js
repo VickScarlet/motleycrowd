@@ -5,6 +5,8 @@ export default class Settlement extends Base {
 
     async set(data) {
         if(!data.id) return false;
-        return this.$put(data);
+        const result = this.$put(data);
+        $emit('settlement', data);
+        return result;
     }
 }

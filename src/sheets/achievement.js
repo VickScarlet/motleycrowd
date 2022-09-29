@@ -5,6 +5,7 @@ export default {
         "description": "10人排位赛夺冠",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.10W",
         "condition": {
             "values": {
@@ -23,6 +24,7 @@ export default {
         "description": "100人排位赛夺冠",
         "grade": 1,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.100W",
         "condition": {
             "values": {
@@ -41,6 +43,7 @@ export default {
         "description": "好友房夺冠",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.privW",
         "condition": {
             "values": {
@@ -64,6 +67,7 @@ export default {
                 "101": 1
             }
         },
+        "category": "record",
         "watch": "record.c.10W",
         "condition": {
             "values": {
@@ -87,6 +91,7 @@ export default {
                 "102": 1
             }
         },
+        "category": "record",
         "watch": "record.c.100W",
         "condition": {
             "values": {
@@ -105,6 +110,7 @@ export default {
         "description": "好友房夺冠10次",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.privW",
         "condition": {
             "values": {
@@ -128,6 +134,7 @@ export default {
                 "103": 1
             }
         },
+        "category": "record",
         "watch": "record.c.10W",
         "condition": {
             "values": {
@@ -151,6 +158,7 @@ export default {
                 "104": 1
             }
         },
+        "category": "record",
         "watch": "record.c.100W",
         "condition": {
             "values": {
@@ -174,6 +182,7 @@ export default {
                 "105": 1
             }
         },
+        "category": "record",
         "watch": "record.c.privW",
         "condition": {
             "values": {
@@ -197,6 +206,7 @@ export default {
                 "106": 1
             }
         },
+        "category": "record",
         "watch": "record.c.10W",
         "condition": {
             "values": {
@@ -220,6 +230,7 @@ export default {
                 "107": 1
             }
         },
+        "category": "record",
         "watch": "record.c.100W",
         "condition": {
             "values": {
@@ -243,6 +254,7 @@ export default {
                 "108": 1
             }
         },
+        "category": "record",
         "watch": "record.c.privW",
         "condition": {
             "values": {
@@ -261,7 +273,8 @@ export default {
         "description": "并列夺冠",
         "grade": 0,
         "hide": 1,
-        "watch": "settlement.win",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -293,7 +306,8 @@ export default {
                 "109": 1
             }
         },
-        "watch": "settlement.win",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -325,6 +339,7 @@ export default {
                 "110": 1
             }
         },
+        "category": "record",
         "watch": "record.s.pairW",
         "condition": {
             "values": {
@@ -343,7 +358,8 @@ export default {
         "description": "夺冠并与第二分差小于0.1",
         "grade": 0,
         "hide": 1,
-        "watch": "settlement.win",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -370,7 +386,8 @@ export default {
         "description": "100人排位赛无人和你同分",
         "grade": 0,
         "hide": 1,
-        "watch": "settlement.100",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -402,7 +419,8 @@ export default {
                 "111": 1
             }
         },
-        "watch": "settlement.10",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -440,7 +458,8 @@ export default {
                 "112": 1
             }
         },
-        "watch": "settlement.100",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -473,6 +492,7 @@ export default {
         "description": "选信仰并+2分",
         "grade": 0,
         "hide": 0,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -500,6 +520,7 @@ export default {
         "description": "选人类并得分",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -541,7 +562,8 @@ export default {
                 "113": 1
             }
         },
-        "watch": "settlement.win",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -577,7 +599,8 @@ export default {
         "description": "选反思并夺冠",
         "grade": 1,
         "hide": 1,
-        "watch": "settlement.win",
+        "category": "settlement",
+        "watch": "settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -629,6 +652,7 @@ export default {
         "description": "加入蜀军并胜利",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -668,6 +692,7 @@ export default {
         "description": "抽中SSR",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -704,6 +729,7 @@ export default {
         "description": "选田忌并+4分",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -741,6 +767,7 @@ export default {
         "description": "选国王并得分",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -777,6 +804,7 @@ export default {
         "description": "选摸鱼被优化",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -810,6 +838,7 @@ export default {
         "description": "选卷王过劳死",
         "grade": 0,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -862,6 +891,7 @@ export default {
         "description": "累计获得1000金币",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.m0",
         "condition": {
             "values": {
@@ -880,6 +910,7 @@ export default {
         "description": "累计获得10000金币",
         "grade": 1,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.m0",
         "condition": {
             "values": {
@@ -903,6 +934,7 @@ export default {
                 "114": 1
             }
         },
+        "category": "record",
         "watch": "record.c.m0",
         "condition": {
             "values": {
@@ -921,6 +953,7 @@ export default {
         "description": "拥有1个头衔",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.badge",
         "condition": {
             "values": {
@@ -939,6 +972,7 @@ export default {
         "description": "拥有3个头衔",
         "grade": 1,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.badge",
         "condition": {
             "values": {
@@ -957,6 +991,7 @@ export default {
         "description": "拥有10个头衔",
         "grade": 2,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.badge",
         "condition": {
             "values": {
@@ -980,6 +1015,7 @@ export default {
                 "115": 1
             }
         },
+        "category": "record",
         "watch": "record.c.badge",
         "condition": {
             "values": {
@@ -998,6 +1034,7 @@ export default {
         "description": "拥有3个名片背景",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.card",
         "condition": {
             "values": {
@@ -1016,6 +1053,7 @@ export default {
         "description": "拥有10个名片背景",
         "grade": 1,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.card",
         "condition": {
             "values": {
@@ -1034,6 +1072,7 @@ export default {
         "description": "拥有30个名片背景",
         "grade": 2,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.card",
         "condition": {
             "values": {
@@ -1057,6 +1096,7 @@ export default {
                 "204": 1
             }
         },
+        "category": "record",
         "watch": "record.c.card",
         "condition": {
             "values": {
@@ -1075,11 +1115,12 @@ export default {
         "description": "10人世界排名前10%",
         "grade": 1,
         "hide": 0,
-        "watch": "rank.10",
+        "category": "rank",
+        "watch": "rank.ten",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.ten",
-                "size": "rank.size.ten"
+                "ranking": "rank.ten.ranking",
+                "size": "rank.ten.size"
             },
             "checks": [
                 "$le",
@@ -1103,11 +1144,12 @@ export default {
                 "117": 1
             }
         },
-        "watch": "rank.10",
+        "category": "rank",
+        "watch": "rank.ten",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.ten",
-                "size": "rank.size.ten"
+                "ranking": "rank.ten.ranking",
+                "size": "rank.ten.size"
             },
             "checks": [
                 "$le",
@@ -1131,11 +1173,12 @@ export default {
                 "118": 1
             }
         },
-        "watch": "rank.10",
+        "category": "rank",
+        "watch": "rank.ten",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.ten",
-                "size": "rank.size.ten"
+                "ranking": "rank.ten.ranking",
+                "size": "rank.ten.size"
             },
             "checks": [
                 "$le",
@@ -1154,11 +1197,12 @@ export default {
         "description": "100人世界排名前10%",
         "grade": 1,
         "hide": 0,
-        "watch": "rank.100",
+        "category": "rank",
+        "watch": "rank.hundred",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.hundred",
-                "size": "rank.size.hundred"
+                "ranking": "rank.hundred.ranking",
+                "size": "rank.hundred.size"
             },
             "checks": [
                 "$le",
@@ -1182,11 +1226,12 @@ export default {
                 "119": 1
             }
         },
-        "watch": "rank.100",
+        "category": "rank",
+        "watch": "rank.hundred",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.hundred",
-                "size": "rank.size.hundred"
+                "ranking": "rank.hundred.ranking",
+                "size": "rank.hundred.size"
             },
             "checks": [
                 "$le",
@@ -1210,11 +1255,12 @@ export default {
                 "120": 1
             }
         },
-        "watch": "rank.100",
+        "category": "rank",
+        "watch": "rank.hundred",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.hundred",
-                "size": "rank.size.hundred"
+                "ranking": "rank.hundred.ranking",
+                "size": "rank.hundred.size"
             },
             "checks": [
                 "$le",
@@ -1238,11 +1284,12 @@ export default {
                 "201": 1
             }
         },
+        "category": "rank",
         "watch": "rank.main",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.main",
-                "size": "rank.size.main"
+                "ranking": "rank.main.ranking",
+                "size": "rank.main.size"
             },
             "checks": [
                 "$le",
@@ -1266,11 +1313,12 @@ export default {
                 "202": 1
             }
         },
+        "category": "rank",
         "watch": "rank.main",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.main",
-                "size": "rank.size.main"
+                "ranking": "rank.main.ranking",
+                "size": "rank.main.size"
             },
             "checks": [
                 "$le",
@@ -1294,11 +1342,12 @@ export default {
                 "203": 1
             }
         },
+        "category": "rank",
         "watch": "rank.main",
         "condition": {
             "values": {
-                "ranking": "rank.ranking.main",
-                "size": "rank.size.main"
+                "ranking": "rank.main.ranking",
+                "size": "rank.main.size"
             },
             "checks": [
                 "$le",
@@ -1317,6 +1366,7 @@ export default {
         "description": "成功使用兑换码",
         "grade": 1,
         "hide": 1,
+        "category": "record",
         "watch": "record.c.reddem",
         "condition": {
             "values": {
@@ -1340,6 +1390,7 @@ export default {
                 "116": 1
             }
         },
+        "category": "record",
         "watch": "record.c.discount",
         "condition": {
             "values": {
@@ -1358,6 +1409,7 @@ export default {
         "description": "进行30场排位赛",
         "grade": 0,
         "hide": 0,
+        "category": "record",
         "watch": "record.c.pair",
         "condition": {
             "values": {
@@ -1381,6 +1433,7 @@ export default {
                 "121": 1
             }
         },
+        "category": "record",
         "watch": "record.c.pair",
         "condition": {
             "values": {
@@ -1404,6 +1457,7 @@ export default {
                 "122": 1
             }
         },
+        "category": "record",
         "watch": "record.c.pair",
         "condition": {
             "values": {
@@ -1427,6 +1481,7 @@ export default {
                 "123": 1
             }
         },
+        "category": "record",
         "watch": "record.c.pair",
         "condition": {
             "values": {
@@ -1445,6 +1500,7 @@ export default {
         "description": "在一题中+5分或更多",
         "grade": 1,
         "hide": 1,
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {
@@ -1483,6 +1539,7 @@ export default {
                 "124": 1
             }
         },
+        "category": "settlement",
         "watch": "settlement",
         "condition": {
             "values": {

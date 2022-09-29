@@ -17,7 +17,7 @@ export function core() { return {
     },
     database: {
         dbName: 'motleycrowd',
-        version: 10,
+        version: 11,
     },
     action: {
 

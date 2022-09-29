@@ -6,6 +6,7 @@ import Rank from './model/Rank.js';
 import Settlement from './model/Settlement.js';
 import Asset from './model/Asset.js';
 import Record from './model/Record.js';
+import Achievement from './model/Achievement.js';
 
 export default class Database extends IModule {
 
@@ -16,6 +17,7 @@ export default class Database extends IModule {
     #settlement;
     #asset;
     #record;
+    #achievement;
     #gsync;
 
     get auth() {return this.#auth;}
@@ -25,6 +27,7 @@ export default class Database extends IModule {
     get settlement() {return this.#settlement;}
     get asset() {return this.#asset;}
     get record() {return this.#record;}
+    get achievement() {return this.#achievement;}
 
     async initialize() {
         const {dbName, version} = this.$configure;
@@ -43,6 +46,7 @@ export default class Database extends IModule {
         this.#settlement = new Settlement(db);
         this.#asset = new Asset(db);
         this.#record = new Record(db);
+        this.#achievement = new Achievement(db);
 
         await this.#kv.initialize();
         await this.#auth.initialize();
@@ -51,6 +55,7 @@ export default class Database extends IModule {
         await this.#settlement.initialize();
         await this.#asset.initialize();
         await this.#record.initialize();
+        await this.#achievement.initialize();
 
         const ls = globalThis.localStorage.getItem('storage');
         if(!ls) return;
@@ -73,6 +78,7 @@ export default class Database extends IModule {
         this.#scheme(db, Settlement.Collection, Settlement.Scheme);
         this.#scheme(db, Asset.Collection, Asset.Scheme);
         this.#scheme(db, Record.Collection, Record.Scheme);
+        this.#scheme(db, Achievement.Collection, Achievement.Scheme);
     }
 
     /**
@@ -94,13 +100,14 @@ export default class Database extends IModule {
 
     get(model) {
         switch(model) {
-            case 'auth': return this.auth;
-            case 'user': return this.user;
-            case 'rank': return this.rank;
-            case 'settlement': return this.settlement;
-            case 'asset': return this.asset;
-            case 'record': return this.record;
-            case 'kv': return this.kv;
+            case 'auth': return this.#auth;
+            case 'user': return this.#user;
+            case 'rank': return this.#rank;
+            case 'settlement': return this.#settlement;
+            case 'asset': return this.#asset;
+            case 'record': return this.#record;
+            case 'kv': return this.#kv;
+            case 'achievement': return this.#achievement;
             default: return null;
         }
     }
@@ -122,7 +129,7 @@ export default class Database extends IModule {
 
         const sync = {};
         for(const model of this.#gsync) {
-            const updated = (await this.get(model)?.get(uuid))?.updated;
+            const updated = (await this.get(model)?.$get(uuid))?.updated;
             if(updated) sync[model] = new Date(updated);
         }
         return { uid: uuid, sync };
