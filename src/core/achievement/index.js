@@ -114,4 +114,11 @@ export default class Achievement extends IModule {
         }
         return data;
     }
+
+    achievements() {
+        if(this.$user.isguest) return [];
+        const uuid = this.$user.uuid;
+        if(!uuid) return [];
+
+    }
 }

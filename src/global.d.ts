@@ -3,6 +3,7 @@ import * as ilogic from './functions/logic.js';
 import * as inormalize from './functions/normalize.js';
 import {on, off, emit} from './event/index.js';
 import iLog4js from 'log4js';
+import Lang from './i18n/index.js';
 import Core from './core/index.js';
 import App from './app/index.js';
 
@@ -20,6 +21,7 @@ declare global {
     let $event = {on, off, emit};
 
     let $Log4js = iLog4js;
+    let $lang = new Lang();
     let $core = new Core();
     let $app = new App();
     let $$ = core;
@@ -35,6 +37,7 @@ declare global {
         event: $event,
         Log4js: $Log4js,
         logger: $logger,
+        lang: $lang,
         core: $core,
         app: $app,
     };

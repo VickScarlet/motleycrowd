@@ -5,12 +5,19 @@
                 <slot></slot>
             </div>
             <div>
-                <button class="yes" @click="$emit('yes')">是</button>
-                <button class="no" @click="$emit('no')">否</button>
+                <button class="yes" @click="$emit('yes')">{{$lang.g.yes}}</button>
+                <button class="no" @click="$emit('no')">{{$lang.g.no}}</button>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue';
+
+export default defineComponent({});
+</script>
+
 
 <style lang="scss" scoped>
 #confirm {

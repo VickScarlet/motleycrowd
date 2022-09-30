@@ -1,4 +1,4 @@
-import { ErrorCode, ErrorMessage } from "./error.js";
+import ErrorCode from "./errorcode.js";
 import Sheet from "./sheet/index.js";
 import Database from "./database/index.js";
 import Question from "./question/index.js";

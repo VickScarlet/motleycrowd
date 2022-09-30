@@ -1,28 +1,64 @@
 <template>
-    <a @click="back" class="back">&lt; 返回</a>
+    <a @click="back" class="back">&lt; {{$lang.g.back}}</a>
     <form v-show="isauth" @submit="auth">
         <ul>
-            <li><input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username"/></li>
-            <li><input type="password" placeholder="密码" autoComplete="current-password" v-model.trim="password"/></li>
+            <li><input type="text"
+                :placeholder="$lang.g.username"
+                autoComplete="username"
+                v-model.trim="username"
+            /></li>
+            <li><input type="password"
+                :placeholder="$lang.g.password"
+                autoComplete="current-password"
+                v-model.trim="password"
+            /></li>
             <li><div class="checkbox">
-                <input id="autologin1" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
-                <label for="autologin1">{{autologin?'自动登录(已开启)':'自动登录(已关闭)'}}</label>
+                <input id="autologin1"
+                    type="checkbox"
+                    :placeholder="$lang.g.autologin"
+                    v-model.trim="autologin"
+                />
+                <label for="autologin1">{{
+                    autologin?
+                        $lang.g.autologin_open:
+                        $lang.g.autologin_close
+                }}</label>
             </div></li>
-            <li><button type="submit">登录</button></li>
-            <li><a @click="this.isauth=false">没有账号? 立即注册.</a></li>
+            <li><button type="submit">{{$lang.g.authenticate}}</button></li>
+            <li><a @click="this.isauth=false">{{$lang.g.no_account}}</a></li>
         </ul>
     </form>
     <form v-show="!isauth" @submit="regi">
         <ul>
-            <li><input type="text" placeholder="用户名" autoComplete="username" v-model.trim="username" /></li>
-            <li><input type="password" placeholder="密码" autoComplete="new-password" v-model.trim="password" /></li>
-            <li><input type="password" placeholder="重复密码" autoComplete="new-password" v-model.trim="check"/></li>
+            <li><input type="text"
+                :placeholder="$lang.g.username"
+                autoComplete="username"
+                v-model.trim="username"
+            /></li>
+            <li><input type="password"
+                :placeholder="$lang.g.password"
+                autoComplete="new-password"
+                v-model.trim="password"
+            /></li>
+            <li><input type="password"
+                :placeholder="$lang.g.password_check"
+                autoComplete="new-password"
+                v-model.trim="check"
+            /></li>
             <li><div class="checkbox">
-                <input id="autologin2" type="checkbox" placeholder="自动登录" v-model.trim="autologin"/>
-                <label for="autologin2">{{autologin?'自动登录(已开启)':'自动登录(已关闭)'}}</label>
+                <input id="autologin1"
+                    type="checkbox"
+                    :placeholder="$lang.g.autologin"
+                    v-model.trim="autologin"
+                />
+                <label for="autologin1">{{
+                    autologin?
+                        $lang.g.autologin_open:
+                        $lang.g.autologin_close
+                }}</label>
             </div></li>
-            <li><button type="submit">注册</button><br /></li>
-            <li><a @click="this.isauth=true">已有账号? 马上登录.</a></li>
+            <li><button type="submit">{{$lang.g.register}}</button><br /></li>
+            <li><a @click="this.isauth=true">{{$lang.g.has_account}}</a></li>
         </ul>
     </form>
 </template>

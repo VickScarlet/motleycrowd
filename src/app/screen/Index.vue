@@ -1,13 +1,13 @@
 <template>
     <ul class="container">
         <li>
-            <h1>乌合之众</h1>
-            <h3 class="subtitle">群体博弈研究</h3>
+            <h1>{{$lang.g.title}}</h1>
+            <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
         </li>
-        <li><button type="button" @click="pair(100)">100人排位</button></li>
-        <li><button type="button" @click="pair(10)">10人排位</button></li>
-        <li><button type="button" @click="custom">好友房</button></li>
-        <li><button type="button" @click="logout">登出</button></li>
+        <li><button type="button" @click="pair(100)">{{$lang.g.pair_mode.f(100)}}</button></li>
+        <li><button type="button" @click="pair(10)">{{$lang.g.pair_mode.f(10)}}</button></li>
+        <li><button type="button" @click="custom">{{$lang.g.priv_mode}}</button></li>
+        <li><button type="button" @click="logout">{{$lang.g.logout}}</button></li>
     </ul>
 </template>
 

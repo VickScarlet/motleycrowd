@@ -1,11 +1,11 @@
 <template>
     <ul class="container">
         <li>
-            <h1>乌合之众</h1>
-            <h3 class="subtitle">群体博弈研究</h3>
+            <h1>{{$lang.g.title}}</h1>
+            <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
         </li>
-        <li><button type="button" @click="auth">登录/注册</button></li>
-        <li><button type="button" @click="guest">游客模式</button></li>
+        <li><button type="button" @click="auth">{{$lang.g.auth_regi}}</button></li>
+        <li><button type="button" @click="guest">{{$lang.g.guestmode}}</button></li>
     </ul>
 </template>
 

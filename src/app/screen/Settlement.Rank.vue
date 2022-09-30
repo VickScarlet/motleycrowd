@@ -4,8 +4,8 @@ import UserCard from '../components/UserCard.vue';
 
 <template>
     <div class="container" :iscollapsed="iscollapsed">
-        <button @click="toggle" collapse v-if="!iscollapsed">收&nbsp;&nbsp;&nbsp;&nbsp;起</button>
-        <h3>排 行 榜</h3>
+        <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
+        <h3>{{$lang.g.rank}}</h3>
         <ul class="rank">
             <li v-for="({uuid, ranking, answers, total}) in rank"
                 :key="uuid"
@@ -36,8 +36,8 @@ import UserCard from '../components/UserCard.vue';
                 </ul>
             </li>
         </ul>
-        <button @click="toggle" collapse v-if="!iscollapsed">收&nbsp;&nbsp;&nbsp;&nbsp;起</button>
-        <button @click="toggle" expand   v-if="iscollapsed">显示全部</button>
+        <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
+        <button @click="toggle" expand   v-if="iscollapsed">{{$lang.g.expand}}</button>
     </div>
 </template>
 <script>

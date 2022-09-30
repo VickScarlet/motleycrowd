@@ -186,3 +186,20 @@ export function flat(obj, depth=Infinity, flatArray=false) {
     }
     return flat(obj, depth+1)[0];
 }
+
+export function format(str, values, ...args) {
+    if(!str || values==null && !args.length)
+        return str;
+    args.unshift(values);
+    if(values == null) values=args;
+    let idx = 0;
+    return str.replace(/\{([0-9A-Za-z]*)\}/g, (match, p1)=> {
+        if(p1 == '') p1 = idx;
+        idx ++;
+        const rep = values[p1];
+        if(rep != null) return rep;
+        const arg = args[p1];
+        if(arg != null) return arg;
+        return match;
+    });
+}

@@ -9,8 +9,8 @@ import UserCard from '../components/UserCard.vue';
         </div>
         <ul class="info">
             <li><UserCard :uuid="uuid" /></li>
-            <li>排名: {{ranking}}</li>
-            <li>得分: {{score}}</li>
+            <li>{{$lang.g.ranking_as.f(ranking)}}</li>
+            <li>{{$lang.g.score_as.f(score)}}</li>
         </ul>
     </div>
 </template>

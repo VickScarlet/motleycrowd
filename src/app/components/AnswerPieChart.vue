@@ -1,7 +1,7 @@
 <template>
     <svg :viewBox="`${-radius-padding} ${-radius-padding} ${-2*(-radius-padding)} ${-2*(-radius-padding)}`">
-        <g><path v-for="({option, value, d}) in pie" :key="option" :d="d">
-            <title>{{option}}: {{value}}人</title>
+        <g><path v-for="({option, value: people, d}) in pie" :key="option" :d="d">
+            <title>{{$lang.g.option_people.f({option, people})}}</title>
         </path></g>
         <g><text v-for="({option, t}) in pie" :key="option" :transform="`translate(${t})`">
             <tspan x="0" y="0.5em">{{option}}</tspan>

@@ -11,6 +11,11 @@ export default class App {
 
     async initialize() {
         const app = createApp(UI);
+        app.config.globalProperties.$lang = $lang;
+        app.config.globalProperties.$core = $core;
+        app.config.globalProperties.$utils = $utils;
+        app.config.globalProperties.$logic = $logic;
+        app.config.globalProperties.$norml = $norml;
         this.#app = app;
         app.mixin({
             props: {

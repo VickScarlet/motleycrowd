@@ -4,7 +4,7 @@ import UserCard from '../components/UserCard.vue';
 
 <template>
     <div class="container">
-        <button class="exit" @click="back">退出房间</button>
+        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
         <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
             <li v-for="uuid of users" :key="uuid">

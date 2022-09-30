@@ -12,8 +12,8 @@ import AnswerPieChart from '../components/AnswerPieChart.vue';
                 <li v-for="({option, value, description}) in answers"
                     :key="option" :ismine="option==mine.answer">
 
-                    <span>{{option?option:'未选'}}:</span>
-                    <span>{{String(value).padStart(4, ' ')}}人</span>
+                    <span>{{option?option:$lang.g.no_answer}}:</span>
+                    <span>{{$lang.g.prople_count.f(String(value).padStart(4, ' '))}}</span>
                     <span>&nbsp;&nbsp;&nbsp;{{description}}</span>
                 </li>
             </ul>

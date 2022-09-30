@@ -5,7 +5,7 @@ import Confirm from '../components/Confirm.vue';
 
 <template>
     <div class="container">
-        <button class="exit" @click="back">退出房间</button>
+        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
         <div class="progress-bar">
             <CountDownProgress :init="progress"/>
         </div>
@@ -24,11 +24,11 @@ import Confirm from '../components/Confirm.vue';
                     /><label :for=option><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
                 </li>
             </ul>
-            <button class="submit" v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
-            <button class="submit" v-if="answered">您已提交选项【{{answeredOption}}】</button>
+            <button class="submit" v-if="!answered" @click="answer">{{$lang.g.submit}}</button>
+            <button class="submit" v-if="answered">{{$lang.g.submit_as.f(answeredOption)}}</button>
         </div>
     </div>
-    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">真的要退出吗</Confirm>
+    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">{{$lang.g.exit_check}}</Confirm>
 </template>
 
 <script>

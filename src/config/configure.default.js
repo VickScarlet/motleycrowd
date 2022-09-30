@@ -24,7 +24,19 @@ export function core() { return {
     }
 } }
 
-export function ui() { return {
+export function i18n() { return {
+    save(lang) { localStorage.setItem('i18n', lang) },
+    load() {
+        const s = localStorage.getItem('i18n');
+        switch(s) {
+            case 'en-us':
+            case 'zh-cn':
+            default: return 'zh-cn';
+        }
+    },
+} }
+
+export function app() { return {
 
 } }
 

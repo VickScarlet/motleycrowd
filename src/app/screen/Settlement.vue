@@ -17,7 +17,7 @@ import Rank from './Settlement.Rank.vue';
                 <Question :getData="get" />
             </li>
         </ul>
-        <button @click="ok">确定</button>
+        <button @click="ok">{{$lang.g.ok}}</button>
     </div>
 </template>
 

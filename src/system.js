@@ -1,9 +1,20 @@
-import * as utils from './functions/index.js';
-import * as logic from './functions/logic.js';
-import * as normalize from './functions/normalize.js';
-import {on, off, emit} from './event/index.js';
-import Core from './core/index.js';
-import App from './app/index.js';
+async function initGlobal() {
+    window.$ = {};
+    window.$.utils =
+    window.$u =
+    window.$utils = await import('./functions/index.js');
+    window.$.logic =
+    window.$logic = await import('./functions/logic.js');
+    window.$.normalize =
+    window.$norml =
+    window.$normalize = await import('./functions/normalize.js');
+
+    window.$.event =
+    window.$event = await import('./event/index.js');
+    window.$on = $event.on;
+    window.$off = $event.off;
+    window.$emit = $event.emit;
+}
 
 async function configure(mods, lists) {
     const configure = {};
@@ -34,7 +45,16 @@ async function initDebug(configure) {
 async function initLogger(configure) {
 }
 
+async function initLang(configure) {
+    const {default: Lang} = await import('./i18n/index.js');
+    const lang = new Lang(configure);
+    window.$.lang =
+    window.$lang = lang;
+    await lang.initialize();
+}
+
 async function initCore(configure) {
+    const {default: Core} = await import('./core/index.js');
     const core = new Core(configure);
     window.$.core =
     window.$$ =
@@ -43,6 +63,7 @@ async function initCore(configure) {
 }
 
 async function initApp(configure) {
+    const {default: App} = await import('./app/index.js');
     const app = new App(configure);
     window.$.app =
     window.$app = app;
@@ -50,32 +71,20 @@ async function initApp(configure) {
 }
 
 export async function start(cfgList) {
-    window.$ = {};
-    window.$.utils =
-    window.$u =
-    window.$utils = utils;
-    window.$.logic =
-    window.$logic = logic;
-    window.$.normalize =
-    window.$norml = normalize;
-    window.$normalize = normalize;
-    window.$on = on;
-    window.$off = off;
-    window.$emit = emit;
-    window.$.event =
-    window.$event = {on, off, emit};
     window.onerror = (msg,source,line,col,error) =>
         alert(`${msg}at: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
 
-    on('network.banned', ()=>window.location.reload());
+    await initGlobal();
 
-    const { debug, logger, core, app } = await configure(
-        ['debug', 'logger', 'core', 'ui'],
-        cfgList
+    $on('network.banned', ()=>window.location.reload());
+
+    const { debug, logger, i18n, core, app } = await configure(
+        ['debug', 'logger', 'i18n', 'core', 'app'], cfgList
     );
 
     await initDebug(debug);
     await initLogger(logger);
+    await initLang(i18n);
     await initCore(core);
     await initApp(app);
 
@@ -83,16 +92,16 @@ export async function start(cfgList) {
     try {
         const banned = $core.database.kv.get('banned');
         if(banned && banned > Date.now()) {
-            $app.tips('服务器拒绝为你工作');
+            $app.tips($lang.t.banned);
             return;
         }
-        await $core.start()
+        await $core.start();
         await $app.start();
         $app.loading = false;
         $emit('system.start');
     } catch(e) {
         console.error(e);
-        $app.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
+        $app.tips($lang.t.init_err);
     }
 }
 
