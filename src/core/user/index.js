@@ -25,7 +25,7 @@ export default class User extends IModule {
     get isguest() { return !!this.#isguest; }
 
     async initialize() {
-        $.on('network.resume', isAuth=>{
+        $on('network.resume', isAuth=>{
             if(isAuth) return;
             this.#uuid = null;
             this.#authenticated = false;
@@ -39,7 +39,11 @@ export default class User extends IModule {
         this.#uuid = u;
         this.#isguest = !u;
         this.#authenticated = !!u;
-        if(u) await this.$db.auth.set(username, u);
+        if(u) {
+            await this.$db.auth.set(username, u);
+            $emit('user.authenticated', [u, false]);
+        }
+
         return !!u;
     }
 
@@ -67,7 +71,10 @@ export default class User extends IModule {
             this.username = username;
             this.#password = password;
         }
-        if(u) await this.$db.auth.set(username, u);
+        if(u) {
+            await this.$db.auth.set(username, u);
+            $emit('user.authenticated', [u, false]);
+        }
         return !!u;
     }
 
@@ -76,16 +83,24 @@ export default class User extends IModule {
         this.#uuid = u;
         this.#authenticated =
         this.#isguest = !!u;
+        if(u) {
+            $emit('user.authenticated', [u, true]);
+        }
         return !!u;
     }
 
     async logout() {
         if(!this.#authenticated) return {r: true};
         const success = await this.$session.logout();
+        const uuid = this.#uuid;
+        const isguest = this.#isguest;
         if(success) this.#uuid = null;
         this.#authenticated =
         this.#isguest =
         this.#autologin = !success;
+        if(success) {
+            $emit('user.logout', [uuid, isguest]);
+        }
         return success;
     }
 
@@ -121,7 +136,7 @@ export default class User extends IModule {
         }
         if(remote.length) {
             const {success, data} = await this.#command('get', remote);
-            if(!success) return list;
+            if(!success) return users;
             const $update = Date.now();
             for(const uuid in data) {
                 const meta = data[uuid];

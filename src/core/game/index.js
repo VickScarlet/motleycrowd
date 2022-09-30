@@ -113,17 +113,17 @@ export default class Game extends IModule {
     async #user(join, leave) {
         await this.#join(join);
         this.#leave(leave);
-        $.emit('game.user', this.#users);
+        $emit('game.user', this.#users);
     }
 
     #ready() {
         this.#isReady = true;
-        $.emit('game.ready');
+        $emit('game.ready');
     }
 
     #pending() {
         this.#isReady = false;
-        $.emit('game.pending');
+        $emit('game.pending');
     }
 
     #question(idx, id, picked) {
@@ -132,20 +132,22 @@ export default class Game extends IModule {
         this.#currentQuestion = question;
         if(!this.#isStarted) {
             this.#isStarted = true;
-            $.emit('game.start');
+            $emit('game.start');
         }
-        $.emit('game.question', question);
+        $emit('game.question', question);
     }
 
     #answer(idx, size) {
         if(idx != this.#index) return;
         const question = this.#currentQuestion;
         if(question) question.size = size;
-        $.emit('game.answer', size);
+        $emit('game.answer', size);
     }
 
     async #settlement(data) {
-        await this.$db.settlement.set(data);
+        await this.$db.settlement.set(
+            $utils.clone(data)
+        );
         const settlement = new SettlementData(
             this.$user.uuid,
             this.$question.get,
@@ -153,7 +155,7 @@ export default class Game extends IModule {
         );
         this.#lastSettlement = settlement;
         this.clear();
-        $.emit('game.settlement', settlement);
+        $emit('game.settlement', settlement);
     }
 
     async #resume({info, start, question}) {
@@ -163,7 +165,7 @@ export default class Game extends IModule {
         this.#limit = limit;
         await this.#join(users);
         if(!start)
-            return $.emit('game.resume.room');
+            return $emit('game.resume.room');
 
         const {idx, id, picked, left, size, answer} = question;
         question = this.$question.get(id, picked, left, answer);
@@ -171,7 +173,7 @@ export default class Game extends IModule {
         this.#isStarted = true;
         this.#index = idx;
         this.#currentQuestion = question;
-        $.emit('game.resume.question', {question, answer});
+        $emit('game.resume.question', {question, answer});
     }
 
     clear() {
@@ -186,7 +188,7 @@ export default class Game extends IModule {
         this.#users.clear();
     }
     #debug() {
-        $.on('debug.game.settlement', data=>{
+        $on('debug.game.settlement', data=>{
             const settlement = new SettlementData(
                 data.users.includes(this.$user.uuid)
                     ?this.$user.uuid
@@ -194,7 +196,7 @@ export default class Game extends IModule {
                 this.$question.get,
                 data,
             );
-            $.emit('game.settlement', settlement);
+            $emit('game.settlement', settlement);
         });
     }
 }

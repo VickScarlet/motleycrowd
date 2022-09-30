@@ -1,11 +1,11 @@
 <script setup>
-import CountDownProgress from './CountDownProgress.vue'
-import Confirm from './Confirm.vue'
+import CountDownProgress from '../components/CountDownProgress.vue';
+import Confirm from '../components/Confirm.vue';
 </script>
 
 <template>
     <div class="container">
-        <button class="exit" @click="back">退出房间</button>
+        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
         <div class="progress-bar">
             <CountDownProgress :init="progress"/>
         </div>
@@ -24,11 +24,11 @@ import Confirm from './Confirm.vue'
                     /><label :for=option><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
                 </li>
             </ul>
-            <button class="submit" v-if="!answered" @click="answer">提&nbsp;&nbsp;&nbsp;交</button>
-            <button class="submit" v-if="answered">您已提交选项【{{answeredOption}}】</button>
+            <button class="submit" v-if="!answered" @click="answer">{{$lang.g.submit}}</button>
+            <button class="submit" v-if="answered">{{$lang.g.submit_as.f(answeredOption)}}</button>
         </div>
     </div>
-    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">真的要退出吗</Confirm>
+    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">{{$lang.g.exit_check}}</Confirm>
 </template>
 
 <script>
@@ -52,15 +52,15 @@ export default defineComponent({
         }
     },
     activated() {
-        this.limit = $.core.game.limit;
+        this.limit = $core.game.limit;
         this.update();
-        $.on('game.question', this.update.bind(this));
-        $.on('game.answer', this.updateAnswer.bind(this));
+        $on('game.question', this.update.bind(this));
+        $on('game.answer', this.updateAnswer.bind(this));
     },
     deactivated() {
         this.confirm = false;
-        $.off('game.question', this.update.bind(this));
-        $.off('game.answer', this.updateAnswer.bind(this));
+        $off('game.question', this.update.bind(this));
+        $off('game.answer', this.updateAnswer.bind(this));
     },
     methods: {
         back() {
@@ -69,12 +69,12 @@ export default defineComponent({
         async doexit(exit) {
             this.confirm = false;
             if(!exit) return;
-            const result = await $.core.game.leave();
+            const result = await $core.game.leave();
             if(result)
-                $.ui.switch('Index');
+                $app.switch('Index');
         },
         update() {
-            const q = $.core.game.currentQuestion;
+            const q = $core.game.currentQuestion;
             if(!q) return;
             const { id, question, size, left,
                 answer, timeout: total, options
@@ -103,11 +103,11 @@ export default defineComponent({
         async answer() {
             const id = this.id;
             const selected = this.selected;
-            $.ui.loading = true;
-            const result = await $.core.game.answer(selected);
-            $.ui.loading = false;
+            $app.loading = true;
+            const result = await $core.game.answer(selected);
+            $app.loading = false;
             if(!result) return;
-            const q = $.core.game.currentQuestion;
+            const q = $core.game.currentQuestion;
             if(!q || id != q.id) return;
             this.answerCount++;
             this.answered = true;

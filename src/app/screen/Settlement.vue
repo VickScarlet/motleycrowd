@@ -1,23 +1,23 @@
 <script setup>
-import SettlementMine from './SettlementMine.vue'
-import SettlementQuestion from './SettlementQuestion.vue'
-import SettlementRank from './SettlementRank.vue'
+import Mine from './Settlement.Mine.vue';
+import Question from './Settlement.Question.vue';
+import Rank from './Settlement.Rank.vue';
 </script>
 
 <template>
     <div class="container">
         <ul>
             <li class="card">
-                <SettlementMine :getData="mine" />
+                <Mine :getData="mine" />
             </li>
             <li class="card">
-                <SettlementRank :getData="rank" @ch="ch" />
+                <Rank :getData="rank" @ch="ch" />
             </li>
             <li v-for="([idx, get]) in questions" :key="idx" class="card">
-                <SettlementQuestion :getData="get" />
+                <Question :getData="get" />
             </li>
         </ul>
-        <button @click="ok">确定</button>
+        <button @click="ok">{{$lang.g.ok}}</button>
     </div>
 </template>
 
@@ -44,13 +44,13 @@ export default defineComponent({
             this.rank = ()=>({uuid, rank});
         },
         ch(uuid) {
-            if(!$.debug) return;
+            if(!$debug) return;
             const settlement = this.getData();
             settlement.uuid = uuid;
             this.update();
         },
         ok() {
-            $.ui.switch('Index');
+            $app.switch('Index');
         }
     }
 });

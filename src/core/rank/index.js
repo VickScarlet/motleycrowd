@@ -1,30 +1,62 @@
 import IModule from "../imodule.js";
 export default class Rank extends IModule {
-    #isexpired(update) {
-        const target = new Date(update).getTime();
-        return Date.now() - 60*60*1000 > target;
+    #expr(expired) {
+        expired = new Date(expired).getTime();
+        if(!expired) return true;
+        return expired < Date.now();
     }
 
     async #command(type, data) {
         return this.$core.command(`rank.${type}`, data);
     }
 
+    #syncUUID;
+    initialize() {
+        const next = new Date();
+        next.setSeconds(0);
+        next.setMilliseconds(0);
+        next.setMinutes(0);
+        next.setHours(next.getHours() + 1);
+        const timeout = Date.now() - next.getTime();
+        setTimeout(()=>{
+            this.#sync();
+            const interval = 60 * 60 * 1000;
+            setInterval(()=>this.#sync(), interval);
+        }, Math.max(0, timeout));
+
+        $on('user.logout', _=>this.#syncUUID=null);
+        $on('user.authenticated', ([uuid, isguest])=>{
+            if(isguest) return;
+            this.#syncUUID = uuid;
+            this.#sync();
+        });
+    }
+
+    async #sync() {
+        const uuid = this.#syncUUID;
+        if(!uuid) return;
+        const ranking = await this.ranking(uuid);
+        if(!ranking) return;
+        for( const type in ranking )
+            $emit(`rank.${type}`, ranking[type]);
+    }
+
     async #ranking(uuid) {
         const cache = await this.$db.rank.get(uuid);
-        if(cache && !this.#isexpired(cache.$update))
+        if(cache && !this.#expr(cache.expired))
             return cache.ranking
 
-        const {success, data} = await this.#command('ranking');
+        const {success, data} = await this.#command('ranking', {user: uuid});
         if(!success) return null;
-        const {update, ranking} = data;
-        await this.$db.rank.set({
-            uuid, ranking,
-            $update: update,
-        });
+        if(!data) return null;
+        const [ranking, expired] = data;
+        const result = {uuid, expired, ranking};
+        await this.$db.rank.set(result);
         return ranking;
     }
 
     async ranking(uuid) {
+        if(!uuid) return null;
         return this.#ranking('' + uuid);
     }
 
@@ -33,7 +65,7 @@ export default class Rank extends IModule {
         const datas = {};
         for(const rank of ranks) {
             const local = await this.$db.kv.get(`rank-${rank}`);
-            if(local && !this.#isexpired(local.$update))
+            if(local && !this.#expr(local.expired))
                 datas[rank] = local.$data;
             else
                 remote.push(rank);
@@ -41,11 +73,11 @@ export default class Rank extends IModule {
         if(remote.length) {
             const {success, data} = await this.#command('get', remote);
             if(!success) return datas;
-            const {ranks: rs, update: $update} = data;
+            const {ranks: rs, expired} = data;
             for(const rank in rs) {
                 const $data = rs[rank];
                 await this.$db.kv.set(`rank-${rank}`, {
-                    $data, $update
+                    $data, expired
                 });
                 datas[rank] = $data;
             }
@@ -53,15 +85,7 @@ export default class Rank extends IModule {
         return datas;
     }
 
-    async ranks(ranks) {
-        const set = new Set();
-        ranks.forEach(rank => {
-            set.add(rank);
-        });
-        return this.#rank(set);
-    }
-
-    async rank(rank) {
+    async get(rank) {
         switch(rank) {
             case 'main':
             case 'ten':
@@ -69,7 +93,19 @@ export default class Rank extends IModule {
             default: return null;
         }
         const result = await this.#rank([rank]);
-        return result[rank];
-    }
+        const data = {};
+        if(!result?.[rank]) data.users = [];
+        else data.users = result[rank].map(([uuid, ranking])=>({uuid, ranking}));
+        data.users.sort((a,b)=>a.ranking - b.ranking);
+        await this.$user.gets(data.users.map(v=>v.uuid));
+        if(!this.$user.authenticate || this.$user.isguest)
+            return data;
 
+        const uuid = this.$user.uuid;
+        const ranking = await this.ranking(uuid);
+        if(!ranking?.[rank]) return data;
+        data.ranking = ranking[rank][0];
+        data.size = ranking[rank][1];
+        return data;
+    }
 }

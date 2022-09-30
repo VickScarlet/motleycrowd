@@ -1,8 +1,9 @@
 <script setup>
-import { getCurrentInstance } from 'vue'
-import Loading from './Loading.vue'
-import Alert from './Alert.vue'
-import Tips from './Tips.vue'
+import './style/app.scss';
+import { getCurrentInstance } from 'vue';
+import Loading from './components/Loading.vue';
+import Alert from './components/Alert.vue';
+import Tips from './components/Tips.vue';
 defineExpose(getCurrentInstance().proxy);
 </script>
 
@@ -11,27 +12,33 @@ defineExpose(getCurrentInstance().proxy);
         <component :is="page" :getData="_data"/>
     </keep-alive>
     <p class="serverstat">
-        当前延迟: {{delay}}ms<br/>
-        在线人数: {{online}}
+        {{$lang.g.delay_as.f(delay)}}<br/>
+        {{$lang.g.online_as.f(online)}}
     </p>
     <Loading v-show="loading" />
     <Alert v-show="showAlert" @hide="hideAlert">{{alertMessage}}</Alert>
     <Tips v-show="showTips" @click="hideTips">{{tipsMessage}}</Tips>
     <div class="fullscreen">
-        <input id="fullscreencb" type="checkbox" placeholder="自动登录" @click="fullscreen()" v-model.trim="isfullscreen"/>
-        <label for="fullscreencb">{{isfullscreen?'窗口':'全屏'}}</label>
+        <input id="fullscreencb" type="checkbox" @click="fullscreen()" v-model.trim="isfullscreen"/>
+        <label for="fullscreencb">{{
+            isfullscreen?
+                $lang.g.window:
+                $lang.g.fullscreen
+        }}</label>
     </div>
 
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import Welcome from './Welcome.vue'
-import Authentication from './Authentication.vue'
-import Index from './Index.vue'
-import Room from './Room.vue'
-import Question from './Question.vue'
-import Settlement from './Settlement.vue'
+import { defineComponent } from 'vue';
+import Welcome from './screen/Welcome.vue';
+import Authentication from './screen/Authentication.vue';
+import Index from './screen/Index.vue';
+import Room from './screen/Room.vue';
+import Question from './screen/Question.vue';
+import Settlement from './screen/Settlement.vue';
+import Achievement from './screen/Achievement.vue';
+import Rank from './screen/Rank.vue';
 
 export default defineComponent({
     name: 'App',
@@ -42,6 +49,8 @@ export default defineComponent({
         Room,
         Question,
         Settlement,
+        Achievement,
+        Rank,
     },
     data() {
         return {
@@ -58,37 +67,38 @@ export default defineComponent({
         }
     },
     mounted() {
-        $.on('network.error', ()=>{
+        $on('network.error', ()=>{
             this.loading = false;
-            this.tips('当前网络有点小问题，尝试重连中~');
+            this.tips($lang.t.net_error);
         });
-        $.on('network.kick', ()=>{
+        $on('network.kick', ()=>{
             this.loading = false;
-            this.tips('你被踢了');
+            this.tips($lang.t.net_kick);
         });
-        $.on('network.resume', async isAuth=>{
+        $on('network.resume', async isAuth=>{
             this.loading = false;
             if(isAuth) {
-                this.tips('重连成功');
+                this.tips($lang.t.net_resume);
                 return;
             }
-            this.tips('掉线太久，已经被踢了, 请尝试重新登录');
+            this.tips($lang.t.net_resume_filed);
             this.switch('Welcome');
-            const [success] = await $.core.user.autologin();
+            const [success] = await $core.user.autologin();
             if (success) {
-                this.tips('自动重新登录成功');
+                this.tips($lang.t.net_resume_uto);
+                if ($core.game.isInRoom) return;
                 this.switch('Index');
             }
         });
-        $.on('game.start', ()=>this.switch('Question'));
-        $.on('game.question', ()=>this.switch('Question'));
-        $.on('game.resume.room', ()=>this.switch('Room'));
-        $.on('game.resume.question', ()=>this.switch('Question'));
-        $.on('game.settlement', data=>this.switch('Settlement', data));
+        $on('game.start', ()=>this.switch('Question'));
+        $on('game.question', ()=>this.switch('Question'));
+        $on('game.resume.room', ()=>this.switch('Room'));
+        $on('game.resume.question', ()=>this.switch('Question'));
+        $on('game.settlement', data=>this.switch('Settlement', data));
 
-        $.on('command.error', code=>{
+        $on('command.error', code=>{
             this.loading = false;
-            const message = $.core.errMsg(code);
+            const message = $lang.e[code];
             this.tips(message);
         });
     },
@@ -106,13 +116,14 @@ export default defineComponent({
             this.showAlert = false;
         },
         async start() {
-            this.tips('欢迎来到 [乌合之众]');
-            const [success, notAuto] = await $.core.user.autologin();
+            this.tips($lang.t.welcome);
+            const [success, notAuto] = await $core.user.autologin();
             if (success) {
-                this.tips('自动登录成功');
+                this.tips($lang.t.autologin_success);
+                if ($core.game.isInRoom) return;
                 this.switch('Index');
             } else if (!notAuto) {
-                this.tips('自动登录失败');
+                this.tips($lang.t.autologin_failed);
             }
             const showUrlPage = () => {
                 const match = /\/#\/(([^\/\?]+)\/?)(\?+(.*))?/
@@ -131,7 +142,7 @@ export default defineComponent({
             globalThis.onpopstate = showUrlPage;
             showUrlPage();
             const updateStat = async () => {
-                const {delay, online} =await $.core.ping();
+                const {delay, online} =await $core.ping();
                 this.delay = delay;
                 this.online = online;
             }
@@ -153,7 +164,7 @@ export default defineComponent({
                 if(de.mozRequestFullScreen) return de.mozRequestFullScreen();
                 if(de.webkitRequestFullScreen) return de.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
                 if(de.msRequestFullScreen) return de.msRequestFullScreen();
-                return this.tips('不支持全屏');
+                return this.tips($lang.t.unsupport_fullscreen);
             }
             const d = document;
             if(d.exitFullscreen) return d.exitFullscreen();

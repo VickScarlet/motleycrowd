@@ -1,10 +1,10 @@
 <script setup>
-import UserCard from './UserCard.vue'
+import UserCard from '../components/UserCard.vue';
 </script>
 
 <template>
     <div class="container">
-        <button class="exit" @click="back">退出房间</button>
+        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
         <p>{{users.length}}/{{limit}}</p>
         <ul class="userlist">
             <li v-for="uuid of users" :key="uuid">
@@ -25,19 +25,19 @@ export default defineComponent({
     },
     activated() {
         this.update();
-        $.on('game.user', this.update.bind(this));
+        $on('game.user', this.update.bind(this));
     },
     deactivated() {
-        $.off('game.user', this.update.bind(this));
+        $off('game.user', this.update.bind(this));
     },
     methods: {
         async back() {
-            const result = await $.core.game.leave();
+            const result = await $core.game.leave();
             if(result)
-                $.ui.switch('Index');
+                $app.switch('Index');
         },
         update() {
-            const {users, limit} = $.core.game;
+            const {users, limit} = $core.game;
             this.limit = limit;
             this.users = [...users];
         },

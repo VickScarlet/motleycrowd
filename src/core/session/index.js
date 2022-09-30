@@ -57,29 +57,37 @@ export default class Session extends IModule {
 
     async #ws(first) {
         return new Promise((resolve, reject) => {
-            let message, close;
             const ws = new WebSocket(this.#url);
-            ws.addEventListener('open', _ => {
-                message = async data => {
-                    message = this.#onmessage.bind(this);
-                    close = ({code, reason}) => this.#onclose(code, reason);
-                    this.#client = ws;
-                    resolve({ws, data});
-                };
-                ws.send(JSON.stringify(first));
-            });
-            ws.addEventListener('error', e => reject(e));
-            ws.addEventListener('message', async ({data}) => {
-                if(!message) return;
+            const open = _ => ws.send(JSON.stringify(first));
+            const message = async ({data}) => {
                 if(data instanceof Blob) {
                     const arrayBuffer = await data.arrayBuffer();
                     data = pako.inflate(arrayBuffer, { to: 'string' })
                 }
                 data = JSON.parse(data);
                 this.#online = data.pop();
-                message(data);
-            });
-            ws.addEventListener('close', e => close?.(e));
+                if(resolve) {
+                    this.#client = ws;
+                    resolve({ws, data});
+                    resolve = null;
+                    return;
+                }
+                this.#onmessage(data);
+            };
+            const close = ({code, reason}) => this.#onclose(code, reason)
+            const error = e => {
+                ws.removeEventListener('error', error);
+                ws.removeEventListener('open', open);
+                ws.removeEventListener('message', message);
+                ws.removeEventListener('close', close);
+                ws.close();
+                reject(e);
+            };
+
+            ws.addEventListener('error', error);
+            ws.addEventListener('open', open);
+            ws.addEventListener('message', message);
+            ws.addEventListener('close', close);
         });
     }
 
@@ -108,9 +116,9 @@ export default class Session extends IModule {
             });
     }
 
-    async #onmessage([guid, content, sync]) {
-        await this.$db.sync(sync);
-        console.debug('[Session|<<<<] [guid:%s]', guid, content, sync);
+    async #onmessage([guid, content, attach]) {
+        await this.$core.attach(attach);
+        console.debug('[Session|<<<<] [guid:%s]', guid, content, attach);
         const callback = index=>{
             if(!this.#callbacks.has(index)) return;
             this.#callbacks.get(index)(null, content);
@@ -138,15 +146,23 @@ export default class Session extends IModule {
         switch(code) {
             case 3000:
             case 3001:
-                $.emit('network.kick');
+                $emit('network.kick');
                 console.debug('[Session|clse] [code:%d] [reason:%s]', code, reason);
+                return;
+            case 3002:
+                this.$db.kv.set('banned', Date.now()+30 * 60 * 1000);
+                $emit('network.banned');
+                return;
+            case 3003:
+                this.$db.kv.set('banned', Infinity);
+                $emit('network.banned');
                 return;
         }
         const exclude = new Set([
             this.#MESSAGE,
             this.#BORDERCAST,
         ]);
-        $.emit('network.error');
+        $emit('network.error');
         const error = new Error(`Network Error`);
         this.#callbacks.forEach((callback, guid) => {
             if(exclude.has(guid)) return;
@@ -156,7 +172,7 @@ export default class Session extends IModule {
         const circleResume = ()=>this.#resume()
             .then(([success, isAuth])=>{
                 if(success)
-                    return $.emit('network.resume', isAuth);
+                    return $emit('network.resume', isAuth);
                 circleResume();
             });
         circleResume();
@@ -225,7 +241,7 @@ export default class Session extends IModule {
             const [code, ret] = await this.#send(...args);
             if(code) {
                 console.debug('Command error:', code);
-                $.emit('command.error', code);
+                $emit('command.error', code);
             }
             return {
                 success: code !== undefined && !code,
@@ -233,7 +249,7 @@ export default class Session extends IModule {
             };
         } catch (err) {
             console.error(err);
-            $.emit('command.error', -1);
+            $emit('command.error', -1);
             return { success: false, code: -1 };
         }
     }

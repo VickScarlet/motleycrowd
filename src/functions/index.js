@@ -54,8 +54,6 @@ export function batch(bpart, time, apart) {
     return fn;
 }
 
-const toString = Object.prototype.toString;
-
 export function getType(value) {
     const name = value?.constructor?.name;
     if(name) return name;
@@ -159,4 +157,49 @@ export function objUpdate(original, update) {
         );
     }
     return original;
+}
+
+/**
+ * @param {any} obj
+ * @param {number} [depth=Infinity]
+ * @param {boolean} [flatArray=false]
+ * @return {any}
+ */
+export function flat(obj, depth=Infinity, flatArray=false) {
+    const flat = (o, d)=> {
+        if( d <= 0
+            || typeof o !== 'object'
+            || Array.isArray(o) && !flatArray
+        ) return [o, false];
+
+        const r = {};
+        for (const k in o) {
+            const [v, n] = flat(o[k], d-1);
+            if(!n) {
+                r[k] = v;
+                continue;
+            }
+            for(const s in v)
+                r[`${k}.${s}`] = v[s];
+        }
+        return [r, true];
+    }
+    return flat(obj, depth+1)[0];
+}
+
+export function format(str, values, ...args) {
+    if(!str || values==null && !args.length)
+        return str;
+    args.unshift(values);
+    if(values == null) values=args;
+    let idx = 0;
+    return str.replace(/\{([0-9A-Za-z]*)\}/g, (match, p1)=> {
+        if(p1 == '') p1 = idx;
+        idx ++;
+        const rep = values[p1];
+        if(rep != null) return rep;
+        const arg = args[p1];
+        if(arg != null) return arg;
+        return match;
+    });
 }

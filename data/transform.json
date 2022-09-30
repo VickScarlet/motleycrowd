@@ -1,0 +1,8 @@
+{
+    "configurations": [
+        {
+            "source": ".",
+            "target": "../src/data"
+        }
+    ]
+}

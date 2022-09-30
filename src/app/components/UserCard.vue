@@ -1,7 +1,7 @@
 <template>
     <div class="usercard">
         <span class="username">
-            <span v-if="guest">游客{{uuid}}</span>
+            <span v-if="guest">{{$lang.g.guestname.f(uuid)}}</span>
             <span v-else>{{username}}</span>
         </span>
     </div>
@@ -29,7 +29,7 @@ export default defineComponent({
     methods: {
         async update() {
             const {uuid} = this;
-            const user = await $.core.user.get(uuid);
+            const user = await $core.user.get(uuid);
             if(user) {
                 this.username = user.username;
                 this.guest = !!user.guest;

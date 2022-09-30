@@ -17,6 +17,8 @@ export default class IModule {
     /** @readonly */
     get $configure() { return this.#configure; }
     /** @readonly */
+    get $sheet() { return this.#core.sheet; }
+    /** @readonly */
     get $db() { return this.#core.database; }
     /** @readonly */
     get $user() { return this.#core.user; }
@@ -28,6 +30,8 @@ export default class IModule {
     get $question() { return this.#core.question; }
     /** @readonly */
     get $session() { return this.#core.session; }
+    /** @readonly */
+    get $achiv() { return this.#core.achievement; }
     /** @readonly */
     get $err() { return this.#core.err; }
 
