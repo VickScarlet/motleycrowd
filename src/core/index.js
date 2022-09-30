@@ -126,10 +126,6 @@ export default class Core {
         proxy.get(command)(data);
     }
 
-    errMsg(errorcode) {
-        return ErrorMessage[errorcode] || '未知错误';
-    }
-
     async attach(attach) {
         if(!attach) return;
         const [uuid, datas] = attach;
