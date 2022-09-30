@@ -136,7 +136,7 @@ export default class User extends IModule {
         }
         if(remote.length) {
             const {success, data} = await this.#command('get', remote);
-            if(!success) return list;
+            if(!success) return users;
             const $update = Date.now();
             for(const uuid in data) {
                 const meta = data[uuid];

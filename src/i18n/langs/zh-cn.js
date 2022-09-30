@@ -51,6 +51,13 @@ export const general = {
     regi_first: '请先注册',
     only_member: '游客没有该功能',
 
+    rank_main: '总榜',
+    rank_ten: '十人',
+    rank_hundred: '百人',
+    next_refresh: '距离下次刷新还有 {}',
+    not_in_rank: '未上榜',
+    my_ranking_as: '我的排位: {}',
+    rank_size: '总人数 {}',
 };
 
 export const tips = {

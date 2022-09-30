@@ -35,7 +35,7 @@ async function configure(mods, lists) {
 
 async function initDebug(configure) {
     if(!configure) return;
-    window.$.debug = configure.on;
+    window.$.debug =
     window.$debug = configure.on;
     if($debug && configure.patch) {
         await configure.patch();

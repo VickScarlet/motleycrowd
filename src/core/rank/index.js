@@ -85,15 +85,7 @@ export default class Rank extends IModule {
         return datas;
     }
 
-    async ranks(ranks) {
-        const set = new Set();
-        ranks.forEach(rank => {
-            set.add(rank);
-        });
-        return this.#rank(set);
-    }
-
-    async rank(rank) {
+    async get(rank) {
         switch(rank) {
             case 'main':
             case 'ten':
@@ -101,6 +93,19 @@ export default class Rank extends IModule {
             default: return null;
         }
         const result = await this.#rank([rank]);
-        return result[rank];
+        const data = {};
+        if(!result?.[rank]) data.users = [];
+        else data.users = result[rank].map(([uuid, ranking])=>({uuid, ranking}));
+        data.users.sort((a,b)=>a.ranking - b.ranking);
+        await this.$user.gets(data.users.map(v=>v.uuid));
+        if(!this.$user.authenticate || this.$user.isguest)
+            return data;
+
+        const uuid = this.$user.uuid;
+        const ranking = await this.ranking(uuid);
+        if(!ranking?.[rank]) return data;
+        data.ranking = ranking[rank][0];
+        data.size = ranking[rank][1];
+        return data;
     }
 }
