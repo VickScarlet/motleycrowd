@@ -20,14 +20,14 @@ export default defineComponent({
     },
     methods: {
         auth() {
-            $ui.switch('Authentication');
+            $app.switch('Authentication');
         },
         async guest() {
-            $ui.loading = true;
+            $app.loading = true;
             const result = await $core.user.guest();
-            $ui.loading = false;
+            $app.loading = false;
             if (!result) return;
-            $ui.switch('Index');
+            $app.switch('Index');
         },
     }
 });

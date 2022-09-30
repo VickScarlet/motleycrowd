@@ -17,26 +17,26 @@ export default defineComponent({
     methods: {
         async pair(type) {
             console.debug('pair', type);
-            $ui.loading = true;
+            $app.loading = true;
             const result = await $core.game.pair(type);
-            $ui.loading = false;
+            $app.loading = false;
             if (result) {
-                $ui.switch('Room');
+                $app.switch('Room');
             } else {
-                $ui.alert(result.e);
+                $app.alert(result.e);
             }
         },
         custom() {
             console.debug('custom');
         },
         async logout() {
-            $ui.loading = true;
+            $app.loading = true;
             const result = await $core.user.logout();
-            $ui.loading = false;
+            $app.loading = false;
             if (result) {
-                $ui.switch('Welcome');
+                $app.switch('Welcome');
             } else {
-                $ui.alert(result.e);
+                $app.alert(result.e);
             }
         },
     }

@@ -1,5 +1,5 @@
 <script setup>
-import UserCard from './UserCard.vue'
+import UserCard from '../components/UserCard.vue';
 </script>
 
 <template>
@@ -34,7 +34,7 @@ export default defineComponent({
         async back() {
             const result = await $core.game.leave();
             if(result)
-                $ui.switch('Index');
+                $app.switch('Index');
         },
         update() {
             const {users, limit} = $core.game;

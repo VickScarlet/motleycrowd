@@ -1,6 +1,6 @@
 <script setup>
-import AnswerLineBarChart from './AnswerLineBarChart.vue'
-import UserCard from './UserCard.vue'
+import AnswerLineBarChart from '../components/AnswerLineBarChart.vue';
+import UserCard from '../components/UserCard.vue';
 </script>
 <template>
     <div class="container">

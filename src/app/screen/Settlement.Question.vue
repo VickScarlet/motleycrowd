@@ -1,5 +1,5 @@
 <script setup>
-import AnswerPieChart from './AnswerPieChart.vue';
+import AnswerPieChart from '../components/AnswerPieChart.vue';
 </script>
 <template>
     <div class="container">

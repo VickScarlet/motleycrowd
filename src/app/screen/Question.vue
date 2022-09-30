@@ -1,6 +1,6 @@
 <script setup>
-import CountDownProgress from './CountDownProgress.vue'
-import Confirm from './Confirm.vue'
+import CountDownProgress from '../components/CountDownProgress.vue';
+import Confirm from '../components/Confirm.vue';
 </script>
 
 <template>
@@ -71,7 +71,7 @@ export default defineComponent({
             if(!exit) return;
             const result = await $core.game.leave();
             if(result)
-                $ui.switch('Index');
+                $app.switch('Index');
         },
         update() {
             const q = $core.game.currentQuestion;
@@ -103,9 +103,9 @@ export default defineComponent({
         async answer() {
             const id = this.id;
             const selected = this.selected;
-            $ui.loading = true;
+            $app.loading = true;
             const result = await $core.game.answer(selected);
-            $ui.loading = false;
+            $app.loading = false;
             if(!result) return;
             const q = $core.game.currentQuestion;
             if(!q || id != q.id) return;

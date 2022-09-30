@@ -1,8 +1,9 @@
 <script setup>
-import { getCurrentInstance } from 'vue'
-import Loading from './Loading.vue'
-import Alert from './Alert.vue'
-import Tips from './Tips.vue'
+import './style/app.scss';
+import { getCurrentInstance } from 'vue';
+import Loading from './components/Loading.vue';
+import Alert from './components/Alert.vue';
+import Tips from './components/Tips.vue';
 defineExpose(getCurrentInstance().proxy);
 </script>
 
@@ -25,13 +26,13 @@ defineExpose(getCurrentInstance().proxy);
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import Welcome from './Welcome.vue'
-import Authentication from './Authentication.vue'
-import Index from './Index.vue'
-import Room from './Room.vue'
-import Question from './Question.vue'
-import Settlement from './Settlement.vue'
+import { defineComponent } from 'vue';
+import Welcome from './screen/Welcome.vue';
+import Authentication from './screen/Authentication.vue';
+import Index from './screen/Index.vue';
+import Room from './screen/Room.vue';
+import Question from './screen/Question.vue';
+import Settlement from './screen/Settlement.vue';
 
 export default defineComponent({
     name: 'App',

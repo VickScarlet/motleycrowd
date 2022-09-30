@@ -3,9 +3,7 @@ import * as logic from './functions/logic.js';
 import * as normalize from './functions/normalize.js';
 import {on, off, emit} from './event/index.js';
 import Core from './core/index.js';
-import { createApp } from 'vue'
-import './style/app.scss'
-import App from './components/App.vue'
+import App from './app/index.js';
 
 async function configure(mods, lists) {
     const configure = {};
@@ -44,19 +42,11 @@ async function initCore(configure) {
     await core.initialize();
 }
 
-async function initUi(configure) {
-    const app = createApp(App);
-    app.mixin({
-        props: {
-            getData: {
-                type: Function,
-                default: ()=>({}),
-            },
-        },
-    });
-    const proxy = app.mount('#app');
-    window.$.ui =
-    window.$ui = proxy;
+async function initApp(configure) {
+    const app = new App(configure);
+    window.$.app =
+    window.$app = app;
+    await app.initialize();
 }
 
 export async function start(cfgList) {
@@ -79,7 +69,7 @@ export async function start(cfgList) {
 
     on('network.banned', ()=>window.location.reload());
 
-    const { debug, logger, core, ui } = await configure(
+    const { debug, logger, core, app } = await configure(
         ['debug', 'logger', 'core', 'ui'],
         cfgList
     );
@@ -87,22 +77,22 @@ export async function start(cfgList) {
     await initDebug(debug);
     await initLogger(logger);
     await initCore(core);
-    await initUi(ui);
+    await initApp(app);
 
-    $ui.loading = true;
+    $app.loading = true;
     try {
         const banned = $core.database.kv.get('banned');
         if(banned && banned > Date.now()) {
-            $ui.tips('服务器拒绝为你工作');
+            $app.tips('服务器拒绝为你工作');
             return;
         }
         await $core.start()
-        await $ui.start();
-        $ui.loading = false;
+        await $app.start();
+        $app.loading = false;
         $emit('system.start');
     } catch(e) {
         console.error(e);
-        $ui.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
+        $app.tips('连接服务器失败, 请检查网络连接, 或者过会再试一次');
     }
 }
 
