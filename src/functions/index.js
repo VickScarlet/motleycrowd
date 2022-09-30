@@ -191,7 +191,9 @@ export function format(str, values, ...args) {
     if(!str || values==null && !args.length)
         return str;
     args.unshift(values);
-    if(values == null) values=args;
+    if( typeof values != 'object'
+        || values instanceof String
+    ) values=args;
     let idx = 0;
     return str.replace(/\{([0-9A-Za-z]*)\}/g, (match, p1)=> {
         if(p1 == '') p1 = idx;
