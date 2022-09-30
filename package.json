@@ -1,7 +1,7 @@
 {
   "name": "motleycrowd",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "repository": "https://github.com/VickScarlet/motleycrowd.git",
   "author": "Vick Scarlet <scarlet_vick@outlook.com>",
