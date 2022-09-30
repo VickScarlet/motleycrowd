@@ -42,6 +42,7 @@ export default class Achievement extends IModule {
         switch(category) {
             case 'settlement':
                 params = {settlement: data.id};
+                break;
             case 'record':
             case 'rank':
             default: break;
@@ -115,10 +116,20 @@ export default class Achievement extends IModule {
         return data;
     }
 
-    achievements() {
+    async achievements() {
         if(this.$user.isguest) return [];
         const uuid = this.$user.uuid;
         if(!uuid) return [];
-
+        const unlocked = await this.$db.achievement.gets(uuid);
+        const sheet = this.$sheet.get('achievement');
+        const achievements = [];
+        for(const id in sheet) {
+            const {name, grade, hide, description} = sheet[id];
+            achievements.push({
+                id, name, description, hide: !!hide,
+                grade, unlocked: !!unlocked[id],
+            });
+        }
+        return achievements;
     }
 }

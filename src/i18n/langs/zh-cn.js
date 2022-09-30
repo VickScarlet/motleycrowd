@@ -16,6 +16,7 @@ export const general = {
     logout: '登出',
     guestmode: '游客模式',
     guestname: '游客{}',
+    achievement: '成就',
 
     username: '用户名',
     password: '密码',
@@ -45,6 +46,11 @@ export const general = {
 
     fullscreen: '全屏',
     window: '窗口',
+
+    auth_first: '请先登录',
+    regi_first: '请先注册',
+    only_member: '游客没有该功能',
+
 };
 
 export const tips = {

@@ -37,6 +37,7 @@ import Index from './screen/Index.vue';
 import Room from './screen/Room.vue';
 import Question from './screen/Question.vue';
 import Settlement from './screen/Settlement.vue';
+import Achievement from './screen/Achievement.vue';
 
 export default defineComponent({
     name: 'App',
@@ -47,6 +48,7 @@ export default defineComponent({
         Room,
         Question,
         Settlement,
+        Achievement,
     },
     data() {
         return {

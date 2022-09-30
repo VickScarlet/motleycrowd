@@ -11,6 +11,7 @@ export default class App {
 
     async initialize() {
         const app = createApp(UI);
+        app.config.globalProperties.$app = this;
         app.config.globalProperties.$lang = $lang;
         app.config.globalProperties.$core = $core;
         app.config.globalProperties.$utils = $utils;

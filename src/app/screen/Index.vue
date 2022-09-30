@@ -7,6 +7,7 @@
         <li><button type="button" @click="pair(100)">{{$lang.g.pair_mode.f(100)}}</button></li>
         <li><button type="button" @click="pair(10)">{{$lang.g.pair_mode.f(10)}}</button></li>
         <li><button type="button" @click="custom">{{$lang.g.priv_mode}}</button></li>
+        <li><button type="button" @click="achiv">{{$lang.g.achievement}}</button></li>
         <li><button type="button" @click="logout">{{$lang.g.logout}}</button></li>
     </ul>
 </template>
@@ -35,9 +36,10 @@ export default defineComponent({
             $app.loading = false;
             if (result) {
                 $app.switch('Welcome');
-            } else {
-                $app.alert(result.e);
             }
+        },
+        achiv() {
+            $app.switch('Achievement');
         },
     }
 });
