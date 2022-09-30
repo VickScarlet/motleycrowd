@@ -2,7 +2,7 @@
     "configurations": [
         {
             "source": ".",
-            "target": "../src/sheets"
+            "target": "../src/data"
         }
     ]
 }

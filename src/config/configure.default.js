@@ -4,7 +4,7 @@ export function debug() { return {
 
 export function core() { return {
     sheet: {
-        load: sheet=>import(`../sheets/${sheet}.js`)
+        load: sheet=>import(`../data/${sheet}.js`)
             .then(module=> module.default)
             .catch(_=>null),
         freeze: true,
