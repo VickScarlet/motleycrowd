@@ -13,7 +13,7 @@ import AnswerPieChart from '../components/AnswerPieChart.vue';
                     :key="option" :ismine="option==mine.answer">
 
                     <span>{{option?option:$lang.g.no_answer}}:</span>
-                    <span>{{$lang.g.prople_count.f(String(value).padStart(4, ' '))}}</span>
+                    <span>{{$lang.g.people_count.f(String(value).padStart(4, ' '))}}</span>
                     <span>&nbsp;&nbsp;&nbsp;{{description}}</span>
                 </li>
             </ul>
