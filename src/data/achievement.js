@@ -6,10 +6,10 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.10W",
+        "watch": "record.c.10Win",
         "condition": {
             "values": {
-                "count": "record.c.10W"
+                "count": "record.c.10Win"
             },
             "checks": [
                 "$ge",
@@ -25,10 +25,10 @@ export default {
         "grade": 1,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.100W",
+        "watch": "record.c.100Win",
         "condition": {
             "values": {
-                "count": "record.c.100W"
+                "count": "record.c.100Win"
             },
             "checks": [
                 "$ge",
@@ -44,10 +44,10 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.privW",
+        "watch": "record.c.privWin",
         "condition": {
             "values": {
-                "count": "record.c.privW"
+                "count": "record.c.privWin"
             },
             "checks": [
                 "$ge",
@@ -68,10 +68,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10W",
+        "watch": "record.c.10Win",
         "condition": {
             "values": {
-                "count": "record.c.10W"
+                "count": "record.c.10Win"
             },
             "checks": [
                 "$ge",
@@ -92,10 +92,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100W",
+        "watch": "record.c.100Win",
         "condition": {
             "values": {
-                "count": "record.c.100W"
+                "count": "record.c.100Win"
             },
             "checks": [
                 "$ge",
@@ -111,10 +111,10 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.privW",
+        "watch": "record.c.privWin",
         "condition": {
             "values": {
-                "count": "record.c.privW"
+                "count": "record.c.privWin"
             },
             "checks": [
                 "$ge",
@@ -135,10 +135,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10W",
+        "watch": "record.c.10Win",
         "condition": {
             "values": {
-                "count": "record.c.10W"
+                "count": "record.c.10Win"
             },
             "checks": [
                 "$ge",
@@ -159,10 +159,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100W",
+        "watch": "record.c.100Win",
         "condition": {
             "values": {
-                "count": "record.c.100W"
+                "count": "record.c.100Win"
             },
             "checks": [
                 "$ge",
@@ -183,10 +183,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.privW",
+        "watch": "record.c.privWin",
         "condition": {
             "values": {
-                "count": "record.c.privW"
+                "count": "record.c.privWin"
             },
             "checks": [
                 "$ge",
@@ -207,10 +207,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10W",
+        "watch": "record.c.10Win",
         "condition": {
             "values": {
-                "count": "record.c.10W"
+                "count": "record.c.10Win"
             },
             "checks": [
                 "$ge",
@@ -231,10 +231,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100W",
+        "watch": "record.c.100Win",
         "condition": {
             "values": {
-                "count": "record.c.100W"
+                "count": "record.c.100Win"
             },
             "checks": [
                 "$ge",
@@ -255,10 +255,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.privW",
+        "watch": "record.c.privWin",
         "condition": {
             "values": {
-                "count": "record.c.privW"
+                "count": "record.c.privWin"
             },
             "checks": [
                 "$ge",
@@ -340,10 +340,10 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.s.pairW",
+        "watch": "record.s.pairWin",
         "condition": {
             "values": {
-                "count": "record.s.pairW"
+                "count": "record.s.pairWin"
             },
             "checks": [
                 "$ge",
