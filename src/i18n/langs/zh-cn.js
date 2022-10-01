@@ -38,7 +38,7 @@ export const general = {
     score_as: '得分: {}',
     no_answer: '未选',
     people_count: '{}人',
-    collapse: '收&nbsp;&nbsp;&nbsp;&nbsp;起',
+    collapse: '收起',
     expand: '显示全部',
     rank: '排行榜',
 
