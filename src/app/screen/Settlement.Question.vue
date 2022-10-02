@@ -1,5 +1,4 @@
 <script setup>
-import AnswerPieChart from '../components/AnswerPieChart.vue';
 </script>
 <template>
     <div class="container">
@@ -23,8 +22,10 @@ import AnswerPieChart from '../components/AnswerPieChart.vue';
 </template>
 <script>
 import { watch, defineComponent } from 'vue';
+import AnswerPieChart from '../components/AnswerPieChart.vue';
 
 export default defineComponent({
+    components: {AnswerPieChart},
     data() {
         return {
             question: null,

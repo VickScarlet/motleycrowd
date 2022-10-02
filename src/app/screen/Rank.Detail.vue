@@ -1,8 +1,3 @@
-<script setup>
-import Ranking from '../components/Ranking.vue';
-import UserCard from '../components/UserCard.vue';
-</script>
-
 <template>
     <div class="container">
         <div v-if="!ranking || ranking<1">{{$lang.g.not_in_rank}}</div>
@@ -19,8 +14,12 @@ import UserCard from '../components/UserCard.vue';
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue'
+import { watch, defineComponent } from 'vue';
+import Ranking from '../components/Ranking.vue';
+import UserCard from '../components/UserCard.vue';
+
 export default defineComponent({
+    components: { Ranking, UserCard },
     props: {
         rank: {
             type: String,

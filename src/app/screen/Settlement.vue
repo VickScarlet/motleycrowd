@@ -1,9 +1,3 @@
-<script setup>
-import Mine from './Settlement.Mine.vue';
-import Question from './Settlement.Question.vue';
-import Rank from './Settlement.Rank.vue';
-</script>
-
 <template>
     <div class="container">
         <ul>
@@ -22,8 +16,13 @@ import Rank from './Settlement.Rank.vue';
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue'
+import { watch, defineComponent } from 'vue';
+import Mine from './Settlement.Mine.vue';
+import Question from './Settlement.Question.vue';
+import Rank from './Settlement.Rank.vue';
+
 export default defineComponent({
+    components: {Mine, Question, Rank},
     data() {
         return {
             questions: [],

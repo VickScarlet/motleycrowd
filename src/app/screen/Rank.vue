@@ -1,7 +1,3 @@
-<script setup>
-import Detail from './Rank.Detail.vue';
-</script>
-
 <template>
     <div class="container">
         <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
@@ -27,8 +23,11 @@ import Detail from './Rank.Detail.vue';
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import Detail from './Rank.Detail.vue';
+
 export default defineComponent({
+    components: {Detail},
     data() {
         return {
             rank: 'main',

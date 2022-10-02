@@ -34,7 +34,7 @@ export default defineComponent({
 .container {
     position: relative;
     margin: 0;
-    padding: 4px;
+    padding: 0;
     min-width: 100%;
     height: 6rem;
     border-radius: 4px;

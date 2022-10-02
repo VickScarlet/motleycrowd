@@ -1,7 +1,3 @@
-<script setup>
-import UserCard from '../components/UserCard.vue';
-</script>
-
 <template>
     <div class="container" :iscollapsed="iscollapsed">
         <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
@@ -42,8 +38,10 @@ import UserCard from '../components/UserCard.vue';
 </template>
 <script>
 import { watch, defineComponent } from 'vue';
+import UserCard from '../components/UserCard.vue';
 
 export default defineComponent({
+    components: {UserCard},
     data() {
         return {
             mine: '',

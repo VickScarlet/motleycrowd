@@ -1,7 +1,3 @@
-<script setup>
-import AnswerLineBarChart from '../components/AnswerLineBarChart.vue';
-import UserCard from '../components/UserCard.vue';
-</script>
 <template>
     <div class="container">
         <div class="chart">
@@ -16,8 +12,11 @@ import UserCard from '../components/UserCard.vue';
 </template>
 <script>
 import { watch, defineComponent } from 'vue';
+import AnswerLineBarChart from '../components/AnswerLineBarChart.vue';
+import UserCard from '../components/UserCard.vue';
 
 export default defineComponent({
+    components: { AnswerLineBarChart, UserCard },
     data() {
         return {
             answers: [],

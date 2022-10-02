@@ -22,8 +22,9 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue'
-import * as d3 from 'd3'
+import { watch, defineComponent } from 'vue';
+import * as d3 from 'd3';
+
 export default defineComponent({
     props: {
         top: { type: Number, default: 40 },

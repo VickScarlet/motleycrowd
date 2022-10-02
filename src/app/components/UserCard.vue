@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue'
+import { watch, defineComponent } from 'vue';
+
 export default defineComponent({
     props: {
         uuid: {

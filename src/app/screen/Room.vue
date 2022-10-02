@@ -1,7 +1,3 @@
-<script setup>
-import UserCard from '../components/UserCard.vue';
-</script>
-
 <template>
     <div class="container">
         <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
@@ -15,8 +11,11 @@ import UserCard from '../components/UserCard.vue';
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import UserCard from '../components/UserCard.vue';
+
 export default defineComponent({
+    components: { UserCard },
     data() {
         return {
             limit: 0,

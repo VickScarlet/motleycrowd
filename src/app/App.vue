@@ -1,12 +1,3 @@
-<script setup>
-import './style/app.scss';
-import { getCurrentInstance } from 'vue';
-import Loading from './components/Loading.vue';
-import Alert from './components/Alert.vue';
-import Tips from './components/Tips.vue';
-defineExpose(getCurrentInstance().proxy);
-</script>
-
 <template>
     <keep-alive>
         <component :is="page" :getData="_data"/>
@@ -26,10 +17,10 @@ defineExpose(getCurrentInstance().proxy);
                 $lang.g.fullscreen
         }}</label>
     </div>
-
 </template>
 
 <script>
+import './style/app.scss';
 import { defineComponent } from 'vue';
 import Welcome from './screen/Welcome.vue';
 import Authentication from './screen/Authentication.vue';
@@ -39,6 +30,10 @@ import Question from './screen/Question.vue';
 import Settlement from './screen/Settlement.vue';
 import Achievement from './screen/Achievement.vue';
 import Rank from './screen/Rank.vue';
+
+import Loading from './components/Loading.vue';
+import Alert from './components/Alert.vue';
+import Tips from './components/Tips.vue';
 
 export default defineComponent({
     name: 'App',
@@ -51,6 +46,9 @@ export default defineComponent({
         Settlement,
         Achievement,
         Rank,
+        Loading,
+        Alert,
+        Tips,
     },
     data() {
         return {

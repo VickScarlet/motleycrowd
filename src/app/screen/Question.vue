@@ -1,8 +1,3 @@
-<script setup>
-import CountDownProgress from '../components/CountDownProgress.vue';
-import Confirm from '../components/Confirm.vue';
-</script>
-
 <template>
     <div class="container">
         <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
@@ -32,8 +27,12 @@ import Confirm from '../components/Confirm.vue';
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import CountDownProgress from '../components/CountDownProgress.vue';
+import Confirm from '../components/Confirm.vue';
+
 export default defineComponent({
+    components: {CountDownProgress, Confirm},
     data() {
         return {
             confirm: false,

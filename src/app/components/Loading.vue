@@ -20,14 +20,10 @@
     </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style scoped>
 .loader {
     /* 默认延迟 320ms, 320ms 内不会看到loading*/
-    animation: opac 400ms; 
+    animation: opac 400ms;
     bottom: 0;
     left: 0;
     overflow: hidden;
@@ -62,7 +58,7 @@
 }
 
 .loader-line-wrap {
-    animation: 
+    animation:
         spin 2000ms cubic-bezier(.175, .885, .32, 1.275) infinite
     ;
     box-sizing: border-box;
@@ -124,7 +120,7 @@
 }
 
 @keyframes opac {
-    0%, 80% { 
+    0%, 80% {
         opacity: 0;
     }
     100% {

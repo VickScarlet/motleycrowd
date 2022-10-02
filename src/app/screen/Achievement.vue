@@ -1,7 +1,3 @@
-<script setup>
-import Item from './Achievement.Item.vue';
-</script>
-
 <template>
     <div class="container">
         <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
@@ -16,7 +12,9 @@ import Item from './Achievement.Item.vue';
 
 <script>
 import { defineComponent } from 'vue'
+import Item from './Achievement.Item.vue';
 export default defineComponent({
+    components: { Item },
     data() {
         return {
             show: false,
