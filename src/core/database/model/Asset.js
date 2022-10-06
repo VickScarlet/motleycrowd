@@ -11,6 +11,11 @@ export default class Asset extends Base {
         for(const key in flated) {
             if(owned[key] < flated[key]) return false;
         }
-        return true;;
+        return true;
+    }
+
+    async sync(uuid, update) {
+        return super.sync(uuid, update)
+            .then(updated=>updated.assets);
     }
 }

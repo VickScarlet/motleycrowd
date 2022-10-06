@@ -5,6 +5,7 @@ export default class User extends Base {
 
     async sync(uuid, update) {
         update.$update = Date.now();
-        return super.sync(uuid, update);
+        return super.sync(uuid, update)
+            .then(updated=>updated.meta);
     }
 }

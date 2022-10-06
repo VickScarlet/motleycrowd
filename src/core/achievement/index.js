@@ -43,6 +43,7 @@ export default class Achievement extends IModule {
             case 'settlement':
                 params = {settlement: data.id};
                 break;
+            case 'asset':
             case 'record':
             case 'rank':
             default: break;
@@ -82,23 +83,28 @@ export default class Achievement extends IModule {
     }
 
     async #prepare(type, uid, params) {
-        let t, get;
+        let get, t=$utils.clone(params);
         switch(type) {
             case 'settlement':
-                t = new Settlement($utils.clone(params), uid);
+                t = new Settlement(t, uid);
                 get = (...args)=>t.get(...args);
                 break;
+            case 'asset':
+                get = (x, k ,...args)=>{
+                    if(x=='count') {
+                        if(!t?.[k]) return 0;
+                        return Object.keys(t[k]).length;
+                    }
+                    return this.#deep(t, x, k, ...args);
+                }
+                break;
             case 'record':
-                t = await this.$db.record.gets(uid);
-                get = (...args)=>this.#deep(t, ...args);
+                get = (...args)=>this.#deep(params, ...args);
                 break;
             case 'rank':
-                t = await this.$rank.ranking(uid);
-                if (t) {
-                    for(const rank in t) {
-                        const [ranking, size] = t[rank];
-                        t[rank] = {ranking, size};
-                    }
+                for(const rank in t) {
+                    const [ranking, size] = t[rank];
+                    t[rank] = {ranking, size};
                 }
                 get = (...args)=>this.#deep(t, ...args);
                 break;

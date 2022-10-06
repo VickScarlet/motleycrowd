@@ -37,8 +37,7 @@ export default class Rank extends IModule {
         if(!uuid) return;
         const ranking = await this.ranking(uuid);
         if(!ranking) return;
-        for( const type in ranking )
-            $emit(`rank.${type}`, ranking[type]);
+        $emit('$rank', ranking);
     }
 
     async #ranking(uuid) {

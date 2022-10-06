@@ -21,12 +21,8 @@ export default class Record extends Base {
         return ret;
     }
 
-    postSync(update) {
-        if(!update.records) return;
-        const flat = $utils.flat({
-            record: update.records
-        });
-        for(const key in flat)
-            $emit(key, flat[key]);
+    async sync(uuid, update) {
+        return super.sync(uuid, update)
+            .then(updated=>updated.records);
     }
 }

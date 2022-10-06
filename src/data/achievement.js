@@ -6,7 +6,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.10Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.10Win"
@@ -25,7 +25,7 @@ export default {
         "grade": 1,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.100Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.100Win"
@@ -44,7 +44,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.privWin",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.privWin"
@@ -68,7 +68,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.10Win"
@@ -92,7 +92,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.100Win"
@@ -111,7 +111,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.privWin",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.privWin"
@@ -135,7 +135,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.10Win"
@@ -159,7 +159,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.100Win"
@@ -183,7 +183,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.privWin",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.privWin"
@@ -207,7 +207,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.10Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.10Win"
@@ -231,7 +231,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.100Win",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.100Win"
@@ -255,7 +255,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.privWin",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.privWin"
@@ -274,7 +274,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -307,7 +307,7 @@ export default {
             }
         },
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -340,7 +340,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.s.pairWin",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.s.pairWin"
@@ -359,7 +359,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -387,7 +387,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -420,7 +420,7 @@ export default {
             }
         },
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -459,7 +459,7 @@ export default {
             }
         },
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "type": "settlement.type",
@@ -493,7 +493,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "select": "settlement.select.1",
@@ -521,7 +521,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.2",
@@ -563,7 +563,7 @@ export default {
             }
         },
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -600,7 +600,7 @@ export default {
         "grade": 1,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "ranking": "settlement.ranking",
@@ -653,7 +653,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.4",
@@ -693,7 +693,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.5",
@@ -730,7 +730,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.5",
@@ -768,7 +768,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.6",
@@ -805,7 +805,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.6",
@@ -839,7 +839,7 @@ export default {
         "grade": 0,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "question": "settlement.question.6",
@@ -892,7 +892,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.m0",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.m0"
@@ -911,7 +911,7 @@ export default {
         "grade": 1,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.m0",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.m0"
@@ -935,7 +935,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.m0",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.m0"
@@ -953,11 +953,11 @@ export default {
         "description": "拥有1个头衔",
         "grade": 0,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.badge",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.badge"
+                "count": "asset.count.badge"
             },
             "checks": [
                 "$ge",
@@ -972,11 +972,11 @@ export default {
         "description": "拥有3个头衔",
         "grade": 1,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.badge",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.badge"
+                "count": "asset.count.badge"
             },
             "checks": [
                 "$ge",
@@ -991,11 +991,11 @@ export default {
         "description": "拥有10个头衔",
         "grade": 2,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.badge",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.badge"
+                "count": "asset.count.badge"
             },
             "checks": [
                 "$ge",
@@ -1015,11 +1015,11 @@ export default {
                 "115": 1
             }
         },
-        "category": "record",
-        "watch": "record.c.badge",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.badge"
+                "count": "asset.count.badge"
             },
             "checks": [
                 "$ge",
@@ -1034,11 +1034,11 @@ export default {
         "description": "拥有3个名片背景",
         "grade": 0,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.card",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.card"
+                "count": "asset.count.card"
             },
             "checks": [
                 "$ge",
@@ -1053,11 +1053,11 @@ export default {
         "description": "拥有10个名片背景",
         "grade": 1,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.card",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.card"
+                "count": "asset.count.card"
             },
             "checks": [
                 "$ge",
@@ -1072,11 +1072,11 @@ export default {
         "description": "拥有30个名片背景",
         "grade": 2,
         "hide": 0,
-        "category": "record",
-        "watch": "record.c.card",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.card"
+                "count": "asset.count.card"
             },
             "checks": [
                 "$ge",
@@ -1096,11 +1096,11 @@ export default {
                 "204": 1
             }
         },
-        "category": "record",
-        "watch": "record.c.card",
+        "category": "asset",
+        "watch": "$asset",
         "condition": {
             "values": {
-                "count": "record.c.card"
+                "count": "asset.count.card"
             },
             "checks": [
                 "$ge",
@@ -1116,7 +1116,7 @@ export default {
         "grade": 1,
         "hide": 0,
         "category": "rank",
-        "watch": "rank.ten",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.ten.ranking",
@@ -1145,7 +1145,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.ten",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.ten.ranking",
@@ -1174,7 +1174,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.ten",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.ten.ranking",
@@ -1198,7 +1198,7 @@ export default {
         "grade": 1,
         "hide": 0,
         "category": "rank",
-        "watch": "rank.hundred",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.hundred.ranking",
@@ -1227,7 +1227,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.hundred",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.hundred.ranking",
@@ -1256,7 +1256,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.hundred",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.hundred.ranking",
@@ -1285,7 +1285,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.main",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.main.ranking",
@@ -1314,7 +1314,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.main",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.main.ranking",
@@ -1343,7 +1343,7 @@ export default {
             }
         },
         "category": "rank",
-        "watch": "rank.main",
+        "watch": "$rank",
         "condition": {
             "values": {
                 "ranking": "rank.main.ranking",
@@ -1367,7 +1367,7 @@ export default {
         "grade": 1,
         "hide": 1,
         "category": "record",
-        "watch": "record.c.reddem",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.reddem"
@@ -1391,7 +1391,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.discount",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.discount"
@@ -1410,7 +1410,7 @@ export default {
         "grade": 0,
         "hide": 0,
         "category": "record",
-        "watch": "record.c.pair",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.pair"
@@ -1434,7 +1434,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.pair",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.pair"
@@ -1458,7 +1458,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.pair",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.pair"
@@ -1482,7 +1482,7 @@ export default {
             }
         },
         "category": "record",
-        "watch": "record.c.pair",
+        "watch": "$record",
         "condition": {
             "values": {
                 "count": "record.c.pair"
@@ -1501,7 +1501,7 @@ export default {
         "grade": 1,
         "hide": 1,
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "s1": "settlement.subscore.1",
@@ -1540,7 +1540,7 @@ export default {
             }
         },
         "category": "settlement",
-        "watch": "settlement",
+        "watch": "$settlement",
         "condition": {
             "values": {
                 "s1": "settlement.subscore.1",
