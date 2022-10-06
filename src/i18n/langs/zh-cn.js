@@ -17,6 +17,7 @@ export const general = {
     guestmode: '游客模式',
     guestname: '游客{}',
     achievement: '成就',
+    accessory: '饰品',
 
     username: '用户名',
     password: '密码',
@@ -58,6 +59,10 @@ export const general = {
     not_in_rank: '未上榜',
     my_ranking_as: '我的排位: {}',
     rank_size: '总人数 {}',
+
+    no_card: '没有卡片背景',
+    no_badge: '没有头衔',
+    apply_accessory: '应用装饰',
 };
 
 export const tips = {
@@ -92,4 +97,6 @@ export const error = {
     3001: '已经在游戏中了',
 
     4000: '已经解锁了成就',
+
+    5000: '资产不足',
 };

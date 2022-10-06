@@ -43,7 +43,8 @@ export default defineComponent({
             return a.id - b.id;
         });
         this.achivs = achivs;
-    }
+    },
+    deactivate() {},
 });
 </script>
 

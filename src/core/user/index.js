@@ -180,4 +180,23 @@ export default class User extends IModule {
         if(!uuid) return false;
         return uuid[0] == "#";
     }
+
+    async mymeta() {
+        if(!this.#authenticated || this.#isguest)
+            return {};
+        const data = await this.get(this.#uuid);
+        return data || {};
+    }
+
+    async accessory(accessory) {
+        for(const key in accessory)
+            if(!accessory[key])
+                delete accessory[key];
+
+        if(Object.keys(accessory).length <= 1)
+            return false;
+
+        const {success} = await this.#command('accessory', accessory);
+        return success;
+    }
 }

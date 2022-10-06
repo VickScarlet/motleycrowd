@@ -3,6 +3,11 @@ export default class Asset extends Base {
     static Collection = 'asset';
     static Scheme = {keyPath: 'uuid'};
 
+    async gets(uuid) {
+        const data = await super.get(uuid);
+        return data?.assets || {};
+    }
+
     async check(uuid, assets) {
         const data = await this.get(uuid);
         if(!data?.assets) return false;

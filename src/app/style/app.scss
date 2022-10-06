@@ -17,7 +17,8 @@ html {
 
   color-scheme: light dark;
   color: var(--main-color);
-  background-color: var(--main-background);
+  background: var(--main-background);
+  background: linear-gradient(25deg, var(--main-background) 0%, #130637);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

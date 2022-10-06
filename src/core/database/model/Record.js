@@ -5,7 +5,7 @@ export default class Record extends Base {
 
     async gets(uuid) {
         const data = await super.get(uuid);
-        return data?.records || null;
+        return data?.records || {};
     }
 
     async get(uuid, key) {
