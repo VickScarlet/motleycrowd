@@ -1498,7 +1498,7 @@ export default {
         "id": 156,
         "name": "赚麻了",
         "description": "在一题中+5分或更多",
-        "grade": 1,
+        "grade": 0,
         "hide": 1,
         "category": "settlement",
         "watch": "$settlement",
@@ -1532,7 +1532,7 @@ export default {
         "id": 157,
         "name": "神之一手",
         "description": "在一题中+10分或更多",
-        "grade": 3,
+        "grade": 1,
         "hide": 1,
         "reward": {
             "badge": {
