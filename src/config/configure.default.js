@@ -17,10 +17,11 @@ export function core() { return {
     },
     database: {
         dbName: 'motleycrowd',
-        version: 11,
+        version: 12,
     },
-    action: {
-
+    action: {},
+    game: {
+        page: 8,
     }
 } }
 

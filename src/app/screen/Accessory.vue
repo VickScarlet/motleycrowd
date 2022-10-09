@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="current">
+        <div class="header">
             <div class="cardbox">
                 <UserCard :uuid="uuid" :p_card="card" :p_badge="badge" />
             </div>
@@ -80,8 +80,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.current {
-    z-index: 1;
+.header {
+    z-index: 10;
     width: 100%;
     height: 100px;
     top: 0;
@@ -212,7 +212,5 @@ div.list {
         }
     }
 }
-
-
 
 </style>

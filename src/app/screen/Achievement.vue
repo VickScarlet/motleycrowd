@@ -1,7 +1,10 @@
 <template>
-    <div class="container">
+    <div class="header">
         <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
+    </div>
+    <div class="container">
         <h1 v-if="!show">{{message}}</h1>
+        <h1 v-if="show">{{$lang.g.achievement}}</h1>
         <ul v-if="show">
             <li v-for="achiv of achivs" :key="achiv.id">
                 <Item :data="achiv" />
@@ -50,9 +53,30 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.container {
-    padding: 3em 0;
+.header {
+    z-index: 10;
+    width: 100%;
+    height: 100px;
+    top: 0;
+    left: 0;
+    position: fixed;
+    margin: auto;
+    background: #3d3d3d;
+    background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
+    > button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
+
+.container {
+    padding: 0;
+    margin: 120px 10px;
+    width: 1030px;
+}
+
 ul {
     position: relative;
     display: flex;
@@ -60,14 +84,26 @@ ul {
     align-content: space-between;
     justify-content: space-between;
     height: auto;
-    margin: auto 20px;
+    margin: auto;
     flex-wrap: wrap;
-
+    width: 100%;
     li {
         width: 250px;
-        margin: 10px;
+        margin: 0;
         margin-top: 0;
+        margin-bottom: 10px;
     }
 }
 
+@media all and (max-width: 1050px) {
+    .container { width: 770px; }
+}
+
+@media all and (max-width: 790px) {
+    .container { width: 510px; }
+}
+
+@media all and (max-width: 530px) {
+    .container { width: 250px; }
+}
 </style>

@@ -48,6 +48,7 @@ import Index from './screen/Index.vue';
 import Room from './screen/Room.vue';
 import Question from './screen/Question.vue';
 import Settlement from './screen/Settlement.vue';
+import History from './screen/History.vue';
 import Achievement from './screen/Achievement.vue';
 import Rank from './screen/Rank.vue';
 import Accessory from './screen/Accessory.vue';
@@ -59,18 +60,11 @@ import Tips from './components/Tips.vue';
 export default defineComponent({
     name: 'App',
     components: {
-        Welcome,
-        Authentication,
-        Index,
-        Room,
-        Question,
-        Settlement,
-        Achievement,
-        Rank,
-        Accessory,
-        Loading,
-        Alert,
-        Tips,
+        Welcome, Authentication, Index,
+        Room, Question, Settlement, History,
+        Achievement, Rank, Accessory,
+
+        Loading, Alert, Tips,
     },
     data() {
         return {
@@ -114,7 +108,7 @@ export default defineComponent({
         $on('game.question', ()=>this.switch('Question'));
         $on('game.resume.room', ()=>this.switch('Room'));
         $on('game.resume.question', ()=>this.switch('Question'));
-        $on('game.settlement', data=>this.switch('Settlement', data));
+        $on('game.settlement', data=>this.switch('Settlement', {data}));
 
         $on('command.error', code=>{
             this.loading = false;

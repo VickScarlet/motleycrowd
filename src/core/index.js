@@ -16,9 +16,9 @@ export default class Core {
 
     #proxy = new Map();
     #configure;
-    /** @type {Database} */
-    #sheet;
     /** @type {Sheet} */
+    #sheet;
+    /** @type {Database} */
     #database;
     /** @type {Question} */
     #question;

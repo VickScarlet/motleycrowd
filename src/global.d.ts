@@ -6,6 +6,7 @@ import iLog4js from 'log4js';
 import Lang from './i18n/index.js';
 import Core from './core/index.js';
 import App from './app/index.js';
+import moment from 'moment';
 
 let category: string;
 declare global {
@@ -19,6 +20,7 @@ declare global {
     let $off = off;
     let $emit = emit;
     let $event = {on, off, emit};
+    let $moment = moment;
 
     let $Log4js = iLog4js;
     let $lang = new Lang();
@@ -40,5 +42,6 @@ declare global {
         lang: $lang,
         core: $core,
         app: $app,
+        moment: $moment
     };
 }

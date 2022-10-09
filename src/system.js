@@ -14,6 +14,9 @@ async function initGlobal() {
     window.$on = $event.on;
     window.$off = $event.off;
     window.$emit = $event.emit;
+
+    window.$.moment =
+    window.$moment = (await import('moment')).default;
 }
 
 async function configure(mods, lists) {

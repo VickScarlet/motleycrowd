@@ -8,6 +8,9 @@
         <li><button type="button" @click="pair(10)">{{$lang.g.pair_mode.f(10)}}</button></li>
         <li><button type="button" @click="custom">{{$lang.g.priv_mode}}</button></li>
         <li v-if="!$core.user.isguest">
+            <button type="button" @click="$app.switch('History')">{{$lang.g.history}}</button>
+        </li>
+        <li v-if="!$core.user.isguest">
             <button type="button" @click="$app.switch('Achievement')">{{$lang.g.achievement}}</button>
         </li>
         <li v-if="!$core.user.isguest">

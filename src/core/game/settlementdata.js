@@ -1,12 +1,9 @@
 import Answer from "./answer.js";
 
 export default class SettlementData {
-    constructor(uuid, getQuestion, {questions, scores}) {
+    constructor(uuid, questions, scores) {
         this.#uuid = uuid;
-        this.#questions = questions.map(
-            ([qid, picked]) => getQuestion(qid, picked)
-        );
-
+        this.#questions = questions;
         this.#indexs = new Array(this.size).fill(1).map((_, i)=>Number(i));
 
         for(const uid in scores) {

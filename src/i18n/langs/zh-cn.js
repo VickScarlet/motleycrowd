@@ -6,6 +6,7 @@ export const general = {
     no: '否',
     back: '返回',
     ok: '确定',
+    review: '复盘',
 
     delay_as: '当前延迟: {}ms',
     online_as: '在线人数: {}',
@@ -18,6 +19,7 @@ export const general = {
     guestname: '游客{}',
     achievement: '成就',
     accessory: '饰品',
+    history: '历史对局',
 
     username: '用户名',
     password: '密码',
@@ -63,6 +65,11 @@ export const general = {
     no_card: '没有卡片背景',
     no_badge: '没有头衔',
     apply_accessory: '应用装饰',
+
+    private_10: '十人好友',
+    private_100: '百人好友',
+    pair_10: '十人排位',
+    pair_100: '百人排位',
 };
 
 export const tips = {
@@ -89,14 +96,17 @@ export const error = {
     1003: '数据库错误',
 
     2000: '没有认证',
-    2001: '认证失败',
-    2002: '用户名错误',
-    2003: '认证限制',
+    2001: '用户名或密码错误',
+    2002: '用户名不符合规范',
+    2003: '请5秒后再试',
 
     3000: '没有游戏类型',
     3001: '已经在游戏中了',
+    3002: '没找到游戏记录',
 
     4000: '已经解锁了成就',
 
     5000: '资产不足',
 };
+
+export {default as moment} from 'moment/dist/locale/zh-cn';

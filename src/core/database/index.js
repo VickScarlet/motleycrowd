@@ -7,17 +7,28 @@ import Settlement from './model/Settlement.js';
 import Asset from './model/Asset.js';
 import Record from './model/Record.js';
 import Achievement from './model/Achievement.js';
+import History from './model/History.js';
 
 export default class Database extends IModule {
 
+    /** @type {Auth} */
     #auth;
+    /** @type {User} */
     #user;
+    /** @type {KV} */
     #kv;
+    /** @type {Rank} */
     #rank;
+    /** @type {Settlement} */
     #settlement;
+    /** @type {AAssetuth} */
     #asset;
+    /** @type {Record} */
     #record;
+    /** @type {Achievement} */
     #achievement;
+    /** @type {History} */
+    #history;
     #gsync;
 
     get auth() {return this.#auth;}
@@ -28,6 +39,7 @@ export default class Database extends IModule {
     get asset() {return this.#asset;}
     get record() {return this.#record;}
     get achievement() {return this.#achievement;}
+    get history() {return this.#history;}
 
     async initialize() {
         const {dbName, version} = this.$configure;
@@ -47,6 +59,7 @@ export default class Database extends IModule {
         this.#asset = new Asset(db);
         this.#record = new Record(db);
         this.#achievement = new Achievement(db);
+        this.#history = new History(db);
 
         await this.#kv.initialize();
         await this.#auth.initialize();
@@ -56,6 +69,7 @@ export default class Database extends IModule {
         await this.#asset.initialize();
         await this.#record.initialize();
         await this.#achievement.initialize();
+        await this.#history.initialize();
 
         const ls = globalThis.localStorage.getItem('storage');
         if(!ls) return;
@@ -79,6 +93,7 @@ export default class Database extends IModule {
         this.#scheme(db, Asset.Collection, Asset.Scheme);
         this.#scheme(db, Record.Collection, Record.Scheme);
         this.#scheme(db, Achievement.Collection, Achievement.Scheme);
+        this.#scheme(db, History.Collection, History.Scheme);
     }
 
     /**
@@ -108,6 +123,7 @@ export default class Database extends IModule {
             case 'record': return this.#record;
             case 'kv': return this.#kv;
             case 'achievement': return this.#achievement;
+            case 'history': return this.#history;
             default: return null;
         }
     }

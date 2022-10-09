@@ -125,15 +125,15 @@ svg {
     }
     g {
         &[win="true"] {
-            rect { fill: #a56fec; }
+            rect { fill: #2563b3; }
         }
         &[win="false"] {
-            rect { fill: #dc5d5d; }
+            rect { fill: #cf5e5e; }
         }
         rect {
             transition: fill 300ms;
             &:hover {
-                fill: orange;
+                fill: #68c564;
                 transition: fill 300ms;
             }
         }
@@ -146,18 +146,18 @@ svg {
         text-anchor: middle;
     }
     .axis text {
-        fill: #dc5d5d;
+        fill: white;
     }
     .line {
         path {
             pointer-events: none;
             fill: none;
-            stroke: #15c5b0;
+            stroke: #fbb946;
             stroke-width: 3;
         }
         circle {
-            fill: orange;
-            stroke: #15c5b0;
+            fill: #fbb946;
+            stroke: #fbb946;
             stroke-width: 3;
         }
         text {

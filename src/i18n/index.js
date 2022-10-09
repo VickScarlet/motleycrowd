@@ -27,7 +27,7 @@ export default class Lang {
         if(this.#cache.has(lang))
             return this.#cache.get(lang);
 
-        const {general, tips, error} = await import(`./langs/${lang}.js`);
+        const {general, tips, error, moment} = await import(`./langs/${lang}.js`);
 
         const ls = (data, notfind)=>{
             const map = new Map();
@@ -47,6 +47,7 @@ export default class Lang {
             general: ls(general),
             tips: ls(tips),
             error: ls(error, target=>target.get('unknow')),
+            moment,
         }
 
         this.#cache.set(lang, data);
@@ -54,11 +55,12 @@ export default class Lang {
     }
 
     async #switch(lang) {
-        const {general, tips, error} = await this.#import(lang);
+        const {general, tips, error, moment} = await this.#import(lang);
         this.#g = general;
         this.#t = tips;
         this.#e = error;
         this.#lang = lang;
+        $moment.locale(lang, moment);
     }
 
     async switch(lang) {

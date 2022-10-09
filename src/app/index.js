@@ -17,6 +17,7 @@ export default class App {
         app.config.globalProperties.$utils = $utils;
         app.config.globalProperties.$logic = $logic;
         app.config.globalProperties.$norml = $norml;
+        app.config.globalProperties.$moment = $moment;
         this.#app = app;
         app.mixin({
             props: {

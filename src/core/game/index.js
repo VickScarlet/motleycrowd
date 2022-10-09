@@ -11,7 +11,7 @@ export default class Game extends IModule {
     #users = new Set();
     #currentQuestion = null;
     #index = -1;
-    #lastSettlement = null;
+    #page = 0;
 
     get room() { return this.#room; }
     get limit() { return this.#limit; }
@@ -21,7 +21,6 @@ export default class Game extends IModule {
     get isReady() { return this.#isReady; }
     get users() { return this.#users; }
     get currentQuestion() { return this.#currentQuestion; }
-    get lastSettlement() { return this.#lastSettlement; }
 
     proxy() {
         return {
@@ -36,6 +35,8 @@ export default class Game extends IModule {
     }
 
     async initialize() {
+        const {page} = this.$configure;
+        this.#page = page;
         this.#debug();
     }
 
@@ -145,17 +146,9 @@ export default class Game extends IModule {
     }
 
     async #settlement(data) {
-        await this.$db.settlement.set(
-            $utils.clone(data)
-        );
-        const settlement = new SettlementData(
-            this.$user.uuid,
-            this.$question.get,
-            data,
-        );
-        this.#lastSettlement = settlement;
+        await this.$db.settlement.set(data);
         this.clear();
-        $emit('game.settlement', settlement);
+        $emit('game.settlement', data);
     }
 
     async #resume({info, start, question}) {
@@ -187,16 +180,76 @@ export default class Game extends IModule {
         this.#index = -1;
         this.#users.clear();
     }
+
+    async get(settlement) {
+        const local = await this.$db.settlement.get(settlement);
+        if(local) return local;
+        const {success, data} = await this.#command('get', settlement);
+        if(!success) return null;
+        await this.$db.settlement.set(data);
+        return data;
+    }
+
+    async pages() {
+        const total = await this.total();
+        if(!total) return 0;
+        return Math.ceil(total / this.#page);
+    }
+
+    async total() {
+        const uuid = this.$user.uuid;
+        const {c:{priv,pair}={}} = await this.$db.record.gets(uuid);
+        return (priv||0) + (pair||0);
+    }
+
+    async history(page) {
+        const total = await this.total();
+        if(!total) return [];
+        const uuid = this.$user.uuid;
+        const local = await this.$db.history.gets(uuid);
+        const p = this.#page;
+        const skip = page * p;
+        let start = total - skip;
+        const end = Math.max(start+p, 0);
+        start = Math.max(start, 0);
+        const map = new Map();
+        const list = [];
+        for(let i=start; i<end; i++) {
+            const l = local.get(i);
+            if(l) {
+                map.set(i, l);
+                continue;
+            }
+            list.push(i);
+        }
+        if(list.length > 0) {
+            const min = list[0];
+            const max = list.pop() + 1;
+            const {success, data} = await this.#command('history', [min, max-min]);
+            if(!success) return [];
+            for(let i=0; i<data.length; i++) {
+                map.set(min+i, data[i]);
+            }
+            await this.$db.history.puts(uuid, map);
+        }
+        return Array.from(map.values()).reverse();
+    }
+
+    packSettlement(data) {
+        const uuid = this.$user.uuid;
+        const {questions, scores} = data;
+        return new SettlementData(
+            uuid,
+            questions.map(
+                ([q,p])=>this.$question.get(q,p)
+            ),
+            scores
+        );
+    }
+
     #debug() {
         $on('debug.game.settlement', data=>{
-            const settlement = new SettlementData(
-                data.users.includes(this.$user.uuid)
-                    ?this.$user.uuid
-                    :data.users[0],
-                this.$question.get,
-                data,
-            );
-            $emit('game.settlement', settlement);
+            $emit('game.settlement', data);
         });
     }
 }

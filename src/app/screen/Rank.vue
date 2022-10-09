@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
         <Detail :rank="rank" />
         <ul>
             <li>
