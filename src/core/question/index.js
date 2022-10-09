@@ -46,6 +46,14 @@ export class ClientQuestion {
         return Math.max(end - now, 0)
     }
 
+    get answers() {return this.#question.answers;}
+
+    puts(answers) {
+        const question = this.#question;
+        for(const [uuid, answer] of answers)
+            question.answer(uuid, answer);
+    }
+
     option(option) {
         return $utils.clone(
             this.#question.option(option)

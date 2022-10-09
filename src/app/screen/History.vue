@@ -2,7 +2,7 @@
     <div class="header">
         <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
         <div class="pages">
-            <Pages :total="total" @update:page="p=>page=p" ref="pages" />
+            <Pages :total="total" @update:page="_=>p=_" ref="pages" />
         </div>
     </div>
     <ul class="history">
@@ -18,20 +18,26 @@ import Item from './History.Item.vue';
 import Pages from '../components/Pages.vue';
 export default defineComponent({
     components: { Item, Pages },
+    props: {
+        page: {
+            type: Number,
+            default: 1,
+        },
+    },
     data() {
         return {
-            _page: 1,
+            _p: 1,
             total: 0,
             history: [],
         }
     },
     computed: {
-        page: {
+        p: {
             get() {
-                return this._page;
+                return this._p;
             },
             async set(page) {
-                this._page = page;
+                this._p = page;
                 $app.loading = true;
                 const history = await $core.game.history(page);
                 $app.loading = false;
@@ -41,10 +47,8 @@ export default defineComponent({
         },
     },
     async activated() {
-        const {page} = this.getData();
         this.total = await $core.game.pages();
-        this.$refs.pages.page =
-        this.page = page || 1;
+        this.$refs.pages.page = this.p = this.page;
     },
     deactivate() {},
     methods: {
@@ -53,7 +57,7 @@ export default defineComponent({
             const data = await $core.game.get(id);
             $app.loading = false;
             if(!data) return;
-            const page = this.page;
+            const page = this.p;
             const ok = ()=>$app.switch('History', {page});
             $app.switch('Settlement', {data, ok});
         }

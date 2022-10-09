@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import * as d3 from 'd3';
 
 export default defineComponent({
@@ -20,26 +20,16 @@ export default defineComponent({
         padding: { type: Number, default: 10 },
         answers: { type: Array, default: () => [] },
     },
-    data: () => ({
-        pie: [],
-    }),
-    mounted() {
-        watch(()=>this.answers, ()=>this.render());
-        watch(()=>this.radius, ()=>this.render());
-        watch(()=>this.innerRadius, ()=>this.render());
-        watch(()=>this.padding, ()=>this.render());
-        this.render();
-    },
-    methods: {
-        render() {
+    computed: {
+        pie() {
             const {answers, radius, innerRadius} = this;
             const d = d3.arc().innerRadius(innerRadius).outerRadius(radius);
             const t = d.centroid;
 
-            this.pie = d3.pie().value(({value}) => value)(answers)
+            return d3.pie().value(({value}) => value)(answers)
                 .map(v => ({...v.data, d: d(v), t: t(v)}));
         }
-    }
+    },
 });
 </script>
 

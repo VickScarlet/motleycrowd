@@ -5,7 +5,7 @@
         <h3>{{question}}</h3>
         <div class="answer">
             <div class="chart">
-                <AnswerPieChart :answers="answers.filter(({value}) => value > 0)"></AnswerPieChart>
+                <AnswerPieChart :answers="pie"></AnswerPieChart>
             </div>
             <ul>
                 <li v-for="({option, value, description}) in answers"
@@ -21,42 +21,31 @@
     </div>
 </template>
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import AnswerPieChart from '../components/AnswerPieChart.vue';
 
 export default defineComponent({
     components: {AnswerPieChart},
-    data() {
-        return {
-            question: null,
-            answers: [],
-            mine: {
+    props: {
+        question: {
+            type: String,
+            default: '',
+        },
+        answers: {
+            type: Array,
+            default: [],
+        },
+        mine: {
+            type: Object,
+            default: {
                 value: 0,
                 answer: '',
-            },
-        }
-    },
-    mounted() {
-        watch(()=>this.getData, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        update() {
-            const {question, answer, total, mine} = this.getData();
-            this.mine = mine;
-            this.question = question.question;
-            const answers = [];
-            let sum = 0;
-            answer.counter.forEach((value, option) => {
-                sum += value;
-                answers.push({option, value,
-                    description: question.option(option).val,
-                });
-            });
-            if (sum < total) {
-                answers.push({option: '', value: total - sum});
             }
-            this.answers = answers;
+        },
+    },
+    computed: {
+        pie() {
+            return this.answers.filter(({value}) => value > 0);
         },
     }
 });

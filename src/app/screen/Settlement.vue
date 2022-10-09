@@ -1,16 +1,16 @@
 <template>
     <div class="header">
-        <button @click="ok">{{$lang.g.ok}}</button>
+        <button @click="ok?ok():$app.switch('Index')">{{$lang.g.ok}}</button>
     </div>
     <ul class="settlement">
         <li class="card">
-            <Mine :getData="mine" />
+            <Mine v-bind="mine" />
         </li>
         <li class="card">
-            <Rank :getData="rank" @ch="ch" />
+            <Rank v-bind="rank" @ch="u=>$debug ?update($core.game.format(data, u)) :1" />
         </li>
-        <li v-for="([idx, get]) in questions" :key="idx" class="card">
-            <Question :getData="get" />
+        <li v-for="[idx, data] in questions" :key="idx" class="card">
+            <Question v-bind="data" />
         </li>
     </ul>
 </template>
@@ -23,45 +23,39 @@ import Rank from './Settlement.Rank.vue';
 
 export default defineComponent({
     components: {Mine, Question, Rank},
+    props: {
+        data: {
+            type: Object,
+        },
+        id: {
+            type: String,
+        },
+        ok: {
+            type: Function,
+            default: null,
+        }
+    },
     data() {
         return {
-            _ok: null,
             questions: [],
-            mine: ()=>null,
-            rank: ()=>null,
+            mine: {},
+            rank: {},
         }
     },
     mounted() {
-        watch(()=>this.getData, ()=>this.update());
-        this.update();
+        const d = data=>this.update($core.game.format(data));
+        const i = async id=>d(await $core.game.get(id));
+        watch(()=>this.data, _=>d(this.data));
+        watch(()=>this.id, _=>i(this.id));
+        if(this.data) d(this.data);
+        else if(this.id) i(this.id);
     },
     methods: {
-        async update() {
-            let {id, data, ok} = this.getData();
-            if(ok) this._ok = ok;
-            if(!data) {
-                if(!id) return;
-                data = await $core.game.get(id);
-                if(!data) return;
-            }
-            const settlement = $core.game.packSettlement(data);
-            const {uuid, indexs, mine, rank} = settlement;
-            this.questions = indexs.map(i=>([i, ()=>settlement.at(i)]));
-            this.mine = ()=>mine;
-            this.rank = ()=>({uuid, rank});
+        update({uuid, questions, rank, mine}) {
+            this.mine = mine;
+            this.rank = {rank, mine: uuid};
+            this.questions = questions.map((d, i)=>([i, d]));
         },
-        ch(uuid) {
-            if(!$debug) return;
-            const settlement = this.getData();
-            settlement.uuid = uuid;
-            this.update();
-        },
-        ok() {
-            const ok = this._ok;
-            this._ok = null;
-            if(ok) ok();
-            else $app.switch('Index');
-        }
     }
 });
 </script>

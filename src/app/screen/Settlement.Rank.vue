@@ -1,6 +1,6 @@
 <template>
-    <div class="settlement-rank" :iscollapsed="iscollapsed">
-        <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
+    <div class="settlement-rank" :iscollapsed="toggle">
+        <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
         <h3>{{$lang.g.rank}}</h3>
         <ul class="rank">
             <li v-for="({uuid, ranking, answers, total}) in rank"
@@ -31,43 +31,31 @@
                 </ul>
             </li>
         </ul>
-        <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
-        <button @click="toggle" expand   v-if="iscollapsed">{{$lang.g.expand}}</button>
+        <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
+        <button @click="toggle=!toggle" expand   v-if="toggle">{{$lang.g.expand}}</button>
     </div>
 </template>
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import UserCard from '../components/UserCard.vue';
 import ScoreRanking from '../components/ScoreRanking.vue';
 
 export default defineComponent({
     components: {UserCard, ScoreRanking},
+    props: {
+        rank: {
+            type: Array,
+            default: [],
+        },
+        mine: {
+            type: String,
+            default: '',
+        },
+    },
     data() {
         return {
-            mine: '',
-            iscollapsed: true,
-            rank: [],
+            toggle: true,
         }
-    },
-    mounted() {
-        watch(()=>this.getData, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            const data = this.getData();
-            if(!data) return;
-            this.mine = data.uuid;
-            this.rank = data.rank.map(({uuid, score, ranking, subs})=>({
-                uuid,
-                ranking,
-                total: score,
-                answers: subs,
-            }));
-        },
-        toggle() {
-            this.iscollapsed = !this.iscollapsed;
-        },
     },
 });
 </script>

@@ -20,7 +20,7 @@
         </g>
     </svg>
     <keep-alive>
-        <component :is="page" :getData="_data"/>
+        <component :is="page" v-bind="_data"/>
     </keep-alive>
     <p class="serverstat">
         {{$lang.g.delay_as.f(delay)}}<br/>
@@ -77,7 +77,7 @@ export default defineComponent({
             tipsMessage: '',
             showTips: false,
             isfullscreen: false,
-            _data: ()=>({}),
+            _data: {},
         }
     },
     mounted() {
@@ -118,7 +118,7 @@ export default defineComponent({
     },
     methods: {
         switch(page, data) {
-            this._data = ()=>(data||{});
+            this._data = data || {};
             if(this.page == page) return;
             this.page = page;
         },

@@ -18,15 +18,8 @@ export default class App {
         app.config.globalProperties.$logic = $logic;
         app.config.globalProperties.$norml = $norml;
         app.config.globalProperties.$moment = $moment;
+        app.config.globalProperties.$debug = $debug;
         this.#app = app;
-        app.mixin({
-            props: {
-                getData: {
-                    type: Function,
-                    default: ()=>({}),
-                },
-            },
-        });
         this.#proxy = app.mount('#app');
     }
 

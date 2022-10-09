@@ -1,5 +1,4 @@
 import IModule from "../imodule.js";
-import SettlementData from "./settlementdata.js";
 export default class Game extends IModule {
 
     #room = '';
@@ -235,16 +234,45 @@ export default class Game extends IModule {
         return Array.from(map.values()).reverse();
     }
 
-    packSettlement(data) {
-        const uuid = this.$user.uuid;
-        const {questions, scores} = data;
-        return new SettlementData(
-            uuid,
-            questions.map(
-                ([q,p])=>this.$question.get(q,p)
-            ),
-            scores
-        );
+    format({questions, scores}, uuid=this.$user.uuid) {
+        const puts = questions.map(_=>([]));
+        const rank = [];
+        let mine;
+        for(const u in scores) {
+            const [score, subs, ranking] = scores[u];
+            const answers = subs.map((sub, i)=>{
+                if(!Array.isArray(sub))
+                    return { value: sub, answer: '' };
+                const [value, answer] = sub;
+                puts[i].push([u, answer]);
+                return { value, answer };
+            });
+            const r = {uuid: u, score, answers, ranking}
+            rank.push(r);
+            if(u == uuid) mine = r;
+        }
+        rank.sort((a,b)=>a.ranking-b.ranking);
+        const total = rank.length;
+        questions = questions.map(([q,p], i)=>{
+            q = this.$question.get(q,p);
+            const question = q.question;
+            q.puts(puts[i]);
+            const counter = q.answers.counter;
+            const answers = [];
+            let left = total;
+            for(const [option, value] of counter) {
+                const description = q.option(option).val;
+                left -= value;
+                answers.push({option, value, description});
+            }
+            if(left)
+                answers.push({option: '', count: left, description: ''});
+            return {
+                question, answers,
+                mine: mine.answers[i],
+            };
+        });
+        return {uuid, questions, rank, mine};
     }
 
     #debug() {
