@@ -116,7 +116,7 @@ export default {
     },
     "124": {
         "id": 124,
-        "name": "神",
+        "name": "妙手",
         "grade": 1
     },
     "301": {
