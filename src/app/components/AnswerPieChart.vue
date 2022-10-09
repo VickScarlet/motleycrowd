@@ -1,5 +1,5 @@
 <template>
-    <svg :viewBox="`${-radius-padding} ${-radius-padding} ${-2*(-radius-padding)} ${-2*(-radius-padding)}`">
+    <svg class="answer-pie-chart" :viewBox="`${-radius-padding} ${-radius-padding} ${-2*(-radius-padding)} ${-2*(-radius-padding)}`">
         <g><path v-for="({option, value: people, d}) in pie" :key="option" :d="d">
             <title>{{$lang.g.option_people.f({option, people})}}</title>
         </path></g>
@@ -44,7 +44,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-svg {
+svg.answer-pie-chart {
     max-width: 100%;
     height: auto;
     text {

@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="count-down-progress">
         <div class="bg"></div>
         <div class="bar" :style="`right:${100-width}%;`"></div>
         <p>{{left}}s</p>
@@ -61,42 +61,41 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.container {
+div.count-down-progress {
     position: relative;
     width: 100%;
     height: 100%;
-}
-.bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(35deg, #2b1330, #0e1237);
-    border: 2px solid black;
-    opacity: 0.8;
-    border-radius: 4px;
-    box-shadow: 0 0 8px rgba($color: #000000, $alpha: .8);
-}
+    > .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(35deg, #2b1330, #0e1237);
+        border: 2px solid black;
+        opacity: 0.8;
+        border-radius: 4px;
+        box-shadow: 0 0 8px rgba($color: #000000, $alpha: .8);
+    }
 
-.bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    margin: 2px;
-    background: linear-gradient(15deg, #a34bb9, #3b4ec8);
-    border-radius: 4px;
-}
+    > .bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        margin: 2px;
+        background: linear-gradient(15deg, #a34bb9, #3b4ec8);
+        border-radius: 4px;
+    }
 
-p {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-shadow: 0 0 4px #4bff87;
+    > p {
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-shadow: 0 0 4px #4bff87;
+    }
 }
-
 </style>

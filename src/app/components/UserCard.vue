@@ -1,5 +1,5 @@
 <template>
-    <Card class="card" :card="card">
+    <Card class="usercard" :card="card">
         <span class="username">
             <Badge class="badge" :badge="badge" />
             <span class="name" v-if="guest">{{$lang.g.guestname.f(uuid)}}</span>
@@ -62,21 +62,19 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.card {
+.usercard {
     margin: 10px;
-}
-
-.username {
-    text-shadow: 0 0 4px rgba(0,0,0,0.5);
-    text-align: center;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    display: inline-block;
-}
-
-.badge {
-    margin-right: 4px;
+    > span.username {
+        text-shadow: 0 0 4px rgba(0,0,0,0.5);
+        text-align: center;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-block;
+        > .badge {
+            margin-right: 4px;
+        }
+    }
 }
 
 </style>

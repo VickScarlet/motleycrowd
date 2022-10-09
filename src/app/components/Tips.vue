@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss" scoped>
-.tips {
+div.tips {
     position: fixed;
     background: var(--tips-background);
     max-width: 90%;

@@ -1,5 +1,5 @@
 <template>
-    <div :ranking="ranking">
+    <div class="ranking" :ranking="ranking">
         <span>{{ranking}}</span>
     </div>
 </template>
@@ -19,7 +19,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-div {
+div.ranking {
     font-style: italic;
     height: 60px;
     width: 60px;

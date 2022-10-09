@@ -1,5 +1,5 @@
 <template>
-    <span :grade="grade" v-if="display">{{name}}</span>
+    <span class="badge" :grade="grade" v-if="display">{{name}}</span>
 </template>
 
 <script>
@@ -41,14 +41,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
-span[grade="0"] { background: #383838; }
-span[grade="1"] { background: #39c2f9; }
-span[grade="2"] { background: #e24fff; }
-span[grade="3"] { background: #fbb946; }
-span {
+span.badge {
     padding: 0 4px;
     border-radius: 4px;
+    &[grade="0"] { background: #383838; }
+    &[grade="1"] { background: #39c2f9; }
+    &[grade="2"] { background: #e24fff; }
+    &[grade="3"] { background: #fbb946; }
 }
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <svg :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
+    <svg class="answer-line-bar-chart" :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
         <g class="axis axis-x"></g>
         <g class="axis axis-y"></g>
         <g class="bars">
@@ -117,13 +117,13 @@ export default defineComponent({
 
 
 <style lang="scss">
-svg {
+svg.answer-line-bar-chart {
     max-width: 100%;
     height: auto;
     text {
         font-size: 1.3em;
     }
-    g {
+    > g.bars > g {
         &[win="true"] {
             rect { fill: #2563b3; }
         }
@@ -138,17 +138,17 @@ svg {
             }
         }
     }
-    .bars text,
-    .line text {
+    > g.bars text,
+    > g.line text {
         pointer-events: none;
         font-weight: bold;
         fill: white;
         text-anchor: middle;
     }
-    .axis text {
+    > g.axis text {
         fill: white;
     }
-    .line {
+    > g.line {
         path {
             pointer-events: none;
             fill: none;
