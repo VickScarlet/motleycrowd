@@ -1,16 +1,16 @@
 <template>
     <ul class="pages">
-        <li class="first" @click="page=1">⇤</li>
-        <li class="prev" @click="page--">↞</li>
-        <li v-for="p in center" :key="p" @click="page=p"
-            :class="{active: p==page, center: 1}"
-        >{{p}}</li>
-        <li class="next" @click="page++">↠</li>
-        <li class="last" @click="page=total">⇥</li>
+        <li class="first" @click="p=1">⇤</li>
+        <li class="prev" @click="p--">↞</li>
+        <li v-for="_ in center" :key="_" @click="p=_"
+            :class="{active: p==_, center: 1}"
+        >{{_}}</li>
+        <li class="next" @click="p++">↠</li>
+        <li class="last" @click="p=total">⇥</li>
         <li class="input">
             <input type="number" v-model.number="input"/>
         </li>
-        <li class="go" @click="page=input">↲</li>
+        <li class="go" @click="p=input">↲</li>
     </ul>
 </template>
 
@@ -28,20 +28,26 @@ export default defineComponent({
             type: Number,
             default: 5,
         },
+        page: {
+            type: Number,
+            default: 1,
+        },
     },
     data() {
         return {
             _input: 1,
-            _page: 1,
+            _p: 1,
             center: [],
         }
     },
     mounted() {
-        watch(()=>this.total, _=>this.page=this._page);
+        watch(()=>this.total, _=>this.p=this._p);
+        watch(()=>this.page, p=>this.p=p);
+        this.p=this.page;
     },
     computed: {
-        page: {
-            get() { return this._page; },
+        p: {
+            get() { return this._p; },
             set(page) {
                 if(page < 1 || page > this.total)
                     return;
@@ -54,14 +60,14 @@ export default defineComponent({
                 this.center = new Array(end - start + 1)
                     .fill(0).map((_, i) => start + i);
                 this.input = page;
-                if(page === this._page)
+                if(page === this._p)
                     return;
-                this._page = page;
+                this._p = page;
                 this.$emit('update:page', page);
             }
         },
         input: {
-            get() { return this._input || this._page; },
+            get() { return this._input || this._p; },
             set(input) {
                 if(input < 1)
                     input = 1;

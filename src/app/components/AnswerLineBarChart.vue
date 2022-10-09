@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import * as d3 from 'd3';
 
 export default defineComponent({
@@ -36,25 +36,8 @@ export default defineComponent({
         height: { type: Number, default: 400 },
         answers: { type: Array, default: () => [] },
     },
-    data() {
-        return {
-            bars: [],
-            line: '',
-        };
-    },
-    mounted() {
-        watch(()=>this.top, ()=>this.render());
-        watch(()=>this.right, ()=>this.render());
-        watch(()=>this.bottom, ()=>this.render());
-        watch(()=>this.left, ()=>this.render());
-        watch(()=>this.barpadding, ()=>this.render());
-        watch(()=>this.width, ()=>this.render());
-        watch(()=>this.height, ()=>this.render());
-        watch(()=>this.answers, ()=>this.render());
-        this.render();
-    },
-    methods: {
-        render() {
+    computed: {
+        bars() {
             const {width, height, barpadding, answers} = this;
             let t = 0;
             const dataset = answers.map(({name, value})=>{
@@ -90,7 +73,7 @@ export default defineComponent({
                 .attr("font-size", null);
 
             const w = xScale.bandwidth();
-            const bars = dataset
+            return dataset
                 .map(({name: n, value: v, total: t}) => ({
                     n, v, t, w,
                     x: xScale(n),
@@ -102,16 +85,15 @@ export default defineComponent({
                     ty: yScale(0),
                     b: v>=0,
                 }));
-
-            this.line = d3.line()
+        },
+        line() {
+            return d3.line()
                 .x(({cx})=>cx)
                 .y(({cy})=>cy)
                 .curve(d3.curveMonotoneX)
-                (bars);
-
-            this.bars = bars;
+                (this.bars);
         }
-    }
+    },
 });
 </script>
 

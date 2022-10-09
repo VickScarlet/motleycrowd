@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
     props: {
@@ -13,30 +13,20 @@ export default defineComponent({
             default: '',
         },
     },
-    data() {
-        return {
-            display: false,
-            name: '',
-            grade: 0,
-        }
-    },
-    mounted() {
-        watch(()=>this.badge, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            const data = $core.sheet.get('badge', this.badge);
-            if(!data) {
-                this.display = false;
-                return;
-            }
-            this.display = true;
-            const {name, grade} = data;
-            this.name = name;
-            this.grade = grade;
+    computed: {
+        sheet() {
+            return $core.sheet.get('badge', this.badge);
         },
-    }
+        name() {
+            return this.sheet.name;
+        },
+        grade() {
+            return this.sheet.grade;
+        },
+        display() {
+            return !!this.sheet;
+        },
+    },
 });
 </script>
 

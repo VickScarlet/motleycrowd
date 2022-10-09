@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { watch, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
     props: {
@@ -15,22 +15,11 @@ export default defineComponent({
             default: '',
         },
     },
-    data() {
-        return {
-            grade: 0,
-        }
-    },
-    mounted() {
-        watch(()=>this.badge, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            const data = $core.sheet.get('card', this.card);
-            if(!data) return;
-            this.grade = data.grade;
+    computed: {
+        grade() {
+            return $core.sheet.get('card', this.card, 'grade') || 0;
         },
-    }
+    },
 });
 </script>
 

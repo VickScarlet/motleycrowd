@@ -2,7 +2,7 @@
     <div class="header">
         <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
         <div class="pages">
-            <Pages :total="total" @update:page="_=>p=_" ref="pages" />
+            <Pages :total="total" :page="page" @update:page="_=>p=_" />
         </div>
     </div>
     <ul class="history">
@@ -48,7 +48,7 @@ export default defineComponent({
     },
     async activated() {
         this.total = await $core.game.pages();
-        this.$refs.pages.page = this.p = this.page;
+        this.p = this.page;
     },
     deactivate() {},
     methods: {
