@@ -1,5 +1,5 @@
 <template>
-    <div class="container" :iscollapsed="iscollapsed">
+    <div class="settlement-rank" :iscollapsed="iscollapsed">
         <button @click="toggle" collapse v-if="!iscollapsed">{{$lang.g.collapse}}</button>
         <h3>{{$lang.g.rank}}</h3>
         <ul class="rank">
@@ -9,16 +9,15 @@
                 :ranking="ranking"
                 @click="$emit('ch',uuid)"
             >
-                <div>
-                    <div>
-                        <span>{{ranking}}</span>
-                        <span :gt0="total>0">{{total}}</span>
-                    </div>
-                    <div>
+                <ul class="info">
+                    <li class="ranking">
+                        <ScoreRanking :score="total" :ranking="ranking" />
+                    </li>
+                    <li class="card">
                         <UserCard :uuid="uuid" />
-                    </div>
-                </div>
-                <ul>
+                    </li>
+                </ul>
+                <ul class="scores">
                     <li v-for="({value, answer}, idx) in answers"
                         :key="idx"
                         :gt0="value>0"
@@ -39,9 +38,10 @@
 <script>
 import { watch, defineComponent } from 'vue';
 import UserCard from '../components/UserCard.vue';
+import ScoreRanking from '../components/ScoreRanking.vue';
 
 export default defineComponent({
-    components: {UserCard},
+    components: {UserCard, ScoreRanking},
     data() {
         return {
             mine: '',
@@ -73,13 +73,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.container {
+div.settlement-rank {
     position: relative;
     &[iscollapsed="true"] {
         overflow: hidden;
         max-height: 400px;
     }
-    button {
+    > button {
         display: block;
         font-size: 0.8em;
         cursor: pointer;
@@ -113,111 +113,82 @@ export default defineComponent({
             background: linear-gradient(67deg, #291ba6, #6f349f );
         }
     }
-}
 
-ul.rank > li {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    padding: 5px 0;
-    margin-top: 5px;
-    &:first-child {
-        margin-top: 0;
-    }
-    &[ismine="true"] {
-        background: rgba($color: #ffa600, $alpha: 0.2);
-        border-radius: 2px;
-    }
-    > div {
+    > ul.rank > li {
+        width: 100%;
         display: flex;
         flex-direction: row;
-        > div:first-child {
+        padding: 5px 0;
+        margin-top: 5px;
+        &:first-child {
+            margin-top: 0;
+        }
+        &[ismine="true"] {
+            background: rgba($color: #ffa600, $alpha: 0.2);
+            border-radius: 2px;
+        }
+
+        > ul.info {
+            height: auto;
+            width: 360px;
             display: flex;
-            flex-direction: column;
-            font-style: italic;
-            height: 100px;
-            width: 60px;
-            text-align: center;
-            margin: 0 10px;
-            span {
-                display: block;
-                &:first-child {
-                    margin-top: 20px;
-                    height: 36px;
-                    line-height: 36px;
-                    font-size: 1.8em;
-                    text-shadow: 0 0 8px #2563b3;
-                    border: #2563b3 solid 2px;
-                    border-radius: 4px 4px 0 0;
-                }
-                &:last-child {
-                    height: 20px;
-                    line-height: 20px;
-                    font-size: 1em;
-                    background: #2563b3;
-                    border-radius: 0 0 4px 4px;
-                }
-            }
-        }
-        > div:last-child {
-            position: relative;
-            width: 300px;
-            height: 100px;
-        }
-    }
-    &[ranking="1"] {
-        > div > div:first-child {
-            span:first-child {
+            > li {
                 position: relative;
-                text-shadow: 0 0 8px #ffe600;
-                border: #ffe600 solid 2px;
-            }
-            span:last-child {
-                background: #ffe600;
-                color: #2563b3
+                margin: auto;
+                &.ranking {
+                    height: 60px;
+                    width: 60px;
+                }
+                &.card {
+                    height: 100px;
+                    width: 300px;
+                }
             }
         }
-    }
-    ul {
-        padding: 0 10px;
-        display: block;
-        li {
-            position: relative;
-            font-size: 0.8em;
-            display: inline-block;
-            padding: 2px 6px;
-            min-width: 14px;
-            text-align: center;
-            height: 22px;
-            background: #0000006a;
-            margin: 3px;
-            border-radius: 2em;
-            span {
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+
+        > ul.scores {
+            padding: 0 10px;
+            display: block;
+            > li {
+                position: relative;
+                font-size: 0.8em;
+                display: inline-block;
+                padding: 2px 6px;
+                min-width: 14px;
+                text-align: center;
+                height: 22px;
+                background: #0000006a;
+                margin: 3px;
                 border-radius: 2em;
-                z-index: -1;
-            }
+                span {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    border-radius: 2em;
+                    z-index: -1;
+                }
 
-            &[gt0="true"] span {
-                background: #6eff46;
-            }
+                &[gt0="true"] span {
+                    background: #6eff46;
+                }
 
-            &[gt0="false"] span {
-                background: #ff5b5b;
+                &[gt0="false"] span {
+                    background: #ff5b5b;
+                }
             }
         }
     }
+
 }
 
+
 @media screen and (max-width: 600px) {
-    ul.rank > li {
+div.settlement-rank {
+    > ul.rank > li {
         flex-direction: column;
-        ul { margin-top: 10px; }
         margin-top: 10px;
         padding-bottom: 10px;
         padding-right: 5px;
@@ -227,9 +198,10 @@ ul.rank > li {
             padding-bottom: 0;
             border-bottom: none;
         }
-        > div {
-            margin: auto;
-        }
+
+        > ul.info { margin: auto; }
+        > ul.scores { margin-top: 10px; }
     }
+}
 }
 </style>

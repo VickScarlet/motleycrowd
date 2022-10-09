@@ -37,6 +37,7 @@ export const general = {
     submit: '提交',
     submit_as: '您已提交选项【{}】',
 
+    mimestate: '我的状态',
     ranking_as: '排名: {}',
     score_as: '得分: {}',
     no_answer: '未选',
