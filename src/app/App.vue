@@ -27,16 +27,7 @@
         {{$lang.g.online_as.f(online)}}
     </p>
     <Loading v-show="loading" />
-    <Alert v-show="showAlert" @hide="hideAlert">{{alertMessage}}</Alert>
-    <Tips v-show="showTips" @click="hideTips">{{tipsMessage}}</Tips>
-    <div class="fullscreen">
-        <input id="fullscreencb" type="checkbox" @click="fullscreen()" v-model.trim="isfullscreen"/>
-        <label for="fullscreencb">{{
-            isfullscreen?
-                $lang.g.window:
-                $lang.g.fullscreen
-        }}</label>
-    </div>
+    <Tips v-show="showTips" @click="showTips=false">{{tipsMessage}}</Tips>
 </template>
 
 <script>
@@ -54,7 +45,6 @@ import Rank from './screen/Rank.vue';
 import Accessory from './screen/Accessory.vue';
 
 import Loading from './components/Loading.vue';
-import Alert from './components/Alert.vue';
 import Tips from './components/Tips.vue';
 
 export default defineComponent({
@@ -64,19 +54,16 @@ export default defineComponent({
         Room, Question, Settlement, History,
         Achievement, Rank, Accessory,
 
-        Loading, Alert, Tips,
+        Loading, Tips,
     },
     data() {
         return {
             loading: true,
-            showAlert: false,
             page: 'Welcome',
-            alertMessage: '',
             delay: -1,
             online: -1,
             tipsMessage: '',
             showTips: false,
-            isfullscreen: false,
             _data: {},
         }
     },
@@ -122,13 +109,6 @@ export default defineComponent({
             if(this.page == page) return;
             this.page = page;
         },
-        alert(message) {
-            this.alertMessage = message;
-            this.showAlert = true;
-        },
-        hideAlert() {
-            this.showAlert = false;
-        },
         async start() {
             this.tips($lang.t.welcome);
             const [success, notAuto] = await $core.user.autologin();
@@ -139,22 +119,6 @@ export default defineComponent({
             } else if (!notAuto) {
                 this.tips($lang.t.autologin_failed);
             }
-            const showUrlPage = () => {
-                const match = /\/#\/(([^\/\?]+)\/?)(\?+(.*))?/
-                    .exec(globalThis.location.href);
-                if(!match) return;
-                let [,,page,,data,,query] = match;
-                if(!data) data = {};
-                else data = JSON.parse(decodeURIComponent(data));
-                if(query)
-                    query.split('&').forEach(v=>{
-                        const [key, value] = v.split('=');
-                        data[key] = JSON.parse(decodeURIComponent(value))
-                    });
-                this.switch(page, data);
-            }
-            globalThis.onpopstate = showUrlPage;
-            showUrlPage();
             const updateStat = async () => {
                 const {delay, online} =await $core.ping();
                 this.delay = delay;
@@ -163,28 +127,10 @@ export default defineComponent({
             setInterval(updateStat, 10000);
             await updateStat();
         },
-        hideTips() {
-            this.showTips = false;
-        },
         tips(message) {
             this.tipsMessage = message;
             this.showTips = true;
-            setTimeout(() => this.hideTips(), 3000);
-        },
-        fullscreen() {
-            if (!document.webkitIsFullScreen) {
-                const de = document.documentElement;
-                if(de.requestFullscreen) return de.requestFullscreen();
-                if(de.mozRequestFullScreen) return de.mozRequestFullScreen();
-                if(de.webkitRequestFullScreen) return de.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-                if(de.msRequestFullScreen) return de.msRequestFullScreen();
-                return this.tips($lang.t.unsupport_fullscreen);
-            }
-            const d = document;
-            if(d.exitFullscreen) return d.exitFullscreen();
-            if(d.mozCancelFullScreen) return d.mozCancelFullScreen();
-            if(d.webkitCancelFullScreen) return d.webkitCancelFullScreen();
-            if(d.msExitFullscreen) return d.msExitFullscreen();
+            setTimeout(() => this.showTips=false, 3000);
         },
     },
 });
@@ -200,40 +146,6 @@ export default defineComponent({
     position: fixed;
     top: 0.2em;
     left: 0.2em;
-}
-
-.fullscreen {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    display: block;
-    text-align: left;
-    z-index: 99999999;
-    position: fixed;
-    bottom: 0.4em;
-    right: 0.4em;
-    width: 3em;
-    height: 3em;
-    line-height: 3em;
-    text-align: center;
-}
-.fullscreen label {
-    font-size: 0.8em;
-    color: #888;
-    background: var(--button-background);
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 50%;;
-}
-.fullscreen input {
-    display: none;
 }
 
 @keyframes move-forever{

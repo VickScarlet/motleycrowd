@@ -46,12 +46,12 @@
                 v-model.trim="check"
             /></li>
             <li><div class="checkbox">
-                <input id="autologin1"
+                <input id="autologin2"
                     type="checkbox"
                     :placeholder="$lang.g.autologin"
                     v-model.trim="autologin"
                 />
-                <label for="autologin1">{{
+                <label for="autologin2">{{
                     autologin?
                         $lang.g.autologin_open:
                         $lang.g.autologin_close

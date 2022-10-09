@@ -73,6 +73,21 @@ async function initApp(configure) {
     await app.initialize();
 }
 
+function dURL() {
+    const match = /\/#\/(([^\/\?]+)\/?)(\?+(.*))?/
+        .exec(window.location.href);
+    if(!match) return;
+    let [,,page,,data,,query] = match;
+    if(!data) data = {};
+    else data = JSON.parse(decodeURIComponent(data));
+    if(query)
+        query.split('&').forEach(v=>{
+            const [key, value] = v.split('=');
+            data[key] = JSON.parse(decodeURIComponent(value))
+        });
+    $app.switch(page, data);
+}
+
 export async function start(cfgList) {
     window.onerror = (msg,source,line,col,error) =>
         alert(`${msg}at: ${source||"<anonymous>"}:${line}:${col}\n${error}`);
@@ -106,6 +121,8 @@ export async function start(cfgList) {
         console.error(e);
         $app.tips($lang.t.init_err);
     }
+    window.onpopstate = dURL;
+    dURL();
 }
 
 export default start;
