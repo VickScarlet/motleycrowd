@@ -18,6 +18,11 @@ export default class Asset extends IModule {
         return Object.keys(assets.badge || {});
     }
 
+    async money() {
+        const assets = await this.#gets();
+        return assets.money || {};
+    }
+
     async check(assets) {
         const uuid = this.$user.uuid;
         if(!uuid) return false;

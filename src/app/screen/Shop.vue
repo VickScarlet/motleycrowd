@@ -2,7 +2,10 @@
     <div class="shop">
         <div class="header">
             <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-            <div>{{next}}</div>
+            <div>
+                <span>{{next}}</span>
+                <span><AssetMoney :asset="money" /></span>
+            </div>
         </div>
         <ul class="goods">
             <li v-for="good in goods" :key="good.id">
@@ -14,14 +17,16 @@
 
 <script>
 import { defineComponent } from 'vue';
+import AssetMoney from '../components/AssetMoney.vue';
 import Good from './Shop.Good.vue';
 
 export default defineComponent({
-    components: {Good},
+    components: {Good, AssetMoney},
     data() {
         return {
             goods: [],
             expired: '1970-01-01 00:00:00',
+            money: {},
         }
     },
     computed: {
@@ -37,8 +42,10 @@ export default defineComponent({
     methods: {
         async update() {
             const {goods, expired} = await $core.shop.shelves();
+            const {m0, m1} = await $core.asset.money();
             this.goods = goods;
             this.expired = expired;
+            this.money = {money: {m0, m1}};
         },
         async buy(good) {
             $app.loading = true;
@@ -63,6 +70,11 @@ div.shop {
         background: #3d3d3d;
         background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
         > * { margin-top: 10px; }
+        > div > span {
+            vertical-align: middle;
+            display: inline-block;
+            &:first-child { margin-right: 10px; }
+        }
     }
     > ul.goods {
         max-width: 720px;

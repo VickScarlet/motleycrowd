@@ -1,25 +1,17 @@
 <template>
     <div :class="{price: true, 'price-discount': !!original}">
-        <ul class="subprice">
-            <li v-for="money in current" :key="money.type">
-                <Money v-bind="money" />
-            </li>
-        </ul>
+        <AssetMoney class="asset-money" :asset="price"/>
         <span class="discount" v-if="!!off">{{off}}</span>
-        <ul class="subprice" v-if="original">
-            <li v-for="money in ori" :key="money.type">
-                <Money v-bind="money" />
-            </li>
-        </ul>
+        <AssetMoney class="asset-money" :asset="original"  v-if="original"/>
     </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import Money from '../components/Money.vue';
+import AssetMoney from '../components/AssetMoney.vue';
 
 export default defineComponent({
-    components: { Money },
+    components: { AssetMoney },
     props: {
         discount: {
             type: Number,
@@ -39,18 +31,6 @@ export default defineComponent({
         },
     },
     computed: {
-        ori() {
-            const original = this.original;
-            if(!original) return null;
-            return Object.entries(
-                original.money || {}
-            ).map(([type, value])=>({type, value}));
-        },
-        current() {
-            return Object.entries(
-                this.price?.money || {}
-            ).map(([type, value])=>({type, value}));
-        },
         off() {
             const discount = this.discount;
             if(typeof discount !== 'number') return null;
@@ -67,20 +47,9 @@ div.price {
     height: 40px;
     position: relative;
 
-    > ul.subprice {
-        display: flex;
-        >li {
-            display: inline-block;
-            line-height: 100%;
-            margin: 0;
-            margin-left: 4px;
-            &:first-child {
-                margin-left: 0;
-            }
-        }
+    > ul.asset-money {
         position: absolute;
         left: 50%;
-        height: 20px;
         transform: translateX(-50%);
         &:last-child {
             bottom: 50%;
@@ -88,7 +57,7 @@ div.price {
         }
     }
 
-    &.price-discount > ul.subprice {
+    &.price-discount > ul.asset-money {
         transform: translateX(calc(-50% - 10px));
         &:last-child {
             bottom: 0;
