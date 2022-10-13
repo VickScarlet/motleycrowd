@@ -65,15 +65,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 div.settlement {
     >.header {
-        z-index: 10;
-        width: 100%;
-        height: 100px;
-        top: 0;
-        left: 0;
-        position: fixed;
-        margin: auto;
-        background: #3d3d3d;
-        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
         > button {
             position: absolute;
             top: 50%;

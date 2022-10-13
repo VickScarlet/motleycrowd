@@ -1,15 +1,17 @@
 <template>
-    <div class="header">
-        <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-        <div class="pages">
-            <Pages :total="total" :page="page" @update:page="_=>p=_" />
+    <div class="history">
+        <div class="header">
+            <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
+            <div class="pages">
+                <Pages :total="total" :page="page" @update:page="_=>p=_" />
+            </div>
         </div>
+        <ul class="list">
+            <li v-for="data in history" :key="data.id">
+                <Item v-bind="data" @review="review"/>
+            </li>
+        </ul>
     </div>
-    <ul class="history">
-        <li v-for="data in history" :key="data.id">
-            <Item v-bind="data" @review="review"/>
-        </li>
-    </ul>
 </template>
 
 <script>
@@ -66,35 +68,27 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+div.history {
 
-.header {
-    z-index: 10;
-    width: 100%;
-    height: 100px;
-    top: 0;
-    left: 0;
-    position: fixed;
-    margin: auto;
-    background: #3d3d3d;
-    background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
+    >.header {
+        > button {
+            position: absolute;
+            left: 50%;
+            top: 5px;
+            transform: translateX(-50%);
+        }
 
-    > button {
-        position: absolute;
-        left: 50%;
-        top: 5px;
-        transform: translateX(-50%);
+        > div.pages {
+            position: absolute;
+            left: 50%;
+            bottom: 5px;
+            transform: translateX(-50%);
+        }
     }
-
-    > div.pages {
-        position: absolute;
-        left: 50%;
-        bottom: 5px;
-        transform: translateX(-50%);
+    > ul.list {
+        margin: 120px 0;
     }
 }
 
-ul.history {
-    margin: 120px 0;
-}
 
 </style>

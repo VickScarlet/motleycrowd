@@ -56,15 +56,6 @@ div.room {
     max-width: 1200px;
 
     > .header {
-        z-index: 10;
-        width: 100%;
-        height: 100px;
-        top: 0;
-        left: 0;
-        position: fixed;
-        margin: auto;
-        background: #3d3d3d;
-        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
         > * { margin-top: 10px; }
     }
     > ul.goods {
