@@ -266,7 +266,7 @@ export default class Game extends IModule {
                 answers.push({option, value, description});
             }
             if(left)
-                answers.push({option: '', count: left, description: ''});
+                answers.push({option: '', value: left, description: ''});
             return {
                 question, answers,
                 mine: mine.answers[i],
