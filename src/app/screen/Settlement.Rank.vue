@@ -3,7 +3,7 @@
         <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
         <h3>{{$lang.g.rank}}</h3>
         <ul class="rank">
-            <li v-for="({uuid, ranking, answers, total}) in rank"
+            <li v-for="({uuid, ranking, answers, score}) in rank"
                 :key="uuid"
                 :ismine="uuid==mine"
                 :ranking="ranking"
@@ -11,7 +11,7 @@
             >
                 <ul class="info">
                     <li class="ranking">
-                        <ScoreRanking :score="total" :ranking="ranking" />
+                        <ScoreRanking :score="score" :ranking="ranking" />
                     </li>
                     <li class="card">
                         <UserCard :uuid="uuid" />
