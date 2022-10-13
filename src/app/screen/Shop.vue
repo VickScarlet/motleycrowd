@@ -59,6 +59,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 div.shop {
+    margin: 120px 0;
     > .header {
         > * { margin-top: 10px; }
         > div > span {
@@ -68,7 +69,6 @@ div.shop {
         }
     }
     > ul.goods {
-        margin: 120px 0;
         max-width: 720px;
         > li {
             display: inline-block;
