@@ -1,5 +1,5 @@
 <template>
-    <ul class="container">
+    <ul class="welcome">
         <li>
             <h1>{{$lang.g.title}}</h1>
             <h3 class="subtitle">{{$lang.g.subtitle}}</h3>

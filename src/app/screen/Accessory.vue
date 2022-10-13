@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="accessory">
         <div class="header">
-            <div class="cardbox">
+            <div class="item">
                 <UserCard :uuid="uuid" :p_card="card" :p_badge="badge" />
             </div>
             <div class="buttons">
@@ -13,13 +13,15 @@
             <div class="card">
                 <p v-if="cards.length==0">{{$lang.g.no_card}}</p>
                 <ul v-if="cards.length!=0">
-                    <li v-for="id in cards" :key="id" class="cardbox">
+                    <li v-for="id in cards" :key="id">
                         <input type="radio" name="card"
                             :id="`c${id}`"
                             :value="id"
                             v-model="card"
                         /><label :for="`c${id}`">
-                            <UserCard :uuid="uuid" :p_card="id" />
+                            <Card :card="id">
+                                {{$core.sheet.get('card', id, 'name')}}
+                            </Card>
                         </label>
                     </li>
                 </ul>
@@ -27,13 +29,13 @@
             <div class="badge">
                 <p v-if="badges.length==0">{{$lang.g.no_badge}}</p>
                 <ul v-if="badges.length!=0">
-                    <li v-for="id in badges" :key="id" class="cardbox">
+                    <li v-for="id in badges" :key="id">
                         <input type="radio" name="badge"
                             :id="`c${id}`"
                             :value="id"
                             v-model="badge"
                         /><label :for="`c${id}`">
-                            <UserCard :uuid="uuid" :p_badge="id" />
+                            <Badge :badge="id" />
                         </label>
                     </li>
                 </ul>
@@ -45,8 +47,10 @@
 <script>
 import { defineComponent } from 'vue';
 import UserCard from '../components/UserCard.vue';
+import Card from '../components/Card.vue';
+import Badge from '../components/Badge.vue';
 export default defineComponent({
-    components: { UserCard },
+    components: { UserCard, Card, Badge },
     data() {
         return {
             badges: [],
@@ -58,11 +62,25 @@ export default defineComponent({
     },
     async activated() {
         const uuid = $core.user.uuid;
-        const badges = await $core.asset.badges();
-        const cards = await $core.asset.cards();
+        let badges = await $core.asset.badges();
+        let cards = await $core.asset.cards();
+        if($debug) {
+            cards = $core.sheet.keys('card');
+            badges = $core.sheet.keys('badge');
+        }
+
+        badges = badges.sort((a,b)=>
+            $core.sheet.get('badge',b,'grade')-
+            $core.sheet.get('badge',a,'grade')
+        );
+        cards = cards.sort((a,b)=>
+            $core.sheet.get('card',b,'grade')-
+            $core.sheet.get('card',a,'grade')
+        );
+
         this.uuid = uuid;
-        this.badges = badges;
         this.cards = cards;
+        this.badges = badges;
         this.card = '';
         this.badge = '';
     },
@@ -80,137 +98,131 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.header {
-    z-index: 10;
-    width: 100%;
-    height: 100px;
-    top: 0;
-    left: 0;
-    position: fixed;
-    margin: auto;
-    background: #3d3d3d;
-    background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
-
-    > div {
-        height: 100px;
-        display: inline-block;
-    }
-
-    > .buttons {
-        position: relative;
-        width: 150px;
-        margin-right: 10px;
-    }
-
-    button {
-        position: absolute;
-        left: 0;
-        &:first-child { top: 10px; }
-        &:last-child { bottom: 10px; }
+div.accessory {
+    > .header {
+        z-index: 10;
         width: 100%;
-        height: 35px;
-    }
-}
+        height: 100px;
+        top: 0;
+        left: 0;
+        position: fixed;
+        margin: auto;
+        background: #3d3d3d;
+        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
 
-input { display: none; }
+        > * {
+            display: inline-block;
+            height: 100px;
+            vertical-align: top;
+        }
 
-div.list {
-    margin-top: 130px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    > div.card {
-        width: 300px;
-    }
-
-    > div.badge {
-        min-width: 300px;
-        width: 900px;
-        max-height: 100%;
-        > ul {
+        > .buttons {
             position: relative;
-            display: flex;
-            align-items: center;
-            align-content: space-between;
-            justify-content: space-between;
-            height: auto;
-            margin: auto;
-            flex-wrap: wrap;
+            width: 150px;
+            margin-right: 10px;
+            > button {
+                position: absolute;
+                left: 0;
+                &:first-child { top: 10px; }
+                &:last-child { bottom: 10px; }
+                width: 100%;
+                height: 35px;
+            }
         }
-    }
-}
 
-.cardbox {
-    position: relative;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    width: 300px;
-    height: 100px;
-    cursor: pointer;
-    &:hover {
-        background: #ffa20030;
-    }
-
-}
-
-@media all and (max-width: 1200px) {
-    div.list {
-        > div.badge {
-            width: 600px;
-        }
-    }
-}
-
-@media all and (max-width: 900px) {
-    div.list {
-        > div.badge {
+        > .item {
+            margin: 0;
+            padding: 0;
             width: 300px;
-            > ul {
-                display: block;
-            }
+            &:hover { background: #ffa20030; }
         }
     }
-}
 
-@media all and (max-width: 600px) {
-    div.list {
-        flex-direction: column;
-        > div.card {
-            width: 100%;
-        }
-        > div.badge {
-            width: 100%;
-            > ul {
-                display: block;
+    > div.list {
+        margin-top: 130px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        > div {
+            > ul > * {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+                padding: 0;
+                margin: 2px;
+                > input { display: none; }
+                &:hover::after {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    z-index: -1;
+                    top: -2px;
+                    left: -2px;
+                    right: -2px;
+                    bottom: -2px;
+                    border: 1px solid #ffa200;
+                }
+            }
+            &.card {
+                width: 160px;
+                > ul > * {
+                    width: 150px;
+                    height: 40px;
+                }
+            }
+            &.badge {
+                width: calc(100% - 160px);
+                > ul {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    align-content: space-between;
+                    justify-content: space-between;
+                    height: auto;
+                    margin: auto;
+                    flex-wrap: wrap;
+                    > * { padding: 6px; }
+                }
             }
         }
+
+
     }
 }
 
 @media all and (max-width: 460px) {
-    div.list {
-        margin-top: 175px;
-    }
-
-    .current {
+div.accessory {
+    > .header {
         height: 145px;
         > .buttons {
             position: relative;
             width: 280px;
             height: 35px;
             margin-right: 0;
-        }
-
-        button {
-            position: absolute;
-            left: auto;
-            &:first-child { top: 0; left: 0; }
-            &:last-child { right: 0; bottom: 0;}
-            width: 135px;
-            height: 35px;
+            > button {
+                position: absolute;
+                left: auto;
+                &:first-child { top: 0; left: 0; }
+                &:last-child { right: 0; bottom: 0;}
+                width: 135px;
+                height: 35px;
+            }
         }
     }
+
+    > div.list {
+        flex-direction: column;
+        margin-top: 175px;
+
+        > div.card,
+        > div.badge {
+            width: 100%;
+            > ul { display: block; }
+        }
+    }
+
+}
 }
 
 </style>

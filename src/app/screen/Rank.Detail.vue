@@ -1,16 +1,18 @@
 <template>
-    <div class="header">
-        <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-        <h3 v-if="!ranking || ranking<1">{{$lang.g.not_in_rank}}</h3>
-        <h3 v-if="ranking>0">
-            {{$lang.g.my_ranking_as.f(ranking)}} / {{$lang.g.rank_size.f(size)}}
-        </h3>
-    </div>
-    <div class="container">
+    <div class="rank-detail">
+        <div class="header">
+            <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
+            <h3 v-if="!ranking || ranking<1">{{$lang.g.not_in_rank}}</h3>
+            <h3 v-if="ranking>0">
+                {{$lang.g.my_ranking_as.f(ranking)}} / {{$lang.g.rank_size.f(size)}}
+            </h3>
+        </div>
         <ul>
             <li v-for="{uuid, ranking} of users" :key="uuid">
-                <div><Ranking :ranking="ranking" /></div>
-                <div><UserCard :uuid="uuid" /></div>
+                <div>
+                    <div><Ranking :ranking="ranking" /></div>
+                    <div><UserCard :uuid="uuid" /></div>
+                </div>
             </li>
         </ul>
     </div>
@@ -54,85 +56,67 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.header {
-    z-index: 10;
+
+div.rank-detail {
     width: 100%;
-    height: 100px;
-    top: 0;
-    left: 0;
-    position: fixed;
-    margin: auto;
-    background: #3d3d3d;
-    background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
-    > button {
-        position: absolute;
-        top: 4px;
-        left: 50%;
-        transform: translateX(-50%);
+    max-width: 1160px;
+    margin: 120px 0;
+    > .header {
+        z-index: 10;
+        width: 100%;
+        height: 100px;
+        top: 0;
+        left: 0;
+        position: fixed;
+        margin: auto;
+        background: #3d3d3d;
+        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
+        > button {
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        > h3 {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.3em;
+            text-shadow: #3d3d3d 0 0 10px;
+        }
     }
-
-    > h3 {
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        bottom: 4px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 1.3em;
-        text-shadow: #3d3d3d 0 0 10px;
+    > ul {
+        width: 100%;
+        max-width: 1160px;
     }
-}
-
-.container {
-    width: auto;
-    margin: 4em 20px;
-}
-
-ul {
-    position: relative;
-    display: flex;
-    align-items: center;
-    align-content: space-between;
-    justify-content: space-between;
-    height: auto;
-    width: auto;
-    flex-wrap: wrap;
-
-    > li {
+    > ul > li {
         position: relative;
-        display: flex;
+        display: inline-block;
+        width: 360px;
         text-align: center;
         margin: 0 10px;
         padding: 0;
         height: 100px;
         > div {
-            position: relative;
+            display: flex;
             height: 100%;
-
-            &:first-child {
+            > div:first-child {
+                margin-top: 20px;
                 width: 60px;
-                display: flex;
-                align-items: center;
+                height:60px;
             }
-
-            &:last-child {
+            > div:last-child {
                 width: 300px;
+                height: 100%;
             }
         }
     }
 }
 
-@media all and (min-width: 400px ) {
-    ul { width: 360px; }
-}
-
-@media all and (min-width: 800px ) {
-    ul { width: 760px; }
-}
-
-@media all and (min-width: 1200px ) {
-    ul { width: 1160px; }
-}
 
 
 </style>

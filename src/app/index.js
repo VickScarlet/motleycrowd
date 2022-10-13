@@ -20,7 +20,43 @@ export default class App {
         app.config.globalProperties.$moment = $moment;
         app.config.globalProperties.$debug = $debug;
         this.#app = app;
-        this.#proxy = app.mount('#app');
+        const proxy = app.mount('#app');
+        this.#proxy = proxy;
+
+        $on('network.error', ()=>{
+            proxy.loading = false;
+            proxy.tips($lang.t.net_error);
+        });
+        $on('network.kick', ()=>{
+            proxy.loading = false;
+            proxy.tips($lang.t.net_kick);
+        });
+        $on('network.resume', async isAuth=>{
+            proxy.loading = false;
+            if(isAuth) {
+                proxy.tips($lang.t.net_resume);
+                return;
+            }
+            proxy.tips($lang.t.net_resume_filed);
+            proxy.switch('Welcome');
+            const [success] = await $core.user.autologin();
+            if (success) {
+                proxy.tips($lang.t.net_resume_auto);
+                if ($core.game.isInRoom) return;
+                proxy.switch('Index');
+            }
+        });
+        $on('game.start', ()=>proxy.switch('Question'));
+        $on('game.question', ()=>proxy.switch('Question'));
+        $on('game.resume.room', ()=>proxy.switch('Room'));
+        $on('game.resume.question', ()=>proxy.switch('Question'));
+        $on('game.settlement', data=>proxy.switch('Settlement', {data}));
+
+        $on('command.error', code=>{
+            proxy.loading = false;
+            const message = $lang.e[code];
+            proxy.tips(message);
+        });
     }
 
     async start() {

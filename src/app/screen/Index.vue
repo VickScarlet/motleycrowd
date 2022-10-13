@@ -19,6 +19,9 @@
         <li v-if="!$core.user.isguest">
             <button type="button" @click="$app.switch('Accessory')">{{$lang.g.accessory}}</button>
         </li>
+        <li v-if="!$core.user.isguest">
+            <button type="button" @click="$app.switch('Shop')">{{$lang.g.shop}}</button>
+        </li>
         <li><button type="button" @click="logout">{{$lang.g.logout}}</button></li>
     </ul>
 </template>

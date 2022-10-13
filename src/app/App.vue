@@ -43,6 +43,7 @@ import History from './screen/History.vue';
 import Achievement from './screen/Achievement.vue';
 import Rank from './screen/Rank.vue';
 import Accessory from './screen/Accessory.vue';
+import Shop from './screen/Shop.vue';
 
 import Loading from './components/Loading.vue';
 import Tips from './components/Tips.vue';
@@ -52,7 +53,7 @@ export default defineComponent({
     components: {
         Welcome, Authentication, Index,
         Room, Question, Settlement, History,
-        Achievement, Rank, Accessory,
+        Achievement, Rank, Accessory, Shop,
 
         Loading, Tips,
     },
@@ -66,42 +67,6 @@ export default defineComponent({
             showTips: false,
             _data: {},
         }
-    },
-    mounted() {
-        $on('network.error', ()=>{
-            this.loading = false;
-            this.tips($lang.t.net_error);
-        });
-        $on('network.kick', ()=>{
-            this.loading = false;
-            this.tips($lang.t.net_kick);
-        });
-        $on('network.resume', async isAuth=>{
-            this.loading = false;
-            if(isAuth) {
-                this.tips($lang.t.net_resume);
-                return;
-            }
-            this.tips($lang.t.net_resume_filed);
-            this.switch('Welcome');
-            const [success] = await $core.user.autologin();
-            if (success) {
-                this.tips($lang.t.net_resume_uto);
-                if ($core.game.isInRoom) return;
-                this.switch('Index');
-            }
-        });
-        $on('game.start', ()=>this.switch('Question'));
-        $on('game.question', ()=>this.switch('Question'));
-        $on('game.resume.room', ()=>this.switch('Room'));
-        $on('game.resume.question', ()=>this.switch('Question'));
-        $on('game.settlement', data=>this.switch('Settlement', {data}));
-
-        $on('command.error', code=>{
-            this.loading = false;
-            const message = $lang.e[code];
-            this.tips(message);
-        });
     },
     methods: {
         switch(page, data) {

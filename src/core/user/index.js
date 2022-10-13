@@ -193,7 +193,7 @@ export default class User extends IModule {
             if(!accessory[key])
                 delete accessory[key];
 
-        if(Object.keys(accessory).length <= 1)
+        if(Object.keys(accessory).length <= 0)
             return false;
 
         const {success} = await this.#command('accessory', accessory);

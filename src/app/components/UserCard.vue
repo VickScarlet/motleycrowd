@@ -1,11 +1,13 @@
 <template>
-    <Card class="usercard" :card="card">
-        <span class="username">
-            <Badge class="badge" :badge="badge" />
-            <span class="name" v-if="guest">{{$lang.g.guestname.f(uuid)}}</span>
-            <span class="name" v-else>{{username}}</span>
-        </span>
-    </Card>
+    <div class="usercard">
+        <Card :card="card">
+            <span class="username">
+                <Badge class="badge" :badge="badge" />
+                <span class="name" v-if="guest">{{$lang.g.guestname.f(uuid)}}</span>
+                <span class="name" v-else>{{username}}</span>
+            </span>
+        </Card>
+    </div>
 </template>
 
 <script>
@@ -64,16 +66,14 @@ export default defineComponent({
 
 .usercard {
     margin: 10px;
-    > span.username {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    span.username {
         text-shadow: 0 0 4px rgba(0,0,0,0.5);
         text-align: center;
         position: relative;
-        top: 50%;
-        transform: translateY(-50%);
         display: inline-block;
-        > .badge {
-            margin-right: 4px;
-        }
+        > .badge { margin-right: 4px; }
     }
 }
 

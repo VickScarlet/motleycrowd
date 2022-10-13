@@ -12,9 +12,12 @@ export default class Asset extends Base {
         const data = await this.get(uuid);
         if(!data?.assets) return false;
         const owned = $utils.flat(data.assets, 2);
-        const flated = $utils.flat({assets}, 2);
+        const flated = $utils.flat(assets, 2);
         for(const key in flated) {
-            if(owned[key] < flated[key]) return false;
+            const o = Number(owned[key]) || 0;
+            const v = Number(flated[key]) || 0;
+            if(o >= v) continue;
+            return false;
         }
         return true;
     }

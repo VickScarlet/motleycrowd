@@ -1,7 +1,9 @@
 <template>
-    <div class="container">
-        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
-        <p>{{users.length}}/{{limit}}</p>
+    <div class="room">
+        <div class="header">
+            <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
+            <p>{{users.length}}/{{limit}}</p>
+        </div>
         <ul class="userlist">
             <li v-for="uuid of users" :key="uuid">
                 <UserCard :uuid=uuid />
@@ -46,24 +48,34 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.container {
+div.room {
     display: block;
     position: relative;
     width: 100%;
     min-width: 300px;
     max-width: 1200px;
-}
 
-.userlist {
-    position: relative;
-    display: flex;
-    align-items: center;
-    align-content: space-between;
-    justify-content: space-between;
-    height: auto;
-    margin: auto;
-    flex-wrap: wrap;
-    > li {
+    > .header {
+        z-index: 10;
+        width: 100%;
+        height: 100px;
+        top: 0;
+        left: 0;
+        position: fixed;
+        margin: auto;
+        background: #3d3d3d;
+        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
+        > * { margin-top: 10px; }
+    }
+    > ul.goods {
+        max-width: 720px;
+        > li {
+            display: inline-block;
+        }
+    }
+
+    > ul.userlist > li {
+        display: inline-block;
         position: relative;
         margin: 0;
         padding: 0;
@@ -71,30 +83,4 @@ export default defineComponent({
         height: 100px;
     }
 }
-
-@media all and (min-width: 300px) {
-    .container {
-        width: 300px;
-    }
-}
-
-@media all and (min-width: 600px) {
-    .container {
-        width: 600px;
-    }
-}
-
-@media all and (min-width: 900px) {
-    .container {
-        width: 900px;
-    }
-}
-
-@media all and (min-width: 1200px) {
-    .container {
-        width: 1200px;
-    }
-}
-
-
 </style>

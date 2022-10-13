@@ -1,18 +1,20 @@
 <template>
-    <div class="header">
-        <button @click="ok?ok():$app.switch('Index')">{{$lang.g.ok}}</button>
+    <div class="settlement">
+        <div class="header">
+            <button @click="ok?ok():$app.switch('Index')">{{$lang.g.ok}}</button>
+        </div>
+        <ul class="content">
+            <li class="card">
+                <Mine v-bind="mine" />
+            </li>
+            <li class="card">
+                <Rank v-bind="rank" @ch="u=>$debug ?update($core.game.format(data, u)) :1" />
+            </li>
+            <li v-for="[idx, data] in questions" :key="idx" class="card">
+                <Question v-bind="data" />
+            </li>
+        </ul>
     </div>
-    <ul class="settlement">
-        <li class="card">
-            <Mine v-bind="mine" />
-        </li>
-        <li class="card">
-            <Rank v-bind="rank" @ch="u=>$debug ?update($core.game.format(data, u)) :1" />
-        </li>
-        <li v-for="[idx, data] in questions" :key="idx" class="card">
-            <Question v-bind="data" />
-        </li>
-    </ul>
 </template>
 
 <script>
@@ -61,37 +63,39 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.header {
-    z-index: 10;
-    width: 100%;
-    height: 100px;
-    top: 0;
-    left: 0;
-    position: fixed;
-    margin: auto;
-    background: #3d3d3d;
-    background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
-    > button {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+div.settlement {
+    >.header {
+        z-index: 10;
+        width: 100%;
+        height: 100px;
+        top: 0;
+        left: 0;
+        position: fixed;
+        margin: auto;
+        background: #3d3d3d;
+        background: linear-gradient(to bottom, #3d3d3d, #3d3d3d00);
+        > button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
-}
-ul.settlement {
-    margin: 120px 10px;
-    > .card {
-        max-width: 960px;
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        background: #170c33;
-        background: #170c334d;
-        background: linear-gradient(35deg, #170c334d, #22412f4f);
-        margin: 0;
-        margin-top: 1em;
-        &:first-child {
-            margin-top: 0;
+    >ul.content {
+        margin: 120px 10px;
+        > .card {
+            max-width: 960px;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background: #170c33;
+            background: #170c334d;
+            background: linear-gradient(35deg, #170c334d, #22412f4f);
+            margin: 0;
+            margin-top: 1em;
+            &:first-child {
+                margin-top: 0;
+            }
         }
     }
 }

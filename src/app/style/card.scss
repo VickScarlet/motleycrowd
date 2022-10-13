@@ -1,0 +1,432 @@
+@mixin mabs {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 5px;
+}
+
+@mixin mfull {
+    @include mabs;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+};
+
+@mixin mcenter($w, $h) {
+    @include mabs;
+    top: 50%;
+    left: 50%;
+    width: $w;
+    height: $h;
+    transform: translate(-50%, -50%);
+};
+
+@keyframes anime-cr360 {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.v-card {
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background: #424242;
+    background: linear-gradient(67deg, #424242, #6e6e6e);
+    text-shadow: #000 1px 1px 2px;
+    span { text-shadow: #000 1px 1px 2px; }
+
+    &[card="201"] {
+        background: #2563b3;
+        background: linear-gradient(67deg, #2563b3, #4c8adb);
+    }
+    &[card="202"] {
+        background: #8a30ab;
+        background: linear-gradient(67deg, #8a30ab, #c66de6);
+    }
+    &[card="203"] {
+        background: #e19b22;
+        background: linear-gradient(67deg, #e19b22, #e1b467);
+    }
+    &[card="204"] {
+        background: #737373;
+        background: linear-gradient(67deg, #73737349, #73737300);
+    }
+
+    // 3D眼镜
+    &[card="701"] {
+        background: repeating-linear-gradient(90deg,#0c2752 0 33%, #ffffff 0 67%,#bb2d29 0 100%);
+    }
+
+    // 加载中
+    &[card="702"] {
+        &::before {
+            @include mfull;
+            z-index: 6;
+            background: #000000;
+            opacity: 0.5;
+        }
+
+        &::after {
+            @include mcenter(22px, 22px);
+            padding: 2px;
+            line-height: 22px;
+            content: '99%';
+            color: #ffffffb0;
+            font-family: consolas, 'Courier New', Courier, monospace;
+            font-size: 12px;
+            z-index: 6;
+            border-radius: 100%;
+            background: #00000000;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: anime-702 2s infinite ease-in-out;
+        }
+
+        @keyframes anime-702 {
+            0%, 100% {
+                border: 2px solid #ffffff60;
+                box-shadow: 0 0 4px 1px #ffffff30;
+            }
+            15%, 85% {
+                border: 2px solid #ffffff80;
+                box-shadow: 0 0 4px 1px #ffffff60;
+            }
+            50% {
+                border: 2px solid #ffffffff;
+                box-shadow: 0 0 4px 1px #ffffffff;
+            }
+        }
+    }
+
+    // 野生的
+    &[card="703"] {
+        background: none;
+        &::before {
+            @include mfull;
+            background: repeating-linear-gradient(
+                0deg,
+                #fff 0 calc(50% - 2px),
+                #000 0 calc(50% + 2px),
+                #f00 0 100%
+            );
+        }
+        &::after {
+            @include mcenter(18px, 18px);
+            background: white;
+            border-radius: 100%;
+            border: 4px solid #000000;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    // 河里
+    &[card="704"] {
+        background: none;
+        &::before {
+            @include mfull;
+            background: repeating-linear-gradient(10deg,
+                #80cae7 0 2px,
+                #6194e7 0 8px,
+                #00a6ff 0 12px
+            );
+        }
+        &::after {
+            @include mfull;
+            background: repeating-linear-gradient(-30deg,
+                #dde3ed 0 2px,
+                #00b7ff 0 3px,
+                #00a6ff 0 5px
+            );
+            opacity: 0.3;
+        }
+    }
+
+    // 太阳
+    &[card="705"] {
+        background: radial-gradient(
+            circle at 90px 30%,
+            #e1de2c70 0 2px,
+            #abe12c60 4px,
+            #2cb1e130 8px 20px,
+            #ffffff00 100%
+        );
+        &::before {
+            @include mfull;
+            background: radial-gradient(
+                circle at 35px 50%,
+                #e1ec7d 0 10px,
+                #e1b12c 20px,
+                #e1b12c30 30px 40px,
+                #ffffff00 100%
+            );
+        }
+        &::after {
+            @include mfull;
+            background: radial-gradient(
+                circle at 100px 25%,
+                #2cbae180 2px,
+                #2cb1e130 4px 8px,
+                #ffffff00 100%
+            );
+        }
+    }
+
+    // 月亮
+    &[card="706"] {
+        background: radial-gradient(
+            circle at 35px 50%,
+            #9fb9c2 0 10px,
+            #7faad8 20px,
+            #11171d 22px 40px,
+            #000000 100%
+        );
+        &::before {
+            @include mfull;
+            background: radial-gradient(
+                circle at 25px calc(50% - 10px),
+                #11171d 0 10px,
+                #11171d 20px 22px,
+                #00000000 24px 100%
+            );
+        }
+    }
+
+    // 脉冲
+    &[card="707"] {
+        background: #000000;
+        &::before {
+            @include mfull;
+            z-index: 1;
+            background: radial-gradient(
+                circle at 35px 50%,
+                #ebfaff 0 4px,
+                #b7d8fb 10px,
+                #b7d8fb00 12px 40px,
+                #1e292f 100%
+            );
+        }
+
+        &::after{
+            @include mfull;
+            background: radial-gradient(
+                circle at 35px 50%,
+                #b7d8fb 12px,
+                #b7d8fb30 18px 40px,
+                #ffffff00 100%
+            );
+            filter: brightness(3);
+            animation: anime-707 ease-out 4s infinite;
+        }
+
+        @keyframes anime-707 {
+            from { opacity: 0; }
+            92% { opacity: 0; }
+            93% { opacity: 0.6; }
+            94% { opacity: 0.2; }
+            96% { opacity: 1; }
+            to { opacity: 0; }
+        }
+    }
+
+    // 涟漪
+    &[card="708"] {
+        background: #63aad6;
+        background: linear-gradient(to right, #64a4cd 60%, #38cada);
+        &::before {
+            @include mfull;
+            background: radial-gradient(
+                circle at -15px 25%,
+                #cfddff30 12px,
+                #cfddff00 18px 26px,
+                #cfddff50 40px,
+                #cfddff00 58px 49%,
+                #cfddff9f calc(50% + 6px),
+                #cfddff00 calc(50% + 12px) 75%,
+                #cfddff90 80%,
+                #ffffff00 calc(80% + 8px),
+                #cfddff90 calc(80% + 16px),
+                #ffffff00 calc(80% + 20px)
+            );
+        }
+        &::after {
+            @include mfull;
+            background: radial-gradient(
+                circle at 10% 110%,
+                #cfddff9f 12px,
+                #cfddff00 18px 34px,
+                #cfddffc0 40px,
+                #cfddff00 48px 49%,
+                #cfddff calc(50% + 6px),
+                #cfddff00 calc(50% + 12px) 75%,
+                #cfddf660 80%,
+                #ffffff00 calc(80% + 8px),
+                #cfddff90 calc(80% + 16px),
+                #ffffff00 calc(80% + 20px)
+            );
+            opacity: 0.8;
+        }
+
+    }
+
+    // 大鸟转转转
+    &[card="709"] {
+        background: #00000000;
+        &::before,
+        &::after {
+            @include mfull;
+            content: '';
+            box-shadow: inset 0 0 0 2px #ffff00;
+            animation: anime-709 4s linear infinite;
+        }
+
+        &::before {
+            animation-delay: -2s;
+        }
+
+        @keyframes anime-709 {
+            0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 2px, 0 2px); }
+            25% { clip-path: polygon(0 0, 2px 0, 2px 100%, 0 100%); }
+            50% { clip-path: polygon(0 calc(100% - 2px), 100% calc(100% - 2px), 100% 100%, 0 100%); }
+            75% { clip-path: polygon(calc(100% - 2px) 0, 100% 0, 100% 100%, calc(100% - 2px) 100%); }
+        }
+    }
+
+    // 太极-黑
+    &[card="710"] {
+        background: linear-gradient(to right, #ffffff 30px, #000000 31px 100%);
+        &::before {
+            @include mcenter(50%, 50%);
+
+            aspect-ratio: 1/1;
+            width: auto;
+            left: 30px;
+            top: 25%;
+            background: #ffffff;
+            background: radial-gradient(
+                circle at 50% 50%,
+                #000000 25%,
+                #ffffff calc(25% + 1px),
+            );
+            position: absolute;
+            border-radius: 100%;
+        }
+        &::after {
+            @include mcenter(50%, 50%);
+            aspect-ratio: 1/1;
+            width: auto;
+            left: 30px;
+            top: 75%;
+            background: #000000;
+            background: radial-gradient(
+                circle at 50% 50%,
+                #ffffff 25%,
+                #000000 calc(25% + 1px),
+            );
+            position: absolute;
+            border-radius: 100%;
+        }
+    }
+
+    // 太极-白
+    &[card="711"] {
+        background: linear-gradient(to left, #000000 30px, #ffffff 31px 100%);
+        &::before {
+            @include mcenter(50%, 50%);
+            aspect-ratio: 1/1;
+            width: auto;
+            left: auto;
+            right: 30px;
+            top: 25%;
+            transform: translate(50%, -50%);
+            background: #ffffff;
+            background: radial-gradient(
+                circle at 50% 50%,
+                #000000 25%,
+                #ffffff calc(25% + 1px),
+            );
+            position: absolute;
+            border-radius: 100%;
+        }
+        &::after {
+            @include mcenter(50%, 50%);
+            aspect-ratio: 1/1;
+            width: auto;
+            left: auto;
+            right: 30px;
+            top: 75%;
+            transform: translate(50%, -50%);
+            background: #000000;
+            background: radial-gradient(
+                circle at 50% 50%,
+                #ffffff 25%,
+                #000000 calc(25% + 1px),
+            );
+            position: absolute;
+            border-radius: 100%;
+        }
+    }
+
+    // 在这理发店
+    &[card="712"] {
+        background: repeating-linear-gradient(
+            45deg,
+            #e6e6d5 0 5px,
+            #d6695e 0 20px,
+            #e6e6d5 0 25px,
+            #3d5694 0 40px
+        );
+        background-size: 566px 566px;
+        animation: anime-901 5s infinite linear;
+        @keyframes anime-901 {
+            from { background-position: 0 282.8427px; }
+            to { background-position: 0 0; }
+        }
+    }
+
+    // 括号
+    &[card="713"] {
+        border-radius: 1000px;
+        background: #00000000;
+        &::before {
+            @include mfull;
+            border-radius: 1000px;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+            background: radial-gradient(
+                circle at 50% 50%,
+                #e1b12c30 30px 40px,
+                #ffffff00 100%
+            );
+        }
+    }
+
+    // 日环食
+    &[card="714"] {
+        background: radial-gradient(
+            circle at 35px 50%,
+            #00000000 28px,
+            #e1b12c 29px,
+            #e1b12c30 30px 40px,
+            #ffffff00 100%
+        );
+    }
+
+    // 带点绿
+    &[card="715"] {
+        background: #00000000;
+        &::before {
+            @include mfull;
+            border-top: 6px solid #00ff00;
+            background: #00ff0010;
+        }
+    }
+
+    // 刚出来的
+    &[card="716"] {
+        background: #00000000;
+        &::before {
+            @include mfull;
+            border-top: 6px solid #000000;
+            background: repeating-linear-gradient(to right, #868686 0 6px, #000000 0 12px);
+        }
+    }
+}

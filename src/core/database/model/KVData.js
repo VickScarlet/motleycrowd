@@ -11,11 +11,12 @@ export default class KVData extends Base {
         }
     }
 
-    get(key) { return this.#cache[key]; }
+    get(key) { return $utils.clone(this.#cache[key]); }
 
     async set(key, value) {
         if(!key) return false;
         key = ''+key;
+        value = $utils.clone(value);
         this.#cache[key] = value;
         return this.$put({key, value});
     }

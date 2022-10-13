@@ -60,7 +60,8 @@ export default class Lang {
         this.#t = tips;
         this.#e = error;
         this.#lang = lang;
-        $moment.locale(lang, moment);
+        $moment.updateLocale(lang, moment);
+        $moment.locale(lang);
     }
 
     async switch(lang) {

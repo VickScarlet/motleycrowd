@@ -11,7 +11,7 @@ export default class Rank extends IModule {
     }
 
     #syncUUID;
-    initialize() {
+    async initialize() {
         const next = new Date();
         next.setSeconds(0);
         next.setMilliseconds(0);

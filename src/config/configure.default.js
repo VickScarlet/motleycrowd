@@ -19,10 +19,15 @@ export function core() { return {
         dbName: 'motleycrowd',
         version: 12,
     },
-    action: {},
     game: {
         page: 8,
-    }
+    },
+    achievement: {},
+    asset: {},
+    shop: {},
+    question: {},
+    user: {},
+    rank: {},
 } }
 
 export function i18n() { return {

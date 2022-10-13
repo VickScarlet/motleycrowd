@@ -1,6 +1,6 @@
 <template>
-    <div class="card" :card="card" :grade="grade">
-        <slot></slot>
+    <div class="v-card" :card="card" :grade="grade">
+        <div><slot></slot></div>
     </div>
 </template>
 
@@ -24,36 +24,22 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-div.card {
+div.v-card {
     display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-
-    &[card=""] {
-        background: #424242;
-        background: linear-gradient(67deg, #424242, #6e6e6e);
-    }
-    &[card="201"] {
-        background: #2563b3;
-        background: linear-gradient(67deg, #2563b3, #4c8adb);
-    }
-    &[card="202"] {
-        background: #8a30ab;
-        background: linear-gradient(67deg, #8a30ab, #c66de6);
-    }
-    &[card="203"] {
-        background: #e19b22;
-        background: linear-gradient(67deg, #e19b22, #e1b467);
-    }
-    &[card="204"] {
-        background: #737373;
-        background: linear-gradient(67deg, #73737349, #73737300);
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    > div {
+        position: relative;
+        display: block;
+        padding: 10px;
+        top: 50%;
+        left: 0;
+        width: calc(100% - 20px);
+        transform: translateY(-50%);
+        z-index: 5;
     }
 }
 

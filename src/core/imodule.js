@@ -33,6 +33,10 @@ export default class IModule {
     /** @readonly */
     get $achiv() { return this.#core.achievement; }
     /** @readonly */
+    get $asset() { return this.#core.asset; }
+    /** @readonly */
+    get $shop() { return this.#core.shop; }
+    /** @readonly */
     get $err() { return this.#core.err; }
 
     async initialize() {

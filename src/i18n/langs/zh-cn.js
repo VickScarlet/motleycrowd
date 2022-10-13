@@ -7,6 +7,7 @@ export const general = {
     back: '返回',
     ok: '确定',
     review: '复盘',
+    buy: '购买',
 
     delay_as: '当前延迟: {}ms',
     online_as: '在线人数: {}',
@@ -20,6 +21,7 @@ export const general = {
     achievement: '成就',
     accessory: '饰品',
     history: '历史对局',
+    shop: '商店',
 
     username: '用户名',
     password: '密码',
@@ -71,6 +73,17 @@ export const general = {
     private_100: '百人好友',
     pair_10: '十人排位',
     pair_100: '百人排位',
+
+    next_restocking: '下次补货在{}',
+    good_card: '背景',
+    good_badge: '头衔',
+    asset_not_enough: '钱不够',
+    already_owned: '已拥有',
+
+    grade_0: '普通',
+    grade_1: '稀有',
+    grade_2: '罕见',
+    grade_3: '传说',
 };
 
 export const tips = {
@@ -85,7 +98,6 @@ export const tips = {
     net_resume: '重连成功',
     net_resume_failed: '掉线太久，已经被踢了, 请尝试重新登录',
     net_resume_auto: '自动重新登录成功',
-
 };
 
 export const error = {
