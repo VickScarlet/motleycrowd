@@ -68,6 +68,7 @@ div.shop {
         }
     }
     > ul.goods {
+        margin: 120px 0;
         max-width: 720px;
         > li {
             display: inline-block;
