@@ -20,6 +20,7 @@ export default class Session extends IModule {
     #AUTH = 8;
     #LOGOUT = 9;
 
+    #finger;
     #protocol;
     #host;
     #port;
@@ -37,10 +38,11 @@ export default class Session extends IModule {
     get online() { return this.#online; }
     get delay() { return this.#delay; }
     async initialize() {
-        const {protocol='ws', host, port} = this.$configure;
+        const {protocol='ws', host, port, finger} = this.$configure;
         this.#protocol = protocol;
         this.#host = host;
         this.#port = port;
+        this.#finger = finger;
     }
 
     async start() {
@@ -92,7 +94,7 @@ export default class Session extends IModule {
     }
 
     async #connect() {
-        return this.#ws([this.#CONNECT])
+        return this.#ws([this.#CONNECT, this.#finger])
             .then(({data: [, info, sid]}) => {
                 console.debug("[Session|conn] [sid:%s] info:", sid, info);
                 this.#sid = sid;
@@ -104,7 +106,7 @@ export default class Session extends IModule {
     async #resume() {
         if(!this.#sid) return this.#connect();
         console.debug('[Session|resume] trying [sid:%s]', this.#sid);
-        return this.#ws([this.#RESUME, this.#sid, this.$user.uuid])
+        return this.#ws([this.#RESUME, this.#sid, this.$user.uuid, this.#finger])
             .then(({data: [, success, sid]})=>{
                 console.debug("[Session|resume] resumed [sid:%s] [success:%s]", sid, success);
                 this.#sid = sid;

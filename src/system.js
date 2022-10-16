@@ -8,6 +8,8 @@ async function initGlobal() {
     window.$.normalize =
     window.$norml =
     window.$normalize = await import('./functions/normalize.js');
+    window.$.hash =
+    window.$hash = await import('./functions/hash.js');
 
     window.$.event =
     window.$event = await import('./event/index.js');

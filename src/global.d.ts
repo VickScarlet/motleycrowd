@@ -1,6 +1,7 @@
 import * as iutils from './functions/index.js';
 import * as ilogic from './functions/logic.js';
 import * as inormalize from './functions/normalize.js';
+import * as hash from './functions/hash.js';
 import {on, off, emit} from './event/index.js';
 import iLog4js from 'log4js';
 import Lang from './i18n/index.js';
@@ -16,6 +17,7 @@ declare global {
     let $logic = ilogic;
     let $normalize = inormalize;
     let $norml = inormalize;
+    let $hash = hash;
     let $on = on;
     let $off = off;
     let $emit = emit;
@@ -36,6 +38,7 @@ declare global {
         utils: $utils,
         logic: $logic,
         normalize: $normalize,
+        hash: $hash,
         event: $event,
         Log4js: $Log4js,
         logger: $logger,

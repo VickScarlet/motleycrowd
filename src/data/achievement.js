@@ -888,14 +888,14 @@ export default {
     "130": {
         "id": 130,
         "name": "积少成多",
-        "description": "累计获得1000金币",
+        "description": "累计获得1000银币",
         "grade": 0,
         "hide": 0,
         "category": "record",
         "watch": "$record",
         "condition": {
             "values": {
-                "count": "record.c.m0"
+                "count": "record.c.m1"
             },
             "checks": [
                 "$ge",
@@ -907,14 +907,14 @@ export default {
     "131": {
         "id": 131,
         "name": "月入过万",
-        "description": "累计获得10000金币",
+        "description": "累计获得10000银币",
         "grade": 1,
         "hide": 0,
         "category": "record",
         "watch": "$record",
         "condition": {
             "values": {
-                "count": "record.c.m0"
+                "count": "record.c.m1"
             },
             "checks": [
                 "$ge",
@@ -926,7 +926,7 @@ export default {
     "132": {
         "id": 132,
         "name": "土块",
-        "description": "累计获得100000金币",
+        "description": "累计获得100000银币",
         "grade": 2,
         "hide": 0,
         "reward": {
@@ -938,7 +938,7 @@ export default {
         "watch": "$record",
         "condition": {
             "values": {
-                "count": "record.c.m0"
+                "count": "record.c.m1"
             },
             "checks": [
                 "$ge",
@@ -1030,8 +1030,8 @@ export default {
     },
     "137": {
         "id": 137,
-        "name": "三原色",
-        "description": "拥有3个名片背景",
+        "name": "身份证明",
+        "description": "拥有1个名片背景",
         "grade": 0,
         "hide": 0,
         "category": "asset",
@@ -1049,8 +1049,8 @@ export default {
     },
     "138": {
         "id": 138,
-        "name": "五彩斑斓的黑",
-        "description": "拥有10个名片背景",
+        "name": "三原色",
+        "description": "拥有3个名片背景",
         "grade": 1,
         "hide": 0,
         "category": "asset",
@@ -1069,7 +1069,7 @@ export default {
     "139": {
         "id": 139,
         "name": "选择困难症",
-        "description": "拥有30个名片背景",
+        "description": "拥有10个名片背景",
         "grade": 2,
         "hide": 0,
         "category": "asset",
@@ -1088,7 +1088,7 @@ export default {
     "140": {
         "id": 140,
         "name": "社交达人",
-        "description": "拥有100个名片背景",
+        "description": "拥有30个名片背景",
         "grade": 3,
         "hide": 0,
         "reward": {
