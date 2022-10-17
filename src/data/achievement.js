@@ -1043,7 +1043,7 @@ export default {
             "checks": [
                 "$ge",
                 "?count",
-                3
+                1
             ]
         }
     },
@@ -1062,7 +1062,7 @@ export default {
             "checks": [
                 "$ge",
                 "?count",
-                10
+                3
             ]
         }
     },
@@ -1081,7 +1081,7 @@ export default {
             "checks": [
                 "$ge",
                 "?count",
-                30
+                10
             ]
         }
     },
@@ -1105,7 +1105,7 @@ export default {
             "checks": [
                 "$ge",
                 "?count",
-                100
+                30
             ]
         }
     },
