@@ -27,7 +27,11 @@
         {{$lang.g.online_as.f(online)}}
     </p>
     <Loading v-show="loading" />
-    <Tips v-show="showTips" @click="showTips=false">{{tipsMessage}}</Tips>
+    <ul class="tips">
+        <li v-for="{i, c, t} in _t" :key="i">
+            <Tips :content="c" :type="t" @done="delete _tips.d[i]"/>
+        </li>
+    </ul>
 </template>
 
 <script>
@@ -63,10 +67,19 @@ export default defineComponent({
             page: 'Welcome',
             delay: -1,
             online: -1,
-            tipsMessage: '',
-            showTips: false,
+            _tips: {
+                n: 0,
+                d: {},
+            },
             _data: {},
         }
+    },
+    computed: {
+        _t() {
+            return Object
+                .entries(this._tips.d)
+                .map(([i, {c, t}])=>({i, c, t}));
+        },
     },
     methods: {
         switch(page, data) {
@@ -92,10 +105,8 @@ export default defineComponent({
             setInterval(updateStat, 10000);
             await updateStat();
         },
-        tips(message) {
-            this.tipsMessage = message;
-            this.showTips = true;
-            setTimeout(() => this.showTips=false, 3000);
+        tips(c, t="info") {
+            this._tips.d[this._tips.n++] = {c, t};
         },
     },
 });
@@ -133,6 +144,18 @@ export default defineComponent({
         &:nth-child(1){fill: #1b0e2d; animation-delay:-2s;}
         &:nth-child(2){fill: #141d38; animation-delay:-2s; animation-duration:5s}
         &:nth-child(3){fill: #1a1438; animation-delay:-4s; animation-duration:3s}
+    }
+}
+
+ul.tips {
+    z-index: 9999999;
+    position: fixed;
+    top: 4em;
+    left: 50%;
+    max-width: 90%;
+    transform: translateX(-50%);
+    li {
+        margin-bottom: 0.2em;
     }
 }
 

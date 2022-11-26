@@ -98,6 +98,7 @@ export const tips = {
     net_resume: '重连成功',
     net_resume_failed: '掉线太久，已经被踢了, 请尝试重新登录',
     net_resume_auto: '自动重新登录成功',
+    achievement_unlock: '解锁成就: {}',
 };
 
 export const error = {

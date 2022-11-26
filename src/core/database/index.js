@@ -71,6 +71,12 @@ export default class Database extends IModule {
         await this.#achievement.initialize();
         await this.#history.initialize();
 
+        $on('user.authenticated', ([uuid])=>{
+            const emit = t=>d=>$emit(`$${t}`,d);
+            this.#asset.get(uuid).then(emit('asset'));
+            this.#record.gets(uuid).then(emit('record'));
+        });
+
         const ls = globalThis.localStorage.getItem('storage');
         if(!ls) return;
         globalThis.localStorage.removeItem('storage');

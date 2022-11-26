@@ -54,8 +54,11 @@ export default class App {
 
         $on('command.error', code=>{
             proxy.loading = false;
-            const message = $lang.e[code];
-            proxy.tips(message);
+            proxy.tips($lang.e[code]);
+        });
+        $on('achievement.unlock', achievement=>{
+            const name = $.core.sheet.get('achievement', achievement, 'name');
+            proxy.tips($lang.t.achievement_unlock.f(name), 'achievement');
         });
     }
 
