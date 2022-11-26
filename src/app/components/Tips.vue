@@ -64,6 +64,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 div.tips {
     pointer-events: none;
+    position: relative;
     background: #777c97ad;
     -webkit-backdrop-filter: blur(30px);
     backdrop-filter: blur(30px);
