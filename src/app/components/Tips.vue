@@ -1,5 +1,5 @@
 <template>
-    <div :class="{tips: true,'tips-show': show}" :type="type">
+    <div class="tips" :type="type">
         <span class="icon" />
         <span class="content">{{tips}}</span>
     </div>
@@ -25,7 +25,6 @@ export default defineComponent({
             interval: null,
             timeout: null,
             list: [],
-            show: false,
         }
     },
     computed: {
@@ -45,16 +44,12 @@ export default defineComponent({
             this.list = this.content.match(/(\w+|[^\w])/g) || [];
             if(this.list.length == 0) return;
             if(this.interval) return;
-            this.show = true;
             this.interval = setInterval(()=>{
                 if (this.n < this.list.length)
                     return this.n++;
                 clearInterval(this.interval);
                 this.interval = null;
-                this.timeout = setTimeout(()=>{
-                    this.show = false;
-                    this.$emit('done');
-                }, 2000);
+                this.timeout = setTimeout(()=>this.$emit('done'), 2000);
             }, 50);
         }
     }
@@ -65,12 +60,12 @@ export default defineComponent({
 div.tips {
     pointer-events: none;
     position: relative;
+    display: inline-block;
     background: #777c97ad;
     -webkit-backdrop-filter: blur(30px);
     backdrop-filter: blur(30px);
     min-width: 1.5em;
     min-height: 1.5em;
-    display: none;
     padding: 0.5em;
     border-radius: 2em;
     box-shadow: 0 4px 16px -2px #000;
@@ -96,8 +91,5 @@ div.tips {
         margin-left: 2em;
         margin-right: 0.5em;
     }
-}
-div.tips-show {
-    display: block;
 }
 </style>
