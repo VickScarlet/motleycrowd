@@ -45,7 +45,6 @@ import Question from './screen/Question.vue';
 import Settlement from './screen/Settlement.vue';
 import History from './screen/History.vue';
 import Achievement from './screen/Achievement.vue';
-import Rank from './screen/Rank.vue';
 import Accessory from './screen/Accessory.vue';
 import Shop from './screen/Shop.vue';
 
@@ -57,7 +56,7 @@ export default defineComponent({
     components: {
         Welcome, Authentication, Index,
         Room, Question, Settlement, History,
-        Achievement, Rank, Accessory, Shop,
+        Achievement, Accessory, Shop,
 
         Loading, Tips,
     },
@@ -122,6 +121,7 @@ export default defineComponent({
     position: fixed;
     top: 0.2em;
     left: 0.2em;
+    pointer-events: none;
 }
 
 @keyframes move-forever{

@@ -1,5 +1,5 @@
 <template>
-    <div class="rank">
+    <div class="index-rank">
         <Detail :rank="rank" />
         <ul class="menu">
             <li>
@@ -23,7 +23,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import Detail from './Rank.Detail.vue';
+import Detail from './Index.Rank.Detail.vue';
 
 export default defineComponent({
     components: {Detail},
@@ -36,12 +36,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-div.rank {
+div.index-rank {
     width: 100%;
     > ul.menu {
         z-index: 10;
         position: fixed;
-        bottom: 0;
+        top: 0;
         left: 0;
         right: 0;
         padding: 0;
