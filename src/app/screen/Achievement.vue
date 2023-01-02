@@ -3,51 +3,31 @@
         <div class="header">
             <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
         </div>
-        <h1 v-if="!show">{{message}}</h1>
-        <h1 v-if="show">{{$lang.g.achievement}}</h1>
-        <ul v-if="show">
+        <h1>{{$lang.g.achievement}}</h1>
+        <ul>
             <li v-for="achiv of achivs" :key="achiv.id">
-                <Item :data="achiv" />
+                <Item v-bind="achiv" />
             </li>
         </ul>
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { ref, onActivated } from 'vue';
 import Item from './Achievement.Item.vue';
-export default defineComponent({
-    components: { Item },
-    data() {
-        return {
-            show: false,
-            message: '',
-            achivs: [],
-        }
-    },
-    async activated() {
-        this.show = false;
-        if(!$core.user.authenticated) {
-            this.message = $lang.g.login_first;
-            return;
-        }
-        if($core.user.isguest) {
-            this.message = $lang.g.only_member;
-            return;
-        }
-        this.show = true;
-        const achivs = await $core.achievement.achievements();
-        achivs.sort((a, b)=>{
-            if(a.unlocked && !b.unlocked) return -1;
-            if(!a.unlocked && b.unlocked) return 1;
-            if(a.hide && !b.hide) return 1;
-            if(!a.hide && b.hide) return -1;
-            if(a.grade != b.grade) return b.grade - a.grade;
-            return a.id - b.id;
-        });
-        this.achivs = achivs;
-    },
-    deactivate() {},
+
+const achivs = ref([]);
+onActivated(async ()=>{
+    const acs = await $core.achievement.achievements();
+    acs.sort((a, b)=>{
+        if(a.unlocked && !b.unlocked) return -1;
+        if(!a.unlocked && b.unlocked) return 1;
+        if(a.hide && !b.hide) return 1;
+        if(!a.hide && b.hide) return -1;
+        if(a.grade != b.grade) return b.grade - a.grade;
+        return a.id - b.id;
+    });
+    achivs.value = acs;
 });
 </script>
 

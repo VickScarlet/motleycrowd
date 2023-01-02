@@ -1,44 +1,19 @@
+<script setup>
+import AssetMoney from '../components/AssetMoney.vue';
+const { discount, price, original } = defineProps({
+    discount: { type: Number, default: null },
+    price: { type: Object, default: {} },
+    original: { type: Object, default: null },
+});
+</script>
+
 <template>
     <div :class="{price: true, 'price-discount': !!original}">
         <AssetMoney class="asset-money" :asset="price"/>
-        <span class="discount" v-if="!!off">{{off}}</span>
-        <AssetMoney class="asset-money" :asset="original"  v-if="original"/>
+        <span class="discount" v-if="!!discount">-{{((1-discount)*100).toFixed(0)}}%</span>
+        <AssetMoney class="asset-money" :asset="original" v-if="original"/>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import AssetMoney from '../components/AssetMoney.vue';
-
-export default defineComponent({
-    components: { AssetMoney },
-    props: {
-        discount: {
-            type: Number,
-            default: null,
-        },
-        price: {
-            type: Object,
-            default: {},
-        },
-        original: {
-            type: Object,
-            default: null,
-        },
-        enough: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    computed: {
-        off() {
-            const discount = this.discount;
-            if(typeof discount !== 'number') return null;
-            return `-${((1-discount)*100).toFixed(0)}%`;
-        }
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 

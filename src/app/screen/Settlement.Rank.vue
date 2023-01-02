@@ -1,3 +1,16 @@
+<script setup>
+import { ref, toRefs } from 'vue';
+import UserCard from '../components/UserCard.vue';
+import ScoreRanking from '../components/ScoreRanking.vue';
+
+const props = defineProps({
+    rank: {type: Array, default: []},
+    mine: {type: String, default: ''}
+});
+const {rank, mine} = toRefs(props);
+const toggle = ref(true);
+</script>
+
 <template>
     <div class="settlement-rank" :iscollapsed="toggle">
         <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
@@ -35,30 +48,6 @@
         <button @click="toggle=!toggle" expand   v-if="toggle">{{$lang.g.expand}}</button>
     </div>
 </template>
-<script>
-import { defineComponent } from 'vue';
-import UserCard from '../components/UserCard.vue';
-import ScoreRanking from '../components/ScoreRanking.vue';
-
-export default defineComponent({
-    components: {UserCard, ScoreRanking},
-    props: {
-        rank: {
-            type: Array,
-            default: [],
-        },
-        mine: {
-            type: String,
-            default: '',
-        },
-    },
-    data() {
-        return {
-            toggle: true,
-        }
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.settlement-rank {

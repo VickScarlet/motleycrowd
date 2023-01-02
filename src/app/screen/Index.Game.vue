@@ -1,3 +1,16 @@
+<script setup>
+const pair = async type => {
+    console.debug('pair', type);
+    $app.loading(true);
+    const result = await $core.game.pair(type);
+    $app.loading(false);
+    if (result) $app.switch('Room');
+};
+const custom = ()=>{
+    console.debug('custom');
+};
+</script>
+
 <template>
     <div class="index-game">
         <h1>{{$lang.g.title}}</h1>
@@ -19,25 +32,6 @@
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    methods: {
-        async pair(type) {
-            console.debug('pair', type);
-            $app.loading = true;
-            const result = await $core.game.pair(type);
-            $app.loading = false;
-            if (result) $app.switch('Room');
-        },
-        custom() {
-            console.debug('custom');
-        },
-    }
-});
-</script>
-
 <style lang="scss" scoped>
 div.index-game {
     > ul.menu {
@@ -56,8 +50,8 @@ div.index-game {
             text-align: left;
             padding-left: 20px;
             font-weight: bold;
-            margin-top: auto;
             margin: 8px;
+            margin-top: auto;
             &::before {
                 content: '';
                 border-radius: 0 8px 8px 0;

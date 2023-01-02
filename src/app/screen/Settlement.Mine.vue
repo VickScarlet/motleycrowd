@@ -1,3 +1,20 @@
+<script setup>
+import { toRefs, computed } from 'vue';
+import AnswerLineBarChart from '../components/AnswerLineBarChart.vue';
+import UserCard from '../components/UserCard.vue';
+import ScoreRanking from '../components/ScoreRanking.vue';
+
+const props = defineProps({
+    uuid: {type: String, default: ''},
+    score: {type: Number, default: 0},
+    ranking: {type: Number, default: 0},
+    answers: {type: Array, default: []}
+});
+
+const {uuid, score, ranking} = toRefs(props);
+const ans = computed(() => props.answers.map(({value, answer}, i) => ({value, answer, name: `Q${i+1}`,})));
+</script>
+
 <template>
     <div class="settlement-mine">
         <h3>{{$lang.g.mimestate}}</h3>
@@ -16,42 +33,6 @@
         </div>
     </div>
 </template>
-<script>
-import { defineComponent } from 'vue';
-import AnswerLineBarChart from '../components/AnswerLineBarChart.vue';
-import UserCard from '../components/UserCard.vue';
-import ScoreRanking from '../components/ScoreRanking.vue';
-
-export default defineComponent({
-    components: { AnswerLineBarChart, UserCard, ScoreRanking },
-    props: {
-        uuid: {
-            type: String,
-            default: '',
-        },
-        score: {
-            type: Number,
-            default: 0,
-        },
-        ranking: {
-            type: Number,
-            default: 0,
-        },
-        answers: {
-            type: Array,
-            default: [],
-        },
-    },
-    computed: {
-        ans() {
-            return this.answers.map(({value, answer}, i) => ({
-                value, name: 'Q'+i,
-                answer,
-            }));
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.settlement-mine > .content {

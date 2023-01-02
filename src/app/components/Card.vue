@@ -1,27 +1,15 @@
+<script setup>
+import { toRef, computed } from 'vue';
+const props = defineProps({card: {type: String, default: ''}});
+const card = toRef(props, 'card');
+const grade = computed(()=>$core.sheet.get('card', props.card, 'grade') || 0);
+</script>
+
 <template>
     <div class="v-card" :card="card" :grade="grade">
         <div><slot></slot></div>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        card: {
-            type: String,
-            required: true,
-            default: '',
-        },
-    },
-    computed: {
-        grade() {
-            return $core.sheet.get('card', this.card, 'grade') || 0;
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.v-card {

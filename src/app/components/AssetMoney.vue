@@ -1,3 +1,11 @@
+<script setup>
+import { computed } from 'vue';
+import Money from './Money.vue';
+
+const props = defineProps({asset: {type: Object, default: {}}});
+const list = computed(()=>Object.entries(this.asset?.money||{}).map(([type, value])=>({type, value})));
+</script>
+
 <template>
     <ul class="asset-money">
         <li v-for="money in list" :key="money.type">
@@ -5,28 +13,6 @@
         </li>
     </ul>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import Money from './Money.vue';
-
-export default defineComponent({
-    components: { Money },
-    props: {
-        asset: {
-            type: Object,
-            default: {},
-        },
-    },
-    computed: {
-        list() {
-            return Object.entries(
-                this.asset?.money || {}
-            ).map(([type, value])=>({type, value}));
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 ul.asset-money {

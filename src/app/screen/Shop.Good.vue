@@ -1,3 +1,25 @@
+<script setup>
+import Card from '../components/Card.vue';
+import Badge from '../components/Badge.vue';
+import Price from './Shop.Price.vue';
+import Grade from '../components/Grade.vue';
+
+const props = defineProps({
+    rewards: { type: Object, default: {} },
+    price: { type: Object, default: {} },
+    original: { type: Object, default: null },
+    owned: { type: Boolean, default: false },
+    enough: { type: Boolean, default: false },
+    discount: { type: Number, default: null },
+});
+
+const { rewards, price, original, owned, enough, discount } = props;
+const type = Object.keys(rewards)[0];
+const id = Object.keys(rewards[type])[0];
+const item = { type, id };
+const grade = $core.sheet.get(type, id, 'grade');
+</script>
+
 <template>
     <ul class="good" :grade="grade">
         <li class="type">
@@ -10,7 +32,7 @@
             <Badge class="badge" v-if="item.type=='badge'" :badge="item.id"/>
         </li>
         <li class="price">
-            <Price :price="price" :original="original" :enough="enough" :discount="discount" />
+            <Price :price="price" :original="original" :discount="discount" />
         </li>
         <li class="button">
             <button v-if="owned" disabled>
@@ -28,56 +50,6 @@
         </li>
     </ul>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import Card from '../components/Card.vue';
-import Badge from '../components/Badge.vue';
-import Price from './Shop.Price.vue';
-import Grade from '../components/Grade.vue';
-
-export default defineComponent({
-    components: { Card, Badge, Price, Grade },
-    props: {
-        rewards: {
-            type: Object,
-            default: {},
-        },
-        price: {
-            type: Object,
-            default: {},
-        },
-        original: {
-            type: Object,
-            default: null,
-        },
-        owned: {
-            type: Boolean,
-            default: false,
-        },
-        enough: {
-            type: Boolean,
-            default: false,
-        },
-        discount: {
-            type: Number,
-            default: null,
-        },
-    },
-    computed: {
-        item() {
-            const r = this.rewards;
-            const type = Object.keys(r)[0];
-            const id = Object.keys(r[type])[0];
-            return {id, type};
-        },
-        grade() {
-            const item = this.item;
-            return $core.sheet.get(item.type, item.id, 'grade');
-        }
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 

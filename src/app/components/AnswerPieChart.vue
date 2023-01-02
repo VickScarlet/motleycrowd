@@ -1,3 +1,20 @@
+<script setup>
+import { computed } from 'vue';
+import * as d3 from 'd3';
+
+const props = defineProps({
+    radius: { type: Number, default: 320 },
+    innerRadius: { type: Number, default: 200 },
+    padding: { type: Number, default: 10 },
+    answers: { type: Array, default: () => [] },
+});
+const pie = computed(()=>{
+    const d = d3.arc().innerRadius(props.innerRadius).outerRadius(props.radius);
+    return d3.pie().value(({value}) => value)(props.answers)
+        .map(v => ({...v.data, d: d(v), t: d.centroid(v)}));
+});
+</script>
+
 <template>
     <svg class="answer-pie-chart" :viewBox="`${-radius-padding} ${-radius-padding} ${-2*(-radius-padding)} ${-2*(-radius-padding)}`">
         <g><path v-for="({option, value: people, d}) in pie" :key="option" :d="d">
@@ -8,30 +25,6 @@
         </text></g>
     </svg>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import * as d3 from 'd3';
-
-export default defineComponent({
-    props: {
-        radius: { type: Number, default: 320 },
-        innerRadius: { type: Number, default: 200 },
-        padding: { type: Number, default: 10 },
-        answers: { type: Array, default: () => [] },
-    },
-    computed: {
-        pie() {
-            const {answers, radius, innerRadius} = this;
-            const d = d3.arc().innerRadius(innerRadius).outerRadius(radius);
-            const t = d.centroid;
-
-            return d3.pie().value(({value}) => value)(answers)
-                .map(v => ({...v.data, d: d(v), t: t(v)}));
-        }
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 svg.answer-pie-chart {

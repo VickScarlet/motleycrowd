@@ -1,3 +1,45 @@
+<script setup>
+import { ref, onActivated } from 'vue';
+import UserCard from '../components/UserCard.vue';
+import Card from '../components/Card.vue';
+import Badge from '../components/Badge.vue';
+
+const badges = ref([]);
+const cards = ref([]);
+const uuid = ref('');
+const card = ref('');
+const badge = ref('');
+
+const accessory = async () => {
+    $app.loading(true);
+    await $core.user.accessory({card: card.value, badge: badge.value});
+    $app.loading(false);
+};
+onActivated(async ()=>{
+    let bs = await $core.asset.badges();
+    let cs = await $core.asset.cards();
+    if($debug) {
+        cs = $core.sheet.keys('card');
+        bs = $core.sheet.keys('badge');
+    }
+
+    bs.sort((a,b)=>
+        $core.sheet.get('badge',b,'grade')-
+        $core.sheet.get('badge',a,'grade')
+    );
+    cs.sort((a,b)=>
+        $core.sheet.get('card',b,'grade')-
+        $core.sheet.get('card',a,'grade')
+    );
+
+    uuid.value = $core.user.uuid;
+    cards.value = cs;
+    badges.value = bs;
+    card.value = '';
+    badge.value = '';
+});
+</script>
+
 <template>
     <div class="accessory">
         <div class="header">
@@ -43,58 +85,6 @@
         </div>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import UserCard from '../components/UserCard.vue';
-import Card from '../components/Card.vue';
-import Badge from '../components/Badge.vue';
-export default defineComponent({
-    components: { UserCard, Card, Badge },
-    data() {
-        return {
-            badges: [],
-            cards: [],
-            uuid: '',
-            card: '',
-            badge: '',
-        }
-    },
-    async activated() {
-        const uuid = $core.user.uuid;
-        let badges = await $core.asset.badges();
-        let cards = await $core.asset.cards();
-        if($debug) {
-            cards = $core.sheet.keys('card');
-            badges = $core.sheet.keys('badge');
-        }
-
-        badges = badges.sort((a,b)=>
-            $core.sheet.get('badge',b,'grade')-
-            $core.sheet.get('badge',a,'grade')
-        );
-        cards = cards.sort((a,b)=>
-            $core.sheet.get('card',b,'grade')-
-            $core.sheet.get('card',a,'grade')
-        );
-
-        this.uuid = uuid;
-        this.cards = cards;
-        this.badges = badges;
-        this.card = '';
-        this.badge = '';
-    },
-    deactivate() {},
-    methods: {
-        async accessory() {
-            const {card, badge} = this;
-            $app.loading = true;
-            await $core.user.accessory({card, badge});
-            $app.loading = false;
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 

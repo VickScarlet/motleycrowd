@@ -6,58 +6,41 @@
     </div>
 </template>
 
-<script>
-import { watch, defineComponent } from 'vue';
+<script setup>
+import { ref, watch } from 'vue';
 
-export default defineComponent({
-    props: {
-        init: {
-            type: Object,
-            default: {
-                total: 60000,
-                left: 60000,
-            },
-        },
-    },
-    data() {
-        return {
-            left: 60,
-            width: 100,
-            interval: null,
-        };
-    },
-    mounted() {
-        watch(()=>this.init, ()=>this.render());
-        this.render();
-    },
-    methods: {
-        render() {
-            if(this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-
-            const total = this.init.total;
-            const end = Date.now() +
-                (this.init.left || total);
-            const tick = ()=>{
-                const left = end - Date.now();
-                if(left > 0) {
-                    this.left = Math.floor(left / 1000);
-                    this.width = left / total * 100;
-                    return;
-                }
-
-                clearInterval(this.interval);
-                this.interval = null;
-                this.width = 0;
-                this.left = 0;
-            };
-            this.interval = setInterval(tick, 100);
-            tick();
-        }
+const props = defineProps({total: Number, left: Number});
+const left = ref(0);
+const width = ref(0);
+let interval = null;
+const render = ()=>{
+    if(interval) {
+        clearInterval(interval);
+        interval = null;
     }
-});
+
+    const total = props.total;
+    const end = Date.now() + (props.left || total);
+    const tick = ()=>{
+        const l = end - Date.now();
+        if(l > 0) {
+            left.value = Math.floor(l / 1000);
+            width.value = l / total * 100;
+            return;
+        }
+
+        clearInterval(interval);
+        interval = null;
+        width.value = 0;
+        left.value = 0;
+    };
+    interval = setInterval(tick, 100);
+    tick();
+};
+
+watch(()=>props.total, render);
+watch(()=>props.left, render);
+render();
 </script>
 
 <style lang="scss" scoped>

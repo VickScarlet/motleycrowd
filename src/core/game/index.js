@@ -113,7 +113,7 @@ export default class Game extends IModule {
     async #user(join, leave) {
         await this.#join(join);
         this.#leave(leave);
-        $emit('game.user', this.#users);
+        $emit('game.user', this.#users, this.#limit);
     }
 
     #ready() {

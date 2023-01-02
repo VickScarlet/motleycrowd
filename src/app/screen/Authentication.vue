@@ -1,3 +1,36 @@
+<script setup>
+import { ref } from 'vue';
+
+const autologin = ref(true);
+const isauth = ref(true);
+const username = ref('');
+const password = ref('');
+const check = ref('');
+const back = ()=>$app.switch('Welcome');
+const auth = async e => {
+    e.returnValue = false;
+    $app.loading(true);
+    const result = await $core.user.authenticate(
+        username.value, password.value, autologin.value
+    );
+    $app.loading(false);
+    if (!result) return;
+    if ($core.game.isInRoom) return;
+    $app.switch('Index');
+};
+const regi = async e => {
+    e.returnValue = false;
+    $app.loading(true);
+    const result = await $core.user.register(
+        username.value, password.value, check.value, autologin.value
+    );
+    $app.loading(false);
+    if (!result) return;
+    if ($core.game.isInRoom) return;
+    $app.switch('Index');
+};
+</script>
+
 <template>
     <a @click="back" class="back">&lt; {{$lang.g.back}}</a>
     <form v-show="isauth" @submit="auth">
@@ -25,7 +58,7 @@
                 }}</label>
             </div></li>
             <li><button type="submit">{{$lang.g.authenticate}}</button></li>
-            <li><a @click="this.isauth=false">{{$lang.g.no_account}}</a></li>
+            <li><a @click="isauth=false">{{$lang.g.no_account}}</a></li>
         </ul>
     </form>
     <form v-show="!isauth" @submit="regi">
@@ -58,51 +91,10 @@
                 }}</label>
             </div></li>
             <li><button type="submit">{{$lang.g.register}}</button><br /></li>
-            <li><a @click="this.isauth=true">{{$lang.g.has_account}}</a></li>
+            <li><a @click="isauth=true">{{$lang.g.has_account}}</a></li>
         </ul>
     </form>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    data() {
-        return {
-            autologin: true,
-            isauth: true,
-            username: '',
-            password: '',
-            check: '',
-        }
-    },
-    methods: {
-        back() {
-            $app.switch('Welcome');
-        },
-        async auth(e) {
-            e.returnValue = false;
-            const { username, password, autologin } = this;
-            $app.loading = true;
-            const result = await $core.user.authenticate(username, password, autologin);
-            $app.loading = false;
-            if (!result) return;
-            if ($core.game.isInRoom) return;
-            $app.switch('Index');
-        },
-        async regi(e) {
-            e.returnValue = false;
-            const { username, password, check, autologin } = this;
-            $app.loading = true;
-            const result = await $core.user.register(username, password, check, autologin);
-            $app.loading = false;
-            if (!result) return;
-            if ($core.game.isInRoom) return;
-            $app.switch('Index');
-        },
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 .back {

@@ -1,3 +1,23 @@
+<script setup>
+import { ref, watch } from 'vue';
+import Ranking from '../components/Ranking.vue';
+import UserCard from '../components/UserCard.vue';
+
+const props = defineProps({rank: {type: String, required: true, default: ''}});
+const ranking = ref(0);
+const size = ref(0);
+const users = ref([]);
+const update = async()=>{
+    const data = await $core.rank.get(props.rank);
+    ranking.value = data.ranking;
+    size.value = data.size;
+    users.value = data.users;
+    console.debug(data.users);
+};
+watch(()=>props.rank, update);
+update();
+</script>
+
 <template>
     <div class="index-rank-detail">
         <div>
@@ -16,43 +36,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import { watch, defineComponent } from 'vue';
-import Ranking from '../components/Ranking.vue';
-import UserCard from '../components/UserCard.vue';
-
-export default defineComponent({
-    components: { Ranking, UserCard },
-    props: {
-        rank: {
-            type: String,
-            required: true,
-            default: '',
-        },
-    },
-    data() {
-        return {
-            ranking: 0,
-            size: 0,
-            users: [],
-        }
-    },
-    mounted() {
-        watch(()=>this.rank, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            const data = await $core.rank.get(this.rank);
-            this.ranking = data.ranking;
-            this.size = data.size;
-            this.users = data.users;
-            console.debug(data.users);
-        }
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 

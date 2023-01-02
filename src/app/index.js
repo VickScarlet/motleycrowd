@@ -24,15 +24,15 @@ export default class App {
         this.#proxy = proxy;
 
         $on('network.error', ()=>{
-            proxy.loading = false;
+            proxy.loading(false);
             proxy.tips($lang.t.net_error);
         });
         $on('network.kick', ()=>{
-            proxy.loading = false;
+            proxy.loading(false);
             proxy.tips($lang.t.net_kick);
         });
         $on('network.resume', async isAuth=>{
-            proxy.loading = false;
+            proxy.loading(false);
             if(isAuth) {
                 proxy.tips($lang.t.net_resume);
                 return;
@@ -53,7 +53,7 @@ export default class App {
         $on('game.settlement', data=>proxy.switch('Settlement', {data}));
 
         $on('command.error', code=>{
-            proxy.loading = false;
+            proxy.loading(false);
             proxy.tips($lang.e[code]);
         });
         $on('achievement.unlock', achievement=>{

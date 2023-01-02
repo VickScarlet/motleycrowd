@@ -1,3 +1,22 @@
+<script setup>
+import { toRefs, computed } from 'vue';
+import ScoreRanking from '../components/ScoreRanking.vue';
+
+const props = defineProps({
+    id: {type: String, required: true},
+    created: {type: String, required: true},
+    ranking: {type: Number, required: true},
+    score: {type: Number, required: true},
+    type: {type: Number, required: true},
+    private: {type: Boolean},
+});
+const {id, created, ranking, score} = toRefs(props);
+const typeText = computed(() => {
+    const sub = props.private? 'private': 'pair';
+    return $lang.g[`${sub}_${props.type}`];
+});
+</script>
+
 <template>
     <div class="history-item">
         <div class="ranking">
@@ -12,46 +31,6 @@
         </div>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import ScoreRanking from '../components/ScoreRanking.vue';
-
-export default defineComponent({
-    components: {ScoreRanking},
-    props: {
-        id: {
-            type: String,
-            required: true,
-        },
-        created: {
-            type: String,
-            required: true,
-        },
-        ranking: {
-            type: Number,
-            required: true,
-        },
-        score: {
-            type: Number,
-            required: true,
-        },
-        type: {
-            type: Number,
-            required: true,
-        },
-        private: {
-            type: Boolean,
-        },
-    },
-    computed: {
-        typeText() {
-            const sub = this.private? 'private': 'pair';
-            return this.$lang.g[`${sub}_${this.type}`];
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.history-item {

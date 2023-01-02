@@ -1,28 +1,19 @@
+<script setup>
+import { toRefs } from 'vue';
+
+const props = defineProps({
+    ranking: {type: Number, default: 0},
+    score: {type: Number, default: 0},
+});
+const {ranking, score} = toRefs(props);
+</script>
+
 <template>
     <div class="score-ranking" :ranking="ranking" :score="score">
         <span>{{ranking}}</span>
         <span>{{score}}</span>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        ranking: {
-            type: Number,
-            required: true,
-            default: 0,
-        },
-        score: {
-            type: Number,
-            required: true,
-            default: 0,
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.score-ranking {

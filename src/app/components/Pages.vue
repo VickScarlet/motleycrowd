@@ -1,3 +1,49 @@
+<script setup>
+import { ref, computed, watch } from 'vue';
+
+const props = defineProps({
+    total: {type: Number, default: 0},
+    live: {type: Number, default: 5},
+    page: {type: Number, default: 1}
+});
+const emit = defineEmits(['update:page']);
+const _input = ref(1);
+const _p = ref(1);
+const center = ref([]);
+const input = computed({
+    get: _=>_input.value||_p.value,
+    set(input) {
+        if(input < 1)
+            input = 1;
+        else if(input > props.total)
+            input = props.total;
+        _input.value = input;
+    }
+});
+const p = computed({
+    get: _=>_p.value,
+    set(page) {
+        if(page < 1 || page > props.total)
+            return;
+        const live = props.live;
+        const total = props.total;
+        const prev = Math.floor(live/2);
+        const start = total < live ? 1
+            : Math.max(1, page - prev);
+        const end = Math.min(total, start + live);
+        center.value = new Array(end - start + 1)
+            .fill(0).map((_, i) => start + i);
+        input.value = page;
+        if(page === this._p) return;
+        _p.value = page;
+        emit('update:page', page);
+    }
+})
+watch(()=>props.total, _=>p.value=_p.value);
+watch(()=>props.page, p1=>p.value=p1);
+p.value=props.page;
+</script>
+
 <template>
     <ul class="pages">
         <li class="first" @click="p=1">⇤</li>
@@ -13,72 +59,6 @@
         <li class="go" @click="p=input">↲</li>
     </ul>
 </template>
-
-<script>
-import { watch, defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        total: {
-            type: Number,
-            required: true,
-            default: 0,
-        },
-        live: {
-            type: Number,
-            default: 5,
-        },
-        page: {
-            type: Number,
-            default: 1,
-        },
-    },
-    data() {
-        return {
-            _input: 1,
-            _p: 1,
-            center: [],
-        }
-    },
-    mounted() {
-        watch(()=>this.total, _=>this.p=this._p);
-        watch(()=>this.page, p=>this.p=p);
-        this.p=this.page;
-    },
-    computed: {
-        p: {
-            get() { return this._p; },
-            set(page) {
-                if(page < 1 || page > this.total)
-                    return;
-                const live = this.live;
-                const total = this.total;
-                const prev = Math.floor(live/2);
-                const start = total < live ? 1
-                    : Math.max(1, page - prev);
-                const end = Math.min(total, start + live);
-                this.center = new Array(end - start + 1)
-                    .fill(0).map((_, i) => start + i);
-                this.input = page;
-                if(page === this._p)
-                    return;
-                this._p = page;
-                this.$emit('update:page', page);
-            }
-        },
-        input: {
-            get() { return this._input || this._p; },
-            set(input) {
-                if(input < 1)
-                    input = 1;
-                else if(input > this.total)
-                    input = this.total;
-                this._input = input;
-            }
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 ul.pages {

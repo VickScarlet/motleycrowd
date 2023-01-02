@@ -1,3 +1,10 @@
+<script setup>
+import { ref } from 'vue';
+import Detail from './Index.Rank.Detail.vue';
+
+const rank = ref('main');
+</script>
+
 <template>
     <div class="index-rank">
         <Detail :rank="rank" />
@@ -21,20 +28,6 @@
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-import Detail from './Index.Rank.Detail.vue';
-
-export default defineComponent({
-    components: {Detail},
-    data() {
-        return {
-            rank: 'main',
-        }
-    },
-});
-</script>
-
 <style lang="scss" scoped>
 div.index-rank {
     width: 100%;
@@ -50,7 +43,6 @@ div.index-rank {
         li {
             margin: 0;
             position: relative;
-            margin: 0;
             padding: 0;
             width: 100%;
             input { display: none; }

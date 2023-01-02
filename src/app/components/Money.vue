@@ -1,37 +1,25 @@
+<script setup>
+import { toRef, computed } from 'vue';
+const props = defineProps({
+    type: {type: String, required: true},
+    value: {type: Number, required: true},
+});
+const type = toRef(props, 'type');
+const money = computed(()=>{
+    const value = props.value;
+    if(value < 10000) return value;
+    if(value < 10000000) return `${(value / 1000).toFixed(1)}K`;
+    if(value < 10000000000) return `${(value / 1000000).toFixed(1)}M`;
+    return `${(value / 1000000000).toFixed(1)}B`;
+});
+</script>
+
 <template>
     <span class="money">
         <span class="icon" :type="type"></span>
         <span class="value">{{money}}</span>
     </span>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        type: {
-            type: String,
-            required: true,
-            default: '',
-        },
-        value: {
-            type: Number,
-            required: true,
-            default: 0,
-        }
-    },
-    computed: {
-        money() {
-            const value = this.value;
-            if(value < 10000) return value;
-            if(value < 10000000) return `${(value / 1000).toFixed(1)}K`;
-            if(value < 10000000000) return `${(value / 1000000).toFixed(1)}M`;
-            return `${(value / 1000000000).toFixed(1)}B`;
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 span.money {

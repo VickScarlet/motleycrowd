@@ -1,3 +1,64 @@
+<script setup>
+import './style/app.scss';
+import { ref, reactive, computed, markRaw } from 'vue';
+import Welcome from './screen/Welcome.vue';
+import Authentication from './screen/Authentication.vue';
+import Index from './screen/Index.vue';
+import Room from './screen/Room.vue';
+import Question from './screen/Question.vue';
+import Settlement from './screen/Settlement.vue';
+import History from './screen/History.vue';
+import Achievement from './screen/Achievement.vue';
+import Accessory from './screen/Accessory.vue';
+import Shop from './screen/Shop.vue';
+
+import Loading from './components/Loading.vue';
+import Tips from './components/Tips.vue';
+
+const components = {
+    Welcome, Authentication, Index,
+    Room, Question, Settlement, Shop,
+    History, Achievement, Accessory,
+};
+const loading = ref(true);
+const page = ref(markRaw(Welcome));
+const delay = ref($lang.g.delay_as.f(-1));
+const online = ref($lang.g.online_as.f(-1));
+const _tips = reactive({d: {}, n: 0});
+const _data = ref({});
+const _t = computed(()=>Object.entries(_tips.d).map(([i, {c, t}])=>({i, c, t})));
+
+const tips = (c, t="info") => _tips.d[_tips.n++] = {c, t};
+const sw = (p, d) => {
+    _data.value = d ?? {};
+    page.value = markRaw(components[p]);
+};
+
+defineExpose({
+    tips, switch: sw,
+    loading(l) {loading.value = l;},
+    async start() {
+        tips($lang.t.welcome);
+        const [success, notAuto] = await $core.user.autologin();
+        if (success) {
+            tips($lang.t.autologin_success);
+            if ($core.game.isInRoom) return;
+            sw('Index');
+        } else if (!notAuto) {
+            tips($lang.t.autologin_failed);
+        }
+        const updateStat = async () => {
+            const d = await $core.ping();
+            delay.value = $lang.g.delay_as.f(d.delay);
+            online.value = $lang.g.online_as.f(d.online);
+        }
+        setInterval(updateStat, 10000);
+        await updateStat();
+    },
+});
+
+</script>
+
 <template>
     <svg class="editorial"
         xmlns="http://www.w3.org/2000/svg"
@@ -22,10 +83,7 @@
     <keep-alive>
         <component :is="page" v-bind="_data"/>
     </keep-alive>
-    <p class="serverstat">
-        {{$lang.g.delay_as.f(delay)}}<br/>
-        {{$lang.g.online_as.f(online)}}
-    </p>
+    <p class="serverstat">{{delay}}<br/>{{online}}</p>
     <Loading v-show="loading" />
     <ul class="tips">
         <li v-for="{i, c, t} in _t" :key="i">
@@ -33,83 +91,6 @@
         </li>
     </ul>
 </template>
-
-<script>
-import './style/app.scss';
-import { defineComponent } from 'vue';
-import Welcome from './screen/Welcome.vue';
-import Authentication from './screen/Authentication.vue';
-import Index from './screen/Index.vue';
-import Room from './screen/Room.vue';
-import Question from './screen/Question.vue';
-import Settlement from './screen/Settlement.vue';
-import History from './screen/History.vue';
-import Achievement from './screen/Achievement.vue';
-import Accessory from './screen/Accessory.vue';
-import Shop from './screen/Shop.vue';
-
-import Loading from './components/Loading.vue';
-import Tips from './components/Tips.vue';
-
-export default defineComponent({
-    name: 'App',
-    components: {
-        Welcome, Authentication, Index,
-        Room, Question, Settlement, History,
-        Achievement, Accessory, Shop,
-
-        Loading, Tips,
-    },
-    data() {
-        return {
-            loading: true,
-            page: 'Welcome',
-            delay: -1,
-            online: -1,
-            _tips: {
-                n: 0,
-                d: {},
-            },
-            _data: {},
-        }
-    },
-    computed: {
-        _t() {
-            return Object
-                .entries(this._tips.d)
-                .map(([i, {c, t}])=>({i, c, t}));
-        },
-    },
-    methods: {
-        switch(page, data) {
-            this._data = data || {};
-            if(this.page == page) return;
-            this.page = page;
-        },
-        async start() {
-            this.tips($lang.t.welcome);
-            const [success, notAuto] = await $core.user.autologin();
-            if (success) {
-                this.tips($lang.t.autologin_success);
-                if ($core.game.isInRoom) return;
-                this.switch('Index');
-            } else if (!notAuto) {
-                this.tips($lang.t.autologin_failed);
-            }
-            const updateStat = async () => {
-                const {delay, online} =await $core.ping();
-                this.delay = delay;
-                this.online = online;
-            }
-            setInterval(updateStat, 10000);
-            await updateStat();
-        },
-        tips(c, t="info") {
-            this._tips.d[this._tips.n++] = {c, t};
-        },
-    },
-});
-</script>
 
 <style scoped lang="scss">
 .serverstat {

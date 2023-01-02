@@ -108,7 +108,7 @@ export async function start(cfgList) {
     await initCore(core);
     await initApp(app);
 
-    $app.loading = true;
+    $app.loading(true);
     try {
         const banned = $core.database.kv.get('banned');
         if(banned && banned > Date.now()) {
@@ -117,7 +117,7 @@ export async function start(cfgList) {
         }
         await $core.start();
         await $app.start();
-        $app.loading = false;
+        $app.loading(false);
         $emit('system.start');
     } catch(e) {
         console.error(e);

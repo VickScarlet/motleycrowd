@@ -14,56 +14,38 @@
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { ref, computed, onActivated } from 'vue';
 import Item from './History.Item.vue';
 import Pages from '../components/Pages.vue';
-export default defineComponent({
-    components: { Item, Pages },
-    props: {
-        page: {
-            type: Number,
-            default: 1,
-        },
-    },
-    data() {
-        return {
-            _p: 1,
-            total: 0,
-            history: [],
-        }
-    },
-    computed: {
-        p: {
-            get() {
-                return this._p;
-            },
-            async set(page) {
-                this._p = page;
-                $app.loading = true;
-                const history = await $core.game.history(page);
-                $app.loading = false;
-                if (!history) return;
-                this.history = history;
-            }
-        },
-    },
-    async activated() {
-        this.total = await $core.game.pages();
-        this.p = this.page;
-    },
-    deactivate() {},
-    methods: {
-        async review(id) {
-            $app.loading = true;
-            const data = await $core.game.get(id);
-            $app.loading = false;
-            if(!data) return;
-            const page = this.p;
-            const ok = ()=>$app.switch('History', {page});
-            $app.switch('Settlement', {data, ok});
-        }
+const props = defineProps({page: {type: Number, default: 1}});
+const _p = ref(1);
+const total = ref(0);
+const history = ref([]);
+const p = computed({
+    get: _ => _p.value,
+    set: async page => {
+        _p.value = page;
+        $app.loading(true);
+        const h = await $core.game.history(page);
+        $app.loading(false);
+        if (!h) return;
+        history.value = h;
     }
+});
+
+const review = async id => {
+    $app.loading(true);
+    const data = await $core.game.get(id);
+    $app.loading(false);
+    if(!data) return;
+    const page = p.value;
+    const ok = ()=>$app.switch('History', {page});
+    $app.switch('Settlement', {data, ok});
+};
+onActivated(async ()=>{
+    total.value = await $core.game.pages();
+    p.value = props.page;
 });
 </script>
 

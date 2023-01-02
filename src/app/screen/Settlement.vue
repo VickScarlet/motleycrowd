@@ -1,3 +1,32 @@
+<script setup>
+import { watch, ref, toRefs } from 'vue';
+import Mine from './Settlement.Mine.vue';
+import Question from './Settlement.Question.vue';
+import Rank from './Settlement.Rank.vue';
+
+const props = defineProps({
+    data: {type: Object},
+    id: {type: String},
+    ok: {type: Function, default: null}
+});
+
+const questions = ref([]);
+const mine = ref({});
+const rank = ref({});
+const update = d => {
+    mine.value = d.mine;
+    rank.value = {rank: d.rank, mine: d.uuid};
+    questions.value = d.questions.map((d, i)=>([i, d]));
+};
+const d = data=>update($core.game.format(data));
+const i = async id=>d(await $core.game.get(id));
+watch(()=>props.data, _=>d(props.data));
+watch(()=>props.id, _=>i(props.id));
+const {data, id, ok} = toRefs(props);
+if(data.value) d(data.value);
+else if(id.value) i(id.value);
+</script>
+
 <template>
     <div class="settlement">
         <div class="header">
@@ -16,51 +45,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import { watch, defineComponent } from 'vue';
-import Mine from './Settlement.Mine.vue';
-import Question from './Settlement.Question.vue';
-import Rank from './Settlement.Rank.vue';
-
-export default defineComponent({
-    components: {Mine, Question, Rank},
-    props: {
-        data: {
-            type: Object,
-        },
-        id: {
-            type: String,
-        },
-        ok: {
-            type: Function,
-            default: null,
-        }
-    },
-    data() {
-        return {
-            questions: [],
-            mine: {},
-            rank: {},
-        }
-    },
-    mounted() {
-        const d = data=>this.update($core.game.format(data));
-        const i = async id=>d(await $core.game.get(id));
-        watch(()=>this.data, _=>d(this.data));
-        watch(()=>this.id, _=>i(this.id));
-        if(this.data) d(this.data);
-        else if(this.id) i(this.id);
-    },
-    methods: {
-        update({uuid, questions, rank, mine}) {
-            this.mine = mine;
-            this.rank = {rank, mine: uuid};
-            this.questions = questions.map((d, i)=>([i, d]));
-        },
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 div.settlement {

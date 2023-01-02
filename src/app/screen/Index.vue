@@ -1,13 +1,27 @@
+<script setup>
+import Game from './Index.Game.vue';
+import Rank from './Index.Rank.vue';
+import User from './Index.User.vue';
+import { ref, reactive, markRaw } from 'vue';
+
+const menu = reactive([
+    {type: 'game', text: '游戏', page: markRaw(Game)},
+    {type: 'rank', text: '排行', page: markRaw(Rank)},
+    {type: 'user', text: '个人', page: markRaw(User)}
+]);
+const page = ref(markRaw(Game));
+</script>
+
 <template>
     <div class="index">
         <keep-alive>
             <component :is="page"/>
         </keep-alive>
         <ul class="menu">
-            <li v-for="{type, text, page} in menu"
+            <li v-for="{type, text, page: p} in menu"
                 :key="type" :type="type"
-                @click="this.page=page"
-                :class="{actived: page===this.page}"
+                @click="page=p"
+                :class="{actived: page===p}"
             >
                 <span class="icon" />
                 <span class="text">{{text}}</span>
@@ -15,33 +29,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import Game from './Index.Game.vue';
-import Rank from './Index.Rank.vue';
-import User from './Index.User.vue';
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    components: { Game, Rank, User },
-    data() {
-        return {
-            menu: [],
-            page: 'Game',
-        }
-    },
-    activated() {
-        const menu = [
-            {type: 'game', text: '游戏', page: 'Game'},
-        ];
-        if(!$core.user.isguest)
-            menu.push({type: 'rank', text: '排行', page: 'Rank'});
-        menu.push({type: 'user', text: '个人', page: 'User'});
-
-        this.menu = menu;
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 

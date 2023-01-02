@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
     <div class="confirm">
         <div class="content">
@@ -11,13 +14,6 @@
         </div>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({});
-</script>
-
 
 <style lang="scss" scoped>
 div.confirm {

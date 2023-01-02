@@ -1,34 +1,29 @@
+<script setup>
+import { toRefs } from 'vue';
+
+const props = defineProps({
+    id: {},
+    name: {type: String, require: true},
+    description: {type: String, require: true},
+    grade: {type: Number, require: true},
+    unlocked: {type: Boolean, default: false},
+    hide: {type: Boolean, default: false},
+});
+const { name, description, grade, unlocked, hide } = toRefs( props );
+</script>
+
 <template>
-    <div class="achievement-item" v-if="data.unlocked" :grade=data.grade >
-        <span class="name">{{data.name}}</span>
-        <span class="desc">{{data.description}}</span>
+    <div class="achievement-item" v-if="unlocked" :grade=grade >
+        <span class="name">{{name}}</span>
+        <span class="desc">{{description}}</span>
     </div>
-    <div class="achievement-item" v-if="!data.unlocked" :grade=data.grade locked >
-        <span class="name" v-if="!data.hide">{{data.name}}</span>
-        <span class="name" v-if="data.hide">???</span>
-        <span class="desc" v-if="!data.hide">{{data.description}}</span>
-        <span class="desc" v-if="data.hide">???</span>
+    <div class="achievement-item" v-if="!unlocked" :grade=grade locked >
+        <span class="name" v-if="!hide">{{name}}</span>
+        <span class="name" v-if="hide">???</span>
+        <span class="desc" v-if="!hide">{{description}}</span>
+        <span class="desc" v-if="hide">???</span>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue'
-export default defineComponent({
-    props: {
-        data: {
-            type: Object,
-            required: true,
-            default: {
-                id: -1,
-                name: '',
-                description: '',
-                grade: 0,
-                hide: false,
-            },
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 div.achievement-item {

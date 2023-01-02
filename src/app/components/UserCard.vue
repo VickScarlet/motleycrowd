@@ -1,3 +1,36 @@
+<script setup>
+import { ref, watch } from 'vue';
+import Card from './Card.vue';
+import Badge from './Badge.vue';
+
+const props = defineProps({
+    uuid: {type: String, required: true},
+    p_card: {type: String, default: ''},
+    p_badge: {type: String, default: ''},
+});
+
+const card = ref('');
+const badge = ref('');
+const username = ref('');
+const guest = ref(false);
+const update = async()=>{
+    const uuid = props.uuid;
+    const user = await $core.user.get(uuid);
+    if(!user) return;
+    console.debug(user);
+    if(props.p_card == null) card.value = ''
+    else card.value = props.p_card || user.card;
+    if(props.p_badge == null) badge.value = ''
+    else badge.value = props.p_badge || user.badge;
+    username.value = user.username;
+    guest.value = !!user.guest;
+}
+watch(()=>props.uuid, update);
+watch(()=>props.p_card, update);
+watch(()=>props.p_badge, update);
+update();
+</script>
+
 <template>
     <div class="usercard">
         <Card :card="card">
@@ -9,58 +42,6 @@
         </Card>
     </div>
 </template>
-
-<script>
-import { watch, defineComponent } from 'vue';
-import Card from './Card.vue';
-import Badge from './Badge.vue';
-
-export default defineComponent({
-    components: { Card, Badge },
-    props: {
-        uuid: {
-            type: String,
-            required: true,
-        },
-        p_card: {
-            type: String,
-            default: '',
-        },
-        p_badge: {
-            type: String,
-            default: '',
-        }
-    },
-    data() {
-        return {
-            card: '',
-            badge: '',
-            username: '',
-            guest: false,
-        }
-    },
-    mounted() {
-        watch(()=>this.uuid, ()=>this.update());
-        watch(()=>this.p_card, ()=>this.update());
-        watch(()=>this.p_badge, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            const {uuid} = this;
-            const user = await $core.user.get(uuid);
-            if(!user) return;
-            const {username, guest, badge, card} = user;
-            if(this.p_card == null) this.card = ''
-            else this.card = this.p_card||card;
-            if(this.p_badge == null) this.badge = ''
-            else this.badge = this.p_badge||badge;
-            this.username = username;
-            this.guest = !!guest;
-        }
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 

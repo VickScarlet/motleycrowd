@@ -1,34 +1,23 @@
+<script setup>
+import { ref, watch } from 'vue';
+const props = defineProps({badge: {type: String, default: ''}});
+const name = ref('');
+const grade = ref(0);
+const display = ref(false);
+const update = ()=>{
+    const data = $core.sheet.get('badge', props.badge);
+    display.value = !!data;
+    if(!display.value) return;
+    name.value = data.name;
+    grade.value = data.grade;
+}
+watch(()=>props.badge, update);
+update();
+</script>
+
 <template>
     <span class="badge" :grade="grade" v-if="display">{{name}}</span>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        badge: {
-            type: String,
-            required: true,
-            default: '',
-        },
-    },
-    computed: {
-        sheet() {
-            return $core.sheet.get('badge', this.badge);
-        },
-        name() {
-            return this.sheet.name;
-        },
-        grade() {
-            return this.sheet.grade;
-        },
-        display() {
-            return !!this.sheet;
-        },
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 span.badge {

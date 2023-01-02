@@ -1,3 +1,16 @@
+<script setup>
+import { computed, toRefs } from 'vue';
+import AnswerPieChart from '../components/AnswerPieChart.vue';
+
+const props = defineProps({
+    question: {type: String, default: ''},
+    answers: {type: Array, default: []},
+    mine: {type: Object, default: {value: 0, answer: ''}}
+});
+const { question, answers, mine } = toRefs(props);
+const pie = computed(()=>answers.value.filter(({value}) => value > 0));
+</script>
+
 <template>
     <div class="settlement-question">
         <h3>{{question}}</h3>
@@ -18,36 +31,6 @@
         <span :class="'alter '+(mine.value>=0?'up':'down')">{{mine.value>0?'+':''}}{{mine.value}}</span>
     </div>
 </template>
-<script>
-import { defineComponent } from 'vue';
-import AnswerPieChart from '../components/AnswerPieChart.vue';
-
-export default defineComponent({
-    components: {AnswerPieChart},
-    props: {
-        question: {
-            type: String,
-            default: '',
-        },
-        answers: {
-            type: Array,
-            default: [],
-        },
-        mine: {
-            type: Object,
-            default: {
-                value: 0,
-                answer: '',
-            }
-        },
-    },
-    computed: {
-        pie() {
-            return this.answers.filter(({value}) => value > 0);
-        },
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 div.settlement-question {

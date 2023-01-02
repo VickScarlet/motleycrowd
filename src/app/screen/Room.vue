@@ -1,3 +1,19 @@
+<script setup>
+import { ref, onActivated, onDeactivated } from 'vue';
+import UserCard from '../components/UserCard.vue';
+
+const limit = ref(0);
+const users = ref([]);
+const back = ()=>$core.game.leave().then(result=>result&&$app.switch('Index'));
+const update = () => {
+    limit.value = $core.game.limit;
+    users.value = [...$core.game.users];
+};
+onActivated(()=>$on('game.user', update));
+onDeactivated(()=>$off('game.user', update));
+update();
+</script>
+
 <template>
     <div class="room">
         <div class="header">
@@ -11,40 +27,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import UserCard from '../components/UserCard.vue';
-
-export default defineComponent({
-    components: { UserCard },
-    data() {
-        return {
-            limit: 0,
-            users: [],
-        }
-    },
-    activated() {
-        this.update();
-        $on('game.user', this.update.bind(this));
-    },
-    deactivated() {
-        $off('game.user', this.update.bind(this));
-    },
-    methods: {
-        async back() {
-            const result = await $core.game.leave();
-            if(result)
-                $app.switch('Index');
-        },
-        update() {
-            const {users, limit} = $core.game;
-            this.limit = limit;
-            this.users = [...users];
-        },
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 

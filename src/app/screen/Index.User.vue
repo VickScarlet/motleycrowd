@@ -1,3 +1,12 @@
+<script setup>
+const logout = async () => {
+    $app.loading(true);
+    const result = await $core.user.logout();
+    $app.loading(false);
+    if (result) $app.switch('Welcome');
+};
+</script>
+
 <template>
     <div class="index-user">
         <h1>{{$lang.g.title}}</h1>
@@ -19,21 +28,6 @@
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    methods: {
-        async logout() {
-            $app.loading = true;
-            const result = await $core.user.logout();
-            $app.loading = false;
-            if (result) $app.switch('Welcome');
-        },
-    }
-});
-</script>
-
 <style lang="scss" scoped>
 div.index-user {
     > ul.menu {
@@ -52,8 +46,8 @@ div.index-user {
             text-align: left;
             padding-left: 20px;
             font-weight: bold;
-            margin-top: auto;
             margin: 8px;
+            margin-top: auto;
             &::before {
                 content: '';
                 border-radius: 0 8px 8px 0;

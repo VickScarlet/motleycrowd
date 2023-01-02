@@ -1,25 +1,13 @@
-<template>
-    <span class="grade" :grade="grade">{{text}}</span>
-</template>
+<script setup>
+import { toRef } from 'vue';
 
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        grade: {
-            type: Number,
-            required: true,
-            default: 0,
-        },
-    },
-    computed: {
-        text() {
-            return $lang.g[`grade_${this.grade}`];
-        },
-    }
-});
+const props = defineProps({grade: {type: Number, required: true}});
+const grade = toRef(props, 'grade');
 </script>
+
+<template>
+    <span class="grade" :grade="grade">{{$lang.g[`grade_${grade}`]}}</span>
+</template>
 
 <style lang="scss" scoped>
 span.grade {

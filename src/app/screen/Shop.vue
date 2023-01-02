@@ -1,3 +1,31 @@
+<script setup>
+import { ref } from 'vue';
+import AssetMoney from '../components/AssetMoney.vue';
+import Good from './Shop.Good.vue';
+
+const goods = ref([]);
+const money = ref({});
+const next = ref('');
+
+const update = async ()=>{
+    const {goods: g, expired} = await $core.shop.shelves();
+    const {m0, m1} = await $core.asset.money();
+    goods.value = g;
+    money.value = {money: {m0, m1}};
+    next.value = $lang.g.next_restocking.f(
+        $moment(expired).calendar()
+    );
+}
+
+const buy = async good => {
+    $app.loading(true);
+    const result = await $core.shop.buy(good);
+    $app.loading(false);
+    if (result) update();
+}
+update();
+</script>
+
 <template>
     <div class="shop">
         <div class="header">
@@ -14,48 +42,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import { defineComponent } from 'vue';
-import AssetMoney from '../components/AssetMoney.vue';
-import Good from './Shop.Good.vue';
-
-export default defineComponent({
-    components: {Good, AssetMoney},
-    data() {
-        return {
-            goods: [],
-            expired: '1970-01-01 00:00:00',
-            money: {},
-        }
-    },
-    computed: {
-        next() {
-            return $lang.g.next_restocking.f(
-                $moment(this.expired).calendar()
-            );
-        }
-    },
-    activated() {
-        this.update();
-    },
-    methods: {
-        async update() {
-            const {goods, expired} = await $core.shop.shelves();
-            const {m0, m1} = await $core.asset.money();
-            this.goods = goods;
-            this.expired = expired;
-            this.money = {money: {m0, m1}};
-        },
-        async buy(good) {
-            $app.loading = true;
-            const result = await $core.shop.buy(good);
-            $app.loading = false;
-            if (result) this.update();
-        }
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 div.shop {

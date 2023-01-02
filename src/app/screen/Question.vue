@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
+        <button class="exit" @click="confirm=true">{{$lang.g.exit_room}}</button>
         <div class="progress-bar">
-            <CountDownProgress :init="progress"/>
+            <CountDownProgress v-bind="progress"/>
         </div>
         <div class="card">
             <h3 class="question">{{question}}</h3>
@@ -26,94 +26,80 @@
     <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">{{$lang.g.exit_check}}</Confirm>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { ref, reactive, onActivated, onDeactivated } from 'vue';
 import CountDownProgress from '../components/CountDownProgress.vue';
 import Confirm from '../components/Confirm.vue';
 
-export default defineComponent({
-    components: {CountDownProgress, Confirm},
-    data() {
-        return {
-            confirm: false,
-            id: '',
-            selected: '',
-            question: '',
-            limit: 0,
-            answerCount: 0,
-            answered: false,
-            answeredOption: '',
-            options: [],
-            progress: {
-                total: 60,
-                left: 60,
-            },
-        }
-    },
-    activated() {
-        this.limit = $core.game.limit;
-        this.update();
-        $on('game.question', this.update.bind(this));
-        $on('game.answer', this.updateAnswer.bind(this));
-    },
-    deactivated() {
-        this.confirm = false;
-        $off('game.question', this.update.bind(this));
-        $off('game.answer', this.updateAnswer.bind(this));
-    },
-    methods: {
-        back() {
-            this.confirm = true;
-        },
-        async doexit(exit) {
-            this.confirm = false;
-            if(!exit) return;
-            const result = await $core.game.leave();
-            if(result)
-                $app.switch('Index');
-        },
-        update() {
-            const q = $core.game.currentQuestion;
-            if(!q) return;
-            const { id, question, size, left,
-                answer, timeout: total, options
-            } = q;
-            if(this.id == id) return;
-            this.id = id;
-            this.answerCount = size;
-            this.question = question;
-            this.selected = '';
-            this.answeredOption = answer;
-            this.answered = !!answer;
-            this.progress = {total, left};
-            const opts = [];
-            for(const option in options) {
-                const data = options[option];
-                if(!data) continue;
-                const {type, val} = data;
-                const key = `${id}-${option}`
-                opts.push({key, option, val, type});
-            }
-            this.options = opts;
-        },
-        updateAnswer(count) {
-            this.answerCount = count;
-        },
-        async answer() {
-            const id = this.id;
-            const selected = this.selected;
-            $app.loading = true;
-            const result = await $core.game.answer(selected);
-            $app.loading = false;
-            if(!result) return;
-            const q = $core.game.currentQuestion;
-            if(!q || id != q.id) return;
-            this.answerCount++;
-            this.answered = true;
-            this.answeredOption = selected;
-        },
+const confirm = ref(false);
+const id = ref('');
+const selected = ref('');
+const question = ref('');
+const limit = ref(0);
+const answerCount = ref(0);
+const answered = ref(false);
+const answeredOption = ref('');
+const options = ref([]);
+const progress = reactive({total: 60, left: 60});
+
+const doexit = async exit => {
+    confirm.value = false;
+    if(!exit) return;
+    const result = await $core.game.leave();
+    if(result) $app.switch('Index');
+};
+
+const updateAnswer = count => answerCount.value = count;
+
+const update = _ => {
+    const q = $core.game.currentQuestion;
+    if(!q) return;
+    if(id.value == q.id) return;
+    id.value = q.id;
+    answerCount.value = q.size;
+    question.value = q.question;
+    selected.value = '';
+    answeredOption.value = q.answer;
+    answered.value = !!q.answer;
+    progress.total = q.timeout;
+    progress.left = q.left;
+    const opts = [];
+    for(const option in q.options) {
+        const data = q.options[option];
+        if(!data) continue;
+        const {type, val} = data;
+        const key = `${id}-${option}`
+        opts.push({key, option, val, type});
     }
+    options.value = opts;
+};
+
+const answer = async () => {
+    const i = id.value;
+    const s = selected.value;
+    $app.loading(true);
+    const result = await $core.game.answer(s);
+    $app.loading(false);
+    if(!result) return;
+    const q = $core.game.currentQuestion;
+    if(!q || i != q.id) return;
+    answerCount.value++;
+    answered.value = true;
+    answeredOption.value = s;
+};
+
+onActivated(() => {
+    limit.value = $core.game.limit;
+    this.update();
+    $on('game.question', update);
+    $on('game.answer', updateAnswer);
 });
+onDeactivated(() => {
+    confirm.value = false;
+    $off('game.question', update);
+    $off('game.answer', updateAnswer);
+});
+update();
 </script>
 
 <style lang="scss" scoped>

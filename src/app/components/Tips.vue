@@ -1,60 +1,45 @@
+<script setup>
+import { ref, computed, watch } from 'vue';
+
+const emit = defineEmits(['done']);
+
+const props = defineProps({
+    content: {type: String, required: true},
+    type: {type: String, default: 'info'},
+});
+
+const n = ref(0);
+const list = ref([]);
+const tips = computed(()=>list.value?.slice(0, n.value).join('') || '');
+
+let interval = null;
+let timeout = null;
+const update = ()=>{
+    clearTimeout(timeout);
+    timeout = null;
+    n.value = 0;
+    list.value = props.content.match(/(\w+|[^\w])/g) || [];
+    if(list.value.length == 0) return;
+    if(interval) return;
+    interval = setInterval(()=>{
+        if (n.value < list.value.length)
+            return n.value++;
+        clearInterval(interval);
+        interval = null;
+        timeout = setTimeout(()=>emit('done'), 2000);
+    }, 50);
+};
+
+watch(()=>props.content, update);
+update();
+</script>
+
 <template>
     <div class="tips" :type="type">
         <span class="icon" />
         <span class="content">{{tips}}</span>
     </div>
 </template>
-
-<script>
-import { watch, defineComponent } from 'vue';
-
-export default defineComponent({
-    props: {
-        content: {
-            type: String,
-            required: true,
-        },
-        type: {
-            type: String,
-            default: 'info',
-        },
-    },
-    data() {
-        return {
-            n: 0,
-            interval: null,
-            timeout: null,
-            list: [],
-        }
-    },
-    computed: {
-        tips() {
-            return this.list?.slice(0, this.n).join('') || '';
-        },
-    },
-    mounted() {
-        watch(()=>this.content, ()=>this.update());
-        this.update();
-    },
-    methods: {
-        async update() {
-            clearTimeout(this.timeout);
-            this.timeout = null;
-            this.n = 0;
-            this.list = this.content.match(/(\w+|[^\w])/g) || [];
-            if(this.list.length == 0) return;
-            if(this.interval) return;
-            this.interval = setInterval(()=>{
-                if (this.n < this.list.length)
-                    return this.n++;
-                clearInterval(this.interval);
-                this.interval = null;
-                this.timeout = setTimeout(()=>this.$emit('done'), 2000);
-            }, 50);
-        }
-    }
-});
-</script>
 
 <style lang="scss" scoped>
 div.tips {
