@@ -132,11 +132,10 @@ div.accessory {
                 padding: 0;
                 margin: 2px;
                 > input { display: none; }
-                &:hover::after {
+                &:hover::before {
                     content: "";
                     display: block;
                     position: absolute;
-                    z-index: -1;
                     top: -2px;
                     left: -2px;
                     right: -2px;

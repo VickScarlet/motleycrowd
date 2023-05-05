@@ -32,7 +32,6 @@ const rank = ref('main');
 div.index-rank {
     width: 100%;
     > ul.menu {
-        z-index: 10;
         position: fixed;
         top: 0;
         left: 0;

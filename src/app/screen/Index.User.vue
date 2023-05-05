@@ -13,15 +13,19 @@ const logout = async () => {
         <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
         <ul class="menu">
             <li class="l-1" @click="$app.switch('Achievement')">
+                <span class="icon"></span>
                 <span>{{$lang.g.achievement}}</span>
             </li>
             <li class="l-2" @click="$app.switch('Accessory')">
+                <span class="icon"></span>
                 <span>{{$lang.g.accessory}}</span>
             </li>
             <li class="l-3" @click="$app.switch('Shop')">
+                <span class="icon"></span>
                 <span>{{$lang.g.shop}}</span>
             </li>
             <li class="l-4" @click="logout">
+                <span class="icon"></span>
                 <span>{{$lang.g.logout}}</span>
             </li>
         </ul>
@@ -48,10 +52,10 @@ div.index-user {
             font-weight: bold;
             margin: 8px;
             margin-top: auto;
-            &::before {
-                content: '';
+            position: relative;
+            span { position: absolute; }
+            span.icon {
                 border-radius: 0 8px 8px 0;
-                z-index: -1;
                 display: block;
                 width: 120px;
                 height: 100px;
@@ -64,19 +68,19 @@ div.index-user {
             }
             &.l-1 {
                 background: linear-gradient(45deg, #aaffb2, #ffff00);
-                &::before { background-image: url(/icons/achi.svg); }
+                span.icon { background-image: url(/icons/achi.svg); }
             }
             &.l-2 {
                 background: linear-gradient(45deg, #f5f5f5, #8282b4);
-                &::before { background-image: url(/icons/accessory.svg); }
+                span.icon { background-image: url(/icons/accessory.svg); }
             }
             &.l-3 {
                 background: linear-gradient(45deg, #f5f5f5, #438e8a);
-                &::before { background-image: url(/icons/shop.svg); }
+                span.icon { background-image: url(/icons/shop.svg); }
             }
             &.l-4 {
                 background: linear-gradient(45deg, #f5f5f5, #933737);
-                &::before { background-image: url(/icons/out.svg); }
+                span.icon { background-image: url(/icons/out.svg); }
             }
         }
     }

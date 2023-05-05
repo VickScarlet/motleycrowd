@@ -7,7 +7,9 @@ const grade = computed(()=>$core.sheet.get('card', props.card, 'grade') || 0);
 
 <template>
     <div class="v-card" :card="card" :grade="grade">
+        <span class="back"></span>
         <div><slot></slot></div>
+        <span class="front"></span>
     </div>
 </template>
 
@@ -27,8 +29,16 @@ div.v-card {
         left: 0;
         width: calc(100% - 20px);
         transform: translateY(-50%);
-        z-index: 5;
     }
+    > .back, > .front {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
 }
 
 </style>

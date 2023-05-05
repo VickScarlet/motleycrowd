@@ -56,68 +56,50 @@
     &[card="701"] {
         background: repeating-linear-gradient(90deg,#0c2752 0 33%, #ffffff 0 67%,#bb2d29 0 100%);
     }
-
-    // 加载中
-    // &[card="702"] {
-    //     &::before {
-    //         @include mfull;
-    //         z-index: 6;
-    //         background: #000000;
-    //         opacity: 0.5;
-    //     }
-
-    //     &::after {
-    //         @include mcenter(22px, 22px);
-    //         padding: 2px;
-    //         line-height: 22px;
-    //         content: '99%';
-    //         color: #ffffffb0;
-    //         font-family: consolas, 'Courier New', Courier, monospace;
-    //         font-size: 12px;
-    //         z-index: 6;
-    //         border-radius: 100%;
-    //         background: #00000000;
-    //         transform: translate(-50%, -50%) rotate(0deg);
-    //         animation: anime-702 2s infinite ease-in-out;
-    //     }
-
-    //     @keyframes anime-702 {
-    //         0%, 100% {
-    //             border: 2px solid #ffffff60;
-    //             box-shadow: 0 0 4px 1px #ffffff30;
-    //         }
-    //         15%, 85% {
-    //             border: 2px solid #ffffff80;
-    //             box-shadow: 0 0 4px 1px #ffffff60;
-    //         }
-    //         50% {
-    //             border: 2px solid #ffffffff;
-    //             box-shadow: 0 0 4px 1px #ffffffff;
-    //         }
-    //     }
-    // }
-
     // 加载中
     &[card="702"] {
-
-        &::after {
+        > .front::before {
             @include mcenter(100%, 100%);
             content: '';
-            color: #ffffffb0;
+            color: #ffffff;
             font-family: consolas, 'Courier New', Courier, monospace;
-            font-size: 12px;
-            z-index: 6;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-25 -25 50 50"><circle cx="0" cy="0" r="20" fill="none" stroke="%23fff" stroke-width="1"/><text x="0" y="0" text-anchor="middle" dominant-baseline="middle" fill="%23fff">99%</text></svg>') no-repeat center;
-            background-color: #00000080;
+            font-size: 12px;            background-color: #00000080;
             transform: translate(-50%, -50%) rotate(0deg);
             animation: anime-702 2s infinite ease-in-out;
+        }
+
+        > .front::after {
+            @include mcenter(22px, 22px);
+            padding: 2px;
+            line-height: 22px;
+            content: '99%';
+            color: #ffffffbf;
+            font-family: consolas, 'Courier New', Courier, monospace;
+            font-size: 18px;
+            background: #00000000;
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        @keyframes anime-702 {
+            0%, 100% {
+                border: 2px solid #ffffff60;
+                box-shadow: 0 0 4px 1px #ffffff30;
+            }
+            15%, 85% {
+                border: 2px solid #ffffff80;
+                box-shadow: 0 0 4px 1px #ffffff60;
+            }
+            50% {
+                border: 2px solid #ffffffff;
+                box-shadow: 0 0 4px 1px #ffffffff;
+            }
         }
     }
 
     // 野生的
     &[card="703"] {
         background: none;
-        &::before {
+        > .back::before {
             @include mfull;
             background: repeating-linear-gradient(
                 0deg,
@@ -126,7 +108,7 @@
                 #f00 0 100%
             );
         }
-        &::after {
+        > .back::after {
             @include mcenter(18px, 18px);
             background: white;
             border-radius: 100%;
@@ -138,7 +120,7 @@
     // 河里
     &[card="704"] {
         background: none;
-        &::before {
+        > .back::before {
             @include mfull;
             background: repeating-linear-gradient(10deg,
                 #80cae7 0 2px,
@@ -146,7 +128,7 @@
                 #00a6ff 0 12px
             );
         }
-        &::after {
+        > .back::after {
             @include mfull;
             background: repeating-linear-gradient(-30deg,
                 #dde3ed 0 2px,
@@ -166,7 +148,7 @@
             #2cb1e130 8px 20px,
             #ffffff00 100%
         );
-        &::before {
+        > .back::before {
             @include mfull;
             background: radial-gradient(
                 circle at 35px 50%,
@@ -176,7 +158,7 @@
                 #ffffff00 100%
             );
         }
-        &::after {
+        > .back::after {
             @include mfull;
             background: radial-gradient(
                 circle at 100px 25%,
@@ -196,7 +178,7 @@
             #11171d 22px 40px,
             #000000 100%
         );
-        &::before {
+        > .back::before {
             @include mfull;
             background: radial-gradient(
                 circle at 25px calc(50% - 10px),
@@ -210,9 +192,8 @@
     // 脉冲
     &[card="707"] {
         background: #000000;
-        &::before {
+        > .back::before {
             @include mfull;
-            z-index: 1;
             background: radial-gradient(
                 circle at 35px 50%,
                 #ebfaff 0 4px,
@@ -222,7 +203,7 @@
             );
         }
 
-        &::after{
+        > .back::after{
             @include mfull;
             background: radial-gradient(
                 circle at 35px 50%,
@@ -248,7 +229,7 @@
     &[card="708"] {
         background: #63aad6;
         background: linear-gradient(to right, #64a4cd 60%, #38cada);
-        &::before {
+        > .back::before {
             @include mfull;
             background: radial-gradient(
                 circle at -15px 25%,
@@ -264,7 +245,7 @@
                 #ffffff00 calc(80% + 20px)
             );
         }
-        &::after {
+        > .back::after {
             @include mfull;
             background: radial-gradient(
                 circle at 10% 110%,
@@ -287,15 +268,15 @@
     // 大鸟转转转
     &[card="709"] {
         background: #00000000;
-        &::before,
-        &::after {
+        > .back::before,
+        > .back::after {
             @include mfull;
             content: '';
             box-shadow: inset 0 0 0 2px #ffff00;
             animation: anime-709 4s linear infinite;
         }
 
-        &::before {
+        > .back::before {
             animation-delay: -2s;
         }
 
@@ -310,7 +291,7 @@
     // 太极-黑
     &[card="710"] {
         background: linear-gradient(to right, #ffffff 30px, #000000 31px 100%);
-        &::before {
+        > .back::before {
             @include mcenter(50%, 50%);
 
             aspect-ratio: 1/1;
@@ -326,7 +307,7 @@
             position: absolute;
             border-radius: 100%;
         }
-        &::after {
+        > .back::after {
             @include mcenter(50%, 50%);
             aspect-ratio: 1/1;
             width: auto;
@@ -346,7 +327,7 @@
     // 太极-白
     &[card="711"] {
         background: linear-gradient(to left, #000000 30px, #ffffff 31px 100%);
-        &::before {
+        > .back::before {
             @include mcenter(50%, 50%);
             aspect-ratio: 1/1;
             width: auto;
@@ -363,7 +344,7 @@
             position: absolute;
             border-radius: 100%;
         }
-        &::after {
+        > .back::after {
             @include mcenter(50%, 50%);
             aspect-ratio: 1/1;
             width: auto;
@@ -403,7 +384,7 @@
     &[card="713"] {
         border-radius: 1000px;
         background: #00000000;
-        &::before {
+        > .back::before {
             @include mfull;
             border-radius: 1000px;
             border-left: 2px solid #ffffff;
@@ -430,7 +411,7 @@
     // 带点绿
     &[card="715"] {
         background: #00000000;
-        &::before {
+        > .back::before {
             @include mfull;
             border-top: 6px solid #00ff00;
             background: #00ff0010;
@@ -440,7 +421,7 @@
     // 刚出来的
     &[card="716"] {
         background: #00000000;
-        &::before {
+        > .back::before {
             @include mfull;
             border-top: 6px solid #000000;
             background: repeating-linear-gradient(to right, #868686 0 6px, #000000 0 12px);

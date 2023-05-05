@@ -35,15 +35,19 @@ const cancel = () => {
         <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
         <ul class="menu">
             <li class="l-1" @click="pair(100)">
+                <span class="icon"></span>
                 <span>{{$lang.g.pair_mode.f(100)}}</span>
             </li>
             <li class="l-2" @click="pair(10)">
+                <span class="icon"></span>
                 <span>{{$lang.g.pair_mode.f(10)}}</span>
             </li>
             <li class="l-3" @click="custom=!custom">
+                <span class="icon"></span>
                 <span>{{$lang.g.priv_mode}}</span>
             </li>
             <li class="l-4" @click="$app.switch('History')">
+                <span class="icon"></span>
                 <span>{{$lang.g.history}}</span>
             </li>
         </ul>
@@ -73,10 +77,10 @@ div.index-game {
             font-weight: bold;
             margin: 8px;
             margin-top: auto;
-            &::before {
-                content: '';
+            position: relative;
+            span { position: absolute; }
+            span.icon {
                 border-radius: 0 8px 8px 0;
-                z-index: -1;
                 display: block;
                 width: 120px;
                 height: 100px;
@@ -89,19 +93,19 @@ div.index-game {
             }
             &.l-1 {
                 background: linear-gradient(45deg, #f5f5f5, #8282b4);
-                &::before { background-image: url(/icons/game100.svg); }
+                span.icon { background-image: url(/icons/game100.svg); }
             }
             &.l-2 {
                 background: linear-gradient(45deg, #f5f5f5, #8282b4);
-                &::before { background-image: url(/icons/game10.svg); }
+                span.icon { background-image: url(/icons/game10.svg); }
             }
             &.l-3 {
                 background: linear-gradient(45deg, #f5f5f5, #438e8a);
-                &::before { background-image: url(/icons/gamec.svg); }
+                span.icon { background-image: url(/icons/gamec.svg); }
             }
             &.l-4 {
                 background: linear-gradient(45deg, #f5f5f5, #8b8941);
-                &::before { background-image: url(/icons/history.svg); }
+                span.icon { background-image: url(/icons/history.svg); }
             }
         }
     }
