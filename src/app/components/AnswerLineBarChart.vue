@@ -1,26 +1,3 @@
-<template>
-    <svg ref="svgRef" class="answer-line-bar-chart" :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
-        <g class="axis axis-x"></g>
-        <g class="axis axis-y"></g>
-        <g class="bars">
-            <g v-for="({n, v, x, y, w, h, tx, ty, b}) in bars"
-                :key="n" :win="b"
-                :visibility="v==0?'hidden':'visible'">
-
-                <rect :x="x" :y="y" :width="w" :height="h" ></rect>
-                <text :x="tx" :y="ty" :dy="`${!b?1:-0.2}em`">{{v}}</text>
-            </g>
-        </g>
-        <g class="line">
-            <path :d="line"></path>
-            <g v-for="({n, t, cx, cy, b}) in bars" :key="n" :win="b">
-                <circle :cx="cx" :cy="cy" r="5"></circle>
-                <text :x="cx" :y="cy" dy="-0.5em">{{t}}</text>
-            </g>
-        </g>
-    </svg>
-</template>
-
 <script setup>
 import { ref, toRefs, watch, onMounted } from 'vue';
 import * as d3 from 'd3';
@@ -98,6 +75,28 @@ watch(()=>props.barpadding, update);
 watch(()=>props.answers, update);
 </script>
 
+<template>
+    <svg ref="svgRef" class="answer-line-bar-chart" :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
+        <g class="axis axis-x"></g>
+        <g class="axis axis-y"></g>
+        <g class="bars">
+            <g v-for="({n, v, x, y, w, h, tx, ty, b}) in bars"
+                :key="n" :win="b"
+                :visibility="v==0?'hidden':'visible'">
+
+                <rect :x="x" :y="y" :width="w" :height="h" ></rect>
+                <text :x="tx" :y="ty" :dy="`${!b?1:-0.2}em`">{{v}}</text>
+            </g>
+        </g>
+        <g class="line">
+            <path :d="line"></path>
+            <g v-for="({n, t, cx, cy, b}) in bars" :key="n" :win="b">
+                <circle :cx="cx" :cy="cy" r="5"></circle>
+                <text :x="cx" :y="cy" dy="-0.5em">{{t}}</text>
+            </g>
+        </g>
+    </svg>
+</template>
 
 <style lang="scss">
 svg.answer-line-bar-chart {

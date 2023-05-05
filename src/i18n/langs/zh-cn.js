@@ -38,6 +38,7 @@ export const general = {
     exit_check: '真的要退出吗?',
     submit: '提交',
     submit_as: '您已提交选项【{}】',
+    input_roomcode: '输入房间号',
 
     mimestate: '我的状态',
     ranking_as: '排名: {}',
@@ -73,6 +74,9 @@ export const general = {
     private_100: '百人好友',
     pair_10: '十人排位',
     pair_100: '百人排位',
+
+    room_info_private: '好友房 {}/{} 房间号 {}',
+    room_info_pair: '排位房 {}/{}',
 
     next_restocking: '下次补货在{}',
     good_card: '背景',

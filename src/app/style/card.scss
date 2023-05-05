@@ -58,42 +58,59 @@
     }
 
     // 加载中
+    // &[card="702"] {
+    //     &::before {
+    //         @include mfull;
+    //         z-index: 6;
+    //         background: #000000;
+    //         opacity: 0.5;
+    //     }
+
+    //     &::after {
+    //         @include mcenter(22px, 22px);
+    //         padding: 2px;
+    //         line-height: 22px;
+    //         content: '99%';
+    //         color: #ffffffb0;
+    //         font-family: consolas, 'Courier New', Courier, monospace;
+    //         font-size: 12px;
+    //         z-index: 6;
+    //         border-radius: 100%;
+    //         background: #00000000;
+    //         transform: translate(-50%, -50%) rotate(0deg);
+    //         animation: anime-702 2s infinite ease-in-out;
+    //     }
+
+    //     @keyframes anime-702 {
+    //         0%, 100% {
+    //             border: 2px solid #ffffff60;
+    //             box-shadow: 0 0 4px 1px #ffffff30;
+    //         }
+    //         15%, 85% {
+    //             border: 2px solid #ffffff80;
+    //             box-shadow: 0 0 4px 1px #ffffff60;
+    //         }
+    //         50% {
+    //             border: 2px solid #ffffffff;
+    //             box-shadow: 0 0 4px 1px #ffffffff;
+    //         }
+    //     }
+    // }
+
+    // 加载中
     &[card="702"] {
-        &::before {
-            @include mfull;
-            z-index: 6;
-            background: #000000;
-            opacity: 0.5;
-        }
 
         &::after {
-            @include mcenter(22px, 22px);
-            padding: 2px;
-            line-height: 22px;
-            content: '99%';
+            @include mcenter(100%, 100%);
+            content: '';
             color: #ffffffb0;
             font-family: consolas, 'Courier New', Courier, monospace;
             font-size: 12px;
             z-index: 6;
-            border-radius: 100%;
-            background: #00000000;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-25 -25 50 50"><circle cx="0" cy="0" r="20" fill="none" stroke="%23fff" stroke-width="1"/><text x="0" y="0" text-anchor="middle" dominant-baseline="middle" fill="%23fff">99%</text></svg>') no-repeat center;
+            background-color: #00000080;
             transform: translate(-50%, -50%) rotate(0deg);
             animation: anime-702 2s infinite ease-in-out;
-        }
-
-        @keyframes anime-702 {
-            0%, 100% {
-                border: 2px solid #ffffff60;
-                box-shadow: 0 0 4px 1px #ffffff30;
-            }
-            15%, 85% {
-                border: 2px solid #ffffff80;
-                box-shadow: 0 0 4px 1px #ffffff60;
-            }
-            50% {
-                border: 2px solid #ffffffff;
-                box-shadow: 0 0 4px 1px #ffffffff;
-            }
         }
     }
 

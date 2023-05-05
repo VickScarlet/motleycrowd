@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import Money from './Money.vue';
 
 const props = defineProps({asset: {type: Object, default: {}}});
-const list = computed(()=>Object.entries(this.asset?.money||{}).map(([type, value])=>({type, value})));
+const list = computed(()=>Object.entries(props.asset?.money||{}).map(([type, value])=>({type, value})));
 </script>
 
 <template>

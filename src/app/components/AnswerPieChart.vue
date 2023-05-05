@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import * as d3 from 'd3';
+import { arc, pie } from 'd3';
 
 const props = defineProps({
     radius: { type: Number, default: 320 },
@@ -8,19 +8,19 @@ const props = defineProps({
     padding: { type: Number, default: 10 },
     answers: { type: Array, default: () => [] },
 });
-const pie = computed(()=>{
-    const d = d3.arc().innerRadius(props.innerRadius).outerRadius(props.radius);
-    return d3.pie().value(({value}) => value)(props.answers)
+const p = computed(()=>{
+    const d = arc().innerRadius(props.innerRadius).outerRadius(props.radius);
+    return pie().value(({value}) => value)(props.answers)
         .map(v => ({...v.data, d: d(v), t: d.centroid(v)}));
 });
 </script>
 
 <template>
     <svg class="answer-pie-chart" :viewBox="`${-radius-padding} ${-radius-padding} ${-2*(-radius-padding)} ${-2*(-radius-padding)}`">
-        <g><path v-for="({option, value: people, d}) in pie" :key="option" :d="d">
+        <g><path v-for="({option, value: people, d}) in p" :key="option" :d="d">
             <title>{{$lang.g.option_people.f({option, people})}}</title>
         </path></g>
-        <g><text v-for="({option, t}) in pie" :key="option" :transform="`translate(${t})`">
+        <g><text v-for="({option, t}) in p" :key="option" :transform="`translate(${t})`">
             <tspan x="0" y="0.5em">{{option}}</tspan>
         </text></g>
     </svg>

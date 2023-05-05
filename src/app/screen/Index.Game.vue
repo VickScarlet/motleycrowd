@@ -1,4 +1,8 @@
 <script setup>
+import ModalRoomCode from './Modal.RoomCode.vue';
+import { ref } from 'vue';
+
+const custom = ref(false);
 const pair = async type => {
     console.debug('pair', type);
     $app.loading(true);
@@ -6,8 +10,22 @@ const pair = async type => {
     $app.loading(false);
     if (result) $app.switch('Room');
 };
-const custom = ()=>{
-    console.debug('custom');
+const create = async type => {
+    custom.value = false;
+    $app.loading(true);
+    const result = await $core.game.create(type);
+    $app.loading(false);
+    if (result) $app.switch('Room');
+};
+const join = async code => {
+    custom.value = false;
+    $app.loading(true);
+    const result = await $core.game.join(code);
+    $app.loading(false);
+    if (result) $app.switch('Room');
+};
+const cancel = () => {
+    custom.value = false;
 };
 </script>
 
@@ -22,7 +40,7 @@ const custom = ()=>{
             <li class="l-2" @click="pair(10)">
                 <span>{{$lang.g.pair_mode.f(10)}}</span>
             </li>
-            <li class="l-3" @click="custom">
+            <li class="l-3" @click="custom=!custom">
                 <span>{{$lang.g.priv_mode}}</span>
             </li>
             <li class="l-4" @click="$app.switch('History')">
@@ -30,6 +48,9 @@ const custom = ()=>{
             </li>
         </ul>
     </div>
+    <teleport to="body">
+        <ModalRoomCode v-show="custom" @create="create" @join="join" @cancel="cancel"/>
+    </teleport>
 </template>
 
 <style lang="scss" scoped>

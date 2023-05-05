@@ -21,6 +21,7 @@
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.0",
     "@vitejs/plugin-legacy": "^2.3.1",
     "@vitejs/plugin-vue": "^3.2.0",
     "@volar-plugins/vetur": "latest",

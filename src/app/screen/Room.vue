@@ -2,14 +2,27 @@
 import { ref, onActivated, onDeactivated } from 'vue';
 import UserCard from '../components/UserCard.vue';
 
-const limit = ref(0);
+const info = ref("");
 const users = ref([]);
 const back = ()=>$core.game.leave().then(result=>result&&$app.switch('Index'));
 const update = () => {
-    limit.value = $core.game.limit;
     users.value = [...$core.game.users];
+    const limit = $core.game.limit;
+    const count = users.value.length;
+    if($core.game.isPrivate) {
+        info.value = $lang.g.room_info_private.f(
+            count, limit, $core.game.room
+        );
+    } else {
+        info.value = $lang.g.room_info_pair.f(
+            count, limit
+        );
+    }
 };
-onActivated(()=>$on('game.user', update));
+onActivated(()=>{
+    $on('game.user', update);
+    update();
+});
 onDeactivated(()=>$off('game.user', update));
 update();
 </script>
@@ -18,7 +31,7 @@ update();
     <div class="room">
         <div class="header">
             <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
-            <p>{{users.length}}/{{limit}}</p>
+            <p>{{info}}</p>
         </div>
         <ul class="userlist">
             <li v-for="uuid of users" :key="uuid">
