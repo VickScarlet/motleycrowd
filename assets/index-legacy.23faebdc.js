@@ -1,0 +1,2 @@
+System.register([],(function(e,t){"use strict";return{execute:function(){e({emit:function(e){for(var n=arguments.length,r=new Array(n>1?n-1:0),o=1;o<n;o++)r[o-1]=arguments[o];t.has(e)&&t.get(e).forEach((function(e){return e.apply(void 0,r)}))},off:function(e,n){t.has(e)&&t.get(e).delete(n)},on:function(e,n){t.has(e)||t.set(e,new Set),t.get(e).add(n)}});var t=new Map}}}));
+//# sourceMappingURL=index-legacy.23faebdc.js.map
