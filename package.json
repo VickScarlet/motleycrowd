@@ -14,21 +14,21 @@
   },
   "dependencies": {
     "crypto-js": "^4.1.1",
-    "d3": "^7.8.0",
+    "d3": "^7.8.4",
     "moment": "^2.29.4",
     "pako": "^2.1.0",
     "uuid": "^8.3.2",
-    "vue": "^3.2.45"
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",
     "@vitejs/plugin-legacy": "^2.3.1",
     "@vitejs/plugin-vue": "^3.2.0",
     "@volar-plugins/vetur": "latest",
-    "sass": "^1.57.1",
-    "terser": "^5.16.1",
+    "sass": "^1.62.1",
+    "terser": "^5.17.1",
     "v-transform": "^2.0.2",
-    "vite": "^3.2.5",
+    "vite": "^3.2.6",
     "vite-plugin-static-copy": "^0.7.0"
   }
 }
