@@ -42,10 +42,10 @@ div.achievement-item {
         justify-content: center;
     }
     box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
-    >&[grade='0'] { background: #f5f5f5; }
-    >&[grade='1'] { background: #6565e1; }
-    >&[grade='2'] { background: #c04fe2; }
-    >&[grade='3'] { background: #ee9b49; }
+    &[grade='0'] { background: #f5f5f5; }
+    &[grade='1'] { background: #6565e1; }
+    &[grade='2'] { background: #c04fe2; }
+    &[grade='3'] { background: #ee9b49; }
     >.name {
         font-size: 1.5rem;
         font-weight: bold;
@@ -56,7 +56,7 @@ div.achievement-item {
         color: #000000;
     }
 
-    >&[locked]::before {
+    &[locked]::before {
         content: '';
         position: absolute;
         top: 0;
