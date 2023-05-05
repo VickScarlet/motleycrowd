@@ -6,7 +6,7 @@ const props = defineProps({
 });
 const type = toRef(props, 'type');
 const money = computed(()=>{
-    const value = props.value;
+    const value = props.value || 0;
     if(value < 10000) return value;
     if(value < 10000000) return `${(value / 1000).toFixed(1)}K`;
     if(value < 10000000000) return `${(value / 1000000).toFixed(1)}M`;
