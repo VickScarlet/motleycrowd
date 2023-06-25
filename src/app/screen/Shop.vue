@@ -26,21 +26,15 @@ const buy = async good => {
 update();
 </script>
 
-<template>
-    <div class="shop">
-        <div class="header">
-            <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-            <div>
-                <span>{{next}}</span>
-                <span><AssetMoney :asset="money" /></span>
-            </div>
-        </div>
-        <ul class="goods">
-            <li v-for="good in goods" :key="good.id">
-                <Good v-bind="good" @buy="buy(good)" />
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.shop
+    .header
+        button.back(@click='$app.switch("Index")') {{$lang.g.back}}
+        div
+            span {{next}}
+            span: AssetMoney(:asset='money')
+    ul.goods: li(v-for='good in goods' :key='good.id')
+        Good(v-bind='good' @buy='buy(good)')
 </template>
 
 <style lang="scss" scoped>

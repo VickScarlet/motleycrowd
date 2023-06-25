@@ -1,9 +1,8 @@
-<template>
-    <div class="count-down-progress">
-        <div class="bg"></div>
-        <div class="bar" :style="`right:${100-width}%;`"></div>
-        <p>{{left}}s</p>
-    </div>
+<template lang="pug">
+.count-down-progress
+    .bg
+    .bar(:style='`right:${100-width}%;`')
+    p {{left}}s
 </template>
 
 <script setup>

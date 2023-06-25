@@ -29,32 +29,25 @@ const cancel = () => {
 };
 </script>
 
-<template>
-    <div class="index-game">
-        <h1>{{$lang.g.title}}</h1>
-        <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
-        <ul class="menu">
-            <li class="l-1" @click="pair(100)">
-                <span class="icon"></span>
-                <span>{{$lang.g.pair_mode.f(100)}}</span>
-            </li>
-            <li class="l-2" @click="pair(10)">
-                <span class="icon"></span>
-                <span>{{$lang.g.pair_mode.f(10)}}</span>
-            </li>
-            <li class="l-3" @click="custom=!custom">
-                <span class="icon"></span>
-                <span>{{$lang.g.priv_mode}}</span>
-            </li>
-            <li class="l-4" @click="$app.switch('History')">
-                <span class="icon"></span>
-                <span>{{$lang.g.history}}</span>
-            </li>
-        </ul>
-    </div>
-    <teleport to="body">
-        <ModalRoomCode v-show="custom" @create="create" @join="join" @cancel="cancel"/>
-    </teleport>
+<template lang="pug">
+.index-game
+    h1 {{$lang.g.title}}
+    h3.subtitle {{$lang.g.subtitle}}
+    ul.menu
+        li.l-1(@click='pair(100)')
+            span.icon
+            span {{$lang.g.pair_mode.f(100)}}
+        li.l-2(@click='pair(10)')
+            span.icon
+            span {{$lang.g.pair_mode.f(10)}}
+        li.l-3(@click='custom=!custom')
+            span.icon
+            span {{$lang.g.priv_mode}}
+        li.l-4(@click='$app.switch("History")')
+            span.icon
+            span {{$lang.g.history}}
+teleport(to='body')
+    ModalRoomCode(v-show='custom' @create='create' @join='join' @cancel='cancel')
 </template>
 
 <style lang="scss" scoped>

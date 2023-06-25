@@ -4,23 +4,17 @@ const code = ref('');
 const emit = defineEmits(['create', 'join', 'cancel']);
 </script>
 
-<template>
-    <div class="modal" @click="()=>emit('cancel')">
-        <div class="modal-roomcode" @click="e=>e.stopPropagation()">
-            <div class="create">
-                <button @click="()=>emit('create', 10)">建十人房</button>
-                <button @click="()=>emit('create', 100)">建百人房</button>
-            </div>
-            <hr />
-            <div class="join">
-                <input type="text"
-                    :placeholder="$lang.g.input_roomcode"
-                    v-model.trim="code"
-                />
-                <button @click="()=>emit('join', code)">进入房间</button>
-            </div>
-        </div>
-    </div>
+<template lang="pug">
+.modal(@click='()=>emit("cancel")')
+    .modal-roomcode(@click='e=>e.stopPropagation()')
+        .create
+            button(@click='()=>emit("create", 10)') 建十人房
+            button(@click='()=>emit("create", 100)') 建百人房
+        hr
+        .join
+            input(type='text' :placeholder='$lang.g.input_roomcode' v-model.trim='code')
+            button(@click='()=>emit("join", code)') 进入房间
+
 </template>
 
 <style lang="scss" scoped>
@@ -60,7 +54,7 @@ const emit = defineEmits(['create', 'join', 'cancel']);
                 height: 50px;
                 border: none;
                 margin: 0;
-                border-radius: 10px 10px 0 0;
+                // border-radius: 10px 10px 0 0;
                 font-size: 36px;
                 text-align: center;
                 padding: 0;

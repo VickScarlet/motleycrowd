@@ -5,27 +5,20 @@ import Detail from './Index.Rank.Detail.vue';
 const rank = ref('main');
 </script>
 
-<template>
-    <div class="index-rank">
-        <Detail :rank="rank" />
-        <ul class="menu">
-            <li>
-                <input type="radio" name="rank" v-model="rank"
-                    id="main" value="main"
-                /><label for=main>{{$lang.g.rank_main}}</label>
-            </li>
-            <li>
-                <input type="radio" name="rank" v-model="rank"
-                    id="ten" value="ten"
-                /><label for=ten>{{$lang.g.rank_ten}}</label>
-            </li>
-            <li>
-                <input type="radio" name="rank" v-model="rank"
-                    id="hundred" value="hundred"
-                /><label for=hundred>{{$lang.g.rank_hundred}}</label>
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.index-rank
+    Detail(:rank='rank')
+    ul.menu
+        li
+            input#main(type='radio' name='rank' v-model='rank' value='main')
+            label(for='main') {{$lang.g.rank_main}}
+        li
+            input#ten(type='radio' name='rank' v-model='rank' value='ten')
+            label(for='ten') {{$lang.g.rank_ten}}
+        li
+            input#hundred(type='radio' name='rank' v-model='rank' value='hundred')
+            label(for='hundred') {{$lang.g.rank_hundred}}
+
 </template>
 
 <style lang="scss" scoped>

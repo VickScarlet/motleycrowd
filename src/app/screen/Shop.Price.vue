@@ -7,12 +7,11 @@ const { discount, price, original } = defineProps({
 });
 </script>
 
-<template>
-    <div :class="{price: true, 'price-discount': !!original}">
-        <AssetMoney class="asset-money" :asset="price"/>
-        <span class="discount" v-if="!!discount">-{{((1-discount)*100).toFixed(0)}}%</span>
-        <AssetMoney class="asset-money" :asset="original" v-if="original"/>
-    </div>
+<template lang="pug">
+div(:class='{price: true, "price-discount": !!original}')
+    AssetMoney.asset-money(:asset='price')
+    span.discount(v-if='discount') -{{((1-discount)*100).toFixed(0)}}%
+    AssetMoney.asset-money(:asset='original' v-if='original')
 </template>
 
 <style lang="scss" scoped>

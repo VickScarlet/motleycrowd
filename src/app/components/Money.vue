@@ -7,18 +7,17 @@ const props = defineProps({
 const type = toRef(props, 'type');
 const money = computed(()=>{
     const value = props.value || 0;
-    if(value < 10000) return value;
+    if(value < 10000) return ''+value;
     if(value < 10000000) return `${(value / 1000).toFixed(1)}K`;
     if(value < 10000000000) return `${(value / 1000000).toFixed(1)}M`;
     return `${(value / 1000000000).toFixed(1)}B`;
 });
 </script>
 
-<template>
-    <span class="money">
-        <span class="icon" :type="type"></span>
-        <span class="value">{{money}}</span>
-    </span>
+<template lang="pug">
+span.money
+    span.icon(:type='type')
+    span.value {{money}}
 </template>
 
 <style lang="scss" scoped>

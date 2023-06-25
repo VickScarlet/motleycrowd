@@ -1,29 +1,16 @@
-<template>
-    <div class="container">
-        <button class="exit" @click="confirm=true">{{$lang.g.exit_room}}</button>
-        <div class="progress-bar">
-            <CountDownProgress v-bind="progress"/>
-        </div>
-        <div class="card">
-            <h3 class="question">{{question}}</h3>
-            <span class="count">{{answerCount}}/{{limit}}人</span>
-            <ul class="options">
-                <li v-for="{key, option, val, type} in options"
-                    :key="key"
-                    :type="type"
-                >
-                    <input type="radio" name="option"
-                        :id="option"
-                        :value="option"
-                        v-model="selected"
-                    /><label :for=option><span>{{option}}&nbsp;&nbsp;</span>{{val}}</label>
-                </li>
-            </ul>
-            <button class="submit" v-if="!answered" @click="answer">{{$lang.g.submit}}</button>
-            <button class="submit" v-if="answered">{{$lang.g.submit_as.f(answeredOption)}}</button>
-        </div>
-    </div>
-    <Confirm v-if="confirm" @yes="doexit(true)" @no="doexit(false)">{{$lang.g.exit_check}}</Confirm>
+<template lang="pug">
+.container
+    button.exit(@click='confirm=true') {{$lang.g.exit_room}}
+    .progress-bar: CountDownProgress(v-bind='progress')
+    .card
+        h3.question {{question}}
+        span.count {{answerCount}}/{{limit}}人
+        ul.options: li(v-for='{key, option, val, type} in options' :key='key' :type='type')
+            input(type='radio' name='option' :id='option' :value='option' v-model='selected')
+            label(:for='option'): span {{option}}  {{val}}
+        button.submit(v-if='!answered' @click='answer') {{$lang.g.submit}}
+        button.submit(v-if='answered') {{$lang.g.submit_as.f(answeredOption)}}
+Confirm(v-if='confirm' @yes='doexit(true)' @no='doexit(false)') {{$lang.g.exit_check}}
 </template>
 
 <script setup>
@@ -68,7 +55,7 @@ const update = _ => {
         const data = q.options[option];
         if(!data) continue;
         const {type, val} = data;
-        const key = `${id}-${option}`
+        const key = `${q.id}-${option}`
         opts.push({key, option, val, type});
     }
     options.value = opts;

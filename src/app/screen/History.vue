@@ -1,17 +1,10 @@
-<template>
-    <div class="history">
-        <div class="header">
-            <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-            <div class="pages">
-                <Pages :total="total" :page="page" @update:page="_=>p=_" />
-            </div>
-        </div>
-        <ul class="list">
-            <li v-for="data in history" :key="data.id">
-                <Item v-bind="data" @review="review"/>
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.history
+    .header
+        button.back(@click='$app.switch("Index")') {{$lang.g.back}}
+        .pages: Pages(:total='total' :page='page' @update:page='_=>p=_')
+    ul.list: li(v-for='data in history' :key='data.id')
+        Item(v-bind='data' @review='review')
 </template>
 
 <script setup>

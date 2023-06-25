@@ -44,20 +44,15 @@ watch(()=>props.page, p1=>p.value=p1);
 p.value=props.page;
 </script>
 
-<template>
-    <ul class="pages">
-        <li class="first" @click="p=1">⇤</li>
-        <li class="prev" @click="p--">↞</li>
-        <li v-for="_ in center" :key="_" @click="p=_"
-            :class="{active: p==_, center: 1}"
-        >{{_}}</li>
-        <li class="next" @click="p++">↠</li>
-        <li class="last" @click="p=total">⇥</li>
-        <li class="input">
-            <input type="number" v-model.number="input"/>
-        </li>
-        <li class="go" @click="p=input">↲</li>
-    </ul>
+<template lang="pug">
+ul.pages
+    li.first(@click='p=1') ⇤
+    li.prev(@click='p--') ↞
+    li(v-for='_ in center' :key='_' @click='p=_' :class='{active: p==_, center: 1}') {{_}}
+    li.next(@click='p++') ↠
+    li.last(@click='p=total') ⇥
+    li.input: input(type='number' v-model.number='input')
+    li.go(@click='p=input') ↲
 </template>
 
 <style lang="scss" scoped>

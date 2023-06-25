@@ -31,16 +31,12 @@ watch(()=>props.p_badge, update);
 update();
 </script>
 
-<template>
-    <div class="usercard">
-        <Card :card="card">
-            <span class="username">
-                <Badge class="badge" :badge="badge" />
-                <span class="name" v-if="guest">{{$lang.g.guestname.f(uuid)}}</span>
-                <span class="name" v-else>{{username}}</span>
-            </span>
-        </Card>
-    </div>
+<template lang="pug">
+.usercard: Card(:card='card')
+    span.username
+        Badge.badge(:badge='badge')
+        span.name(v-if='guest') {{$lang.g.guestname.f(uuid)}}
+        span.name(v-else) {{username}}
 </template>
 
 <style lang="scss" scoped>

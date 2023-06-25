@@ -12,22 +12,15 @@ const menu = reactive([
 const page = ref(markRaw(Game));
 </script>
 
-<template>
-    <div class="index">
-        <keep-alive>
-            <component :is="page"/>
-        </keep-alive>
-        <ul class="menu">
-            <li v-for="{type, text, page: p} in menu"
-                :key="type" :type="type"
-                @click="page=p"
-                :class="{actived: page===p}"
-            >
-                <span class="icon" />
-                <span class="text">{{text}}</span>
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.index
+    keep-alive: component(:is='page')
+    ul.menu: li(v-for='{type, text, page: p} in menu'
+        :class='{actived: page===p}'
+        :key='type' :type='type' @click='page=p'
+    )
+        span.icon
+        span.text {{text}}
 </template>
 
 <style lang="scss" scoped>

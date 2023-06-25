@@ -75,27 +75,19 @@ watch(()=>props.barpadding, update);
 watch(()=>props.answers, update);
 </script>
 
-<template>
-    <svg ref="svgRef" class="answer-line-bar-chart" :viewBox="`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`">
-        <g class="axis axis-x"></g>
-        <g class="axis axis-y"></g>
-        <g class="bars">
-            <g v-for="({n, v, x, y, w, h, tx, ty, b}) in bars"
-                :key="n" :win="b"
-                :visibility="v==0?'hidden':'visible'">
-
-                <rect :x="x" :y="y" :width="w" :height="h" ></rect>
-                <text :x="tx" :y="ty" :dy="`${!b?1:-0.2}em`">{{v}}</text>
-            </g>
-        </g>
-        <g class="line">
-            <path :d="line"></path>
-            <g v-for="({n, t, cx, cy, b}) in bars" :key="n" :win="b">
-                <circle :cx="cx" :cy="cy" r="5"></circle>
-                <text :x="cx" :y="cy" dy="-0.5em">{{t}}</text>
-            </g>
-        </g>
-    </svg>
+<template lang="pug">
+svg.answer-line-bar-chart(:viewBox='`${-left} ${-top} ${- (-width - left - right)} ${-(-height - top - bottom)}`' ref='svgRef')
+    g.axis.axis-x
+    g.axis.axis-y
+    g.bars
+        g(v-for='({n, v, x, y, w, h, tx, ty, b}) in bars' :key='n' :win='b' :visibility='v==0?"hidden":"visible"')
+            rect(:x='x' :y='y' :width='w' :height='h')
+            text(:x='tx' :y='ty' :dy='`${!b?1:-0.2}em`') {{v}}
+    g.line
+        path(:d='line')
+        g(v-for='({n, t, cx, cy, b}) in bars' :key='n' :win='b')
+            circle(:cx='cx' :cy='cy' r='5')
+            text(:x='cx' :y='cy' dy='-0.5em') {{t}}
 </template>
 
 <style lang="scss">

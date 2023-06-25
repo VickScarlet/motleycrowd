@@ -6,12 +6,10 @@ const props = defineProps({asset: {type: Object, default: {}}});
 const list = computed(()=>Object.entries(props.asset?.money||{}).map(([type, value])=>({type, value})));
 </script>
 
-<template>
-    <ul class="asset-money">
-        <li v-for="money in list" :key="money.type">
-            <Money v-bind="money" />
-        </li>
-    </ul>
+<template lang="pug">
+ul.asset-money
+    li(v-for='money in list' :key='money.type')
+        Money(v-bind='money')
 </template>
 
 <style lang="scss" scoped>

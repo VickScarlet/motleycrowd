@@ -27,18 +27,13 @@ onDeactivated(()=>$off('game.user', update));
 update();
 </script>
 
-<template>
-    <div class="room">
-        <div class="header">
-            <button class="exit" @click="back">{{$lang.g.exit_room}}</button>
-            <p>{{info}}</p>
-        </div>
-        <ul class="userlist">
-            <li v-for="uuid of users" :key="uuid">
-                <UserCard :uuid=uuid />
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.room
+    .header
+        button.exit(@click='back') {{$lang.g.exit_room}}
+        p {{info}}
+    ul.userlist: li(v-for='uuid of users' :key='uuid')
+        UserCard(:uuid='uuid')
 </template>
 
 <style lang="scss" scoped>

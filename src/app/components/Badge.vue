@@ -15,8 +15,8 @@ watch(()=>props.badge, update);
 update();
 </script>
 
-<template>
-    <span class="badge" :grade="grade" v-if="display">{{name}}</span>
+<template lang="pug">
+span.badge(:grade='grade' v-if='display') {{name}}
 </template>
 
 <style lang="scss" scoped>

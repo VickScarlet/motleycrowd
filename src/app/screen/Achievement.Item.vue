@@ -12,17 +12,15 @@ const props = defineProps({
 const { name, description, grade, unlocked, hide } = toRefs( props );
 </script>
 
-<template>
-    <div class="achievement-item" v-if="unlocked" :grade=grade >
-        <span class="name">{{name}}</span>
-        <span class="desc">{{description}}</span>
-    </div>
-    <div class="achievement-item" v-if="!unlocked" :grade=grade locked >
-        <span class="name" v-if="!hide">{{name}}</span>
-        <span class="name" v-if="hide">???</span>
-        <span class="desc" v-if="!hide">{{description}}</span>
-        <span class="desc" v-if="hide">???</span>
-    </div>
+<template lang="pug">
+.achievement-item(v-if='unlocked' :grade='grade')
+    span.name {{name}}
+    span.desc {{description}}
+.achievement-item(v-else :grade='grade' locked)
+    span.name(v-if='hide') ???
+    span.name(v-else) {{name}}
+    span.desc(v-if='hide') ???
+    span.desc(v-else) {{description}}
 </template>
 
 <style lang="scss" scoped>

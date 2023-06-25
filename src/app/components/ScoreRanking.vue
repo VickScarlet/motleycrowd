@@ -8,11 +8,10 @@ const props = defineProps({
 const {ranking, score} = toRefs(props);
 </script>
 
-<template>
-    <div class="score-ranking" :ranking="ranking" :score="score">
-        <span>{{ranking}}</span>
-        <span>{{score}}</span>
-    </div>
+<template lang="pug">
+.score-ranking(:ranking='ranking' :score='score')
+    span {{ranking}}
+    span {{score}}
 </template>
 
 <style lang="scss" scoped>

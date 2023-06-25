@@ -7,29 +7,23 @@ const logout = async () => {
 };
 </script>
 
-<template>
-    <div class="index-user">
-        <h1>{{$lang.g.title}}</h1>
-        <h3 class="subtitle">{{$lang.g.subtitle}}</h3>
-        <ul class="menu">
-            <li class="l-1" @click="$app.switch('Achievement')">
-                <span class="icon"></span>
-                <span>{{$lang.g.achievement}}</span>
-            </li>
-            <li class="l-2" @click="$app.switch('Accessory')">
-                <span class="icon"></span>
-                <span>{{$lang.g.accessory}}</span>
-            </li>
-            <li class="l-3" @click="$app.switch('Shop')">
-                <span class="icon"></span>
-                <span>{{$lang.g.shop}}</span>
-            </li>
-            <li class="l-4" @click="logout">
-                <span class="icon"></span>
-                <span>{{$lang.g.logout}}</span>
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.index-user
+    h1 {{$lang.g.title}}
+    h3.subtitle {{$lang.g.subtitle}}
+    ul.menu
+        li.l-1(@click='$app.switch("Achievement")')
+            span.icon
+            span {{$lang.g.achievement}}
+        li.l-2(@click='$app.switch("Accessory")')
+            span.icon
+            span {{$lang.g.accessory}}
+        li.l-3(@click='$app.switch("Shop")')
+            span.icon
+            span {{$lang.g.shop}}
+        li.l-4(@click='logout')
+            span.icon
+            span {{$lang.g.logout}}
 </template>
 
 <style lang="scss" scoped>

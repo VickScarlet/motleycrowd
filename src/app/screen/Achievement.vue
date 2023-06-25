@@ -1,15 +1,9 @@
-<template>
-    <div class="achievement">
-        <div class="header">
-            <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-        </div>
-        <h1>{{$lang.g.achievement}}</h1>
-        <ul>
-            <li v-for="achiv of achivs" :key="achiv.id">
-                <Item v-bind="achiv" />
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.achievement
+    .header: button.back(@click='$app.switch("Index")') {{$lang.g.back}}
+    h1 {{$lang.g.achievement}}
+    ul: li(v-for='achiv of achivs' :key='achiv.id')
+        Item(v-bind='achiv')
 </template>
 
 <script setup>

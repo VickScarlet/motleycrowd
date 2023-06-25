@@ -1,18 +1,12 @@
 <script setup>
 </script>
 
-<template>
-    <div class="confirm">
-        <div class="content">
-            <div>
-                <slot></slot>
-            </div>
-            <div>
-                <button class="yes" @click="$emit('yes')">{{$lang.g.yes}}</button>
-                <button class="no" @click="$emit('no')">{{$lang.g.no}}</button>
-            </div>
-        </div>
-    </div>
+<template lang="pug">
+.confirm: .content
+    div: slot
+    div
+        button.yes(@click='$emit("yes")') {{$lang.g.yes}}
+        button.no(@click='$emit("no")') {{$lang.g.no}}
 </template>
 
 <style lang="scss" scoped>

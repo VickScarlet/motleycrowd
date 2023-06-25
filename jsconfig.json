@@ -2,5 +2,10 @@
     "exclude": ["node_modules", "bower_components"],
     "compilerOptions": {
         "jsx": "preserve",
+    },
+    "vueCompilerOptions": {
+        "plugins": [
+            "@vue/language-plugin-pug"
+        ]
     }
 }

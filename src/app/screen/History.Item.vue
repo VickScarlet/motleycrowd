@@ -17,19 +17,13 @@ const typeText = computed(() => {
 });
 </script>
 
-<template>
-    <div class="history-item">
-        <div class="ranking">
-            <ScoreRanking :score="score" :ranking="ranking" />
-        </div>
-        <div class="info">
-            <span class="type">{{typeText}}</span>
-            <span class="time">{{$moment(created).fromNow()}}</span>
-        </div>
-        <div class="review">
-            <button @click="$emit('review', id)">{{$lang.g.review}}</button>
-        </div>
-    </div>
+<template lang="pug">
+.history-item
+    .ranking: ScoreRanking(:score='score' :ranking='ranking')
+    .info
+        span.type {{typeText}}
+        span.time {{$moment(created).fromNow()}}
+    .review: button(@click='$emit("review", id)') {{$lang.g.review}}
 </template>
 
 <style lang="scss" scoped>

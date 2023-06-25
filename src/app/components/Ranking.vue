@@ -5,10 +5,8 @@ const props = defineProps({ranking: {type: Number, default: 0}});
 const ranking = toRef(props, 'ranking');
 </script>
 
-<template>
-    <div class="ranking" :ranking="ranking">
-        <span>{{ranking}}</span>
-    </div>
+<template lang="pug">
+.ranking(:ranking='ranking'): span {{ranking}}
 </template>
 
 <style lang="scss" scoped>

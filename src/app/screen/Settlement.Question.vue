@@ -11,25 +11,17 @@ const { question, answers, mine } = toRefs(props);
 const pie = computed(()=>answers.value.filter(({value}) => value > 0));
 </script>
 
-<template>
-    <div class="settlement-question">
-        <h3>{{question}}</h3>
-        <div class="answer">
-            <div class="chart">
-                <AnswerPieChart :answers="pie"></AnswerPieChart>
-            </div>
-            <ul>
-                <li v-for="({option, value, description}) in answers"
-                    :key="option" :ismine="option==mine.answer">
-
-                    <span>{{option?option:$lang.g.no_answer}}:</span>
-                    <span>{{$lang.g.people_count.f(String(value).padStart(4, ' '))}}</span>
-                    <span>&nbsp;&nbsp;&nbsp;{{description}}</span>
-                </li>
-            </ul>
-        </div>
-        <span :class="'alter '+(mine.value>=0?'up':'down')">{{mine.value>0?'+':''}}{{mine.value}}</span>
-    </div>
+<template lang="pug">
+.settlement-question
+    h3 {{question}}
+    .answer
+        .chart: AnswerPieChart(:answers='pie')
+        ul: li(v-for='({option, value, description}) in answers' :key='option' :ismine='option==mine.answer')
+            span {{option?option:$lang.g.no_answer}} :
+            span {{$lang.g.people_count.f(String(value).padStart(4, ' '))}}
+            span {{description}}
+    span.alter(:class='{up: mine.value>=0, down: mine.value<0 }')
+        | {{mine.value>0?'+':''}}{{mine.value}}
 </template>
 
 <style lang="scss" scoped>

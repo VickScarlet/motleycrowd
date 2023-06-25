@@ -5,12 +5,11 @@ const card = toRef(props, 'card');
 const grade = computed(()=>$core.sheet.get('card', props.card, 'grade') || 0);
 </script>
 
-<template>
-    <div class="v-card" :card="card" :grade="grade">
-        <span class="back"></span>
-        <div><slot></slot></div>
-        <span class="front"></span>
-    </div>
+<template lang="pug">
+.v-card(:card='card' :grade='grade')
+    span.back
+    div: slot
+    span.front
 </template>
 
 <style lang="scss" scoped>

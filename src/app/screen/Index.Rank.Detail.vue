@@ -18,23 +18,15 @@ watch(()=>props.rank, update);
 update();
 </script>
 
-<template>
-    <div class="index-rank-detail">
-        <div>
-            <h3 v-if="!ranking || ranking<1">{{$lang.g.not_in_rank}}</h3>
-            <h3 v-if="ranking>0">
-                {{$lang.g.my_ranking_as.f(ranking)}} / {{$lang.g.rank_size.f(size)}}
-            </h3>
-        </div>
-        <ul>
-            <li v-for="{uuid, ranking} of users" :key="uuid">
-                <div>
-                    <div><Ranking :ranking="ranking" /></div>
-                    <div><UserCard :uuid="uuid" /></div>
-                </div>
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.index-rank-detail
+    div
+        h3(v-if='!ranking || ranking<1') {{$lang.g.not_in_rank}}
+        h3(v-else) {{$lang.g.my_ranking_as.f(ranking)}}
+            |  / {{$lang.g.rank_size.f(size)}}
+    ul: li(v-for='{uuid, ranking} of users' :key='uuid'): div
+        div: Ranking(:ranking='ranking')
+        div: UserCard(:uuid='uuid')
 </template>
 
 <style lang="scss" scoped>

@@ -34,11 +34,10 @@ watch(()=>props.content, update);
 update();
 </script>
 
-<template>
-    <div class="tips" :type="type">
-        <span class="icon" />
-        <span class="content">{{tips}}</span>
-    </div>
+<template lang="pug">
+.tips(:type='type')
+    span.icon
+    span.content {{tips}}
 </template>
 
 <style lang="scss" scoped>

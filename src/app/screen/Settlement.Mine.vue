@@ -15,23 +15,14 @@ const {uuid, score, ranking} = toRefs(props);
 const ans = computed(() => props.answers.map(({value, answer}, i) => ({value, answer, name: `Q${i+1}`,})));
 </script>
 
-<template>
-    <div class="settlement-mine">
-        <h3>{{$lang.g.mimestate}}</h3>
-        <div class="content">
-            <div class="chart">
-                <AnswerLineBarChart :answers="ans" :width="330" :height="330"/>
-            </div>
-            <ul class="info">
-                <li class="ranking">
-                    <ScoreRanking :score="score" :ranking="ranking" />
-                </li>
-                <li class="card">
-                    <UserCard :uuid="uuid" />
-                </li>
-            </ul>
-        </div>
-    </div>
+<template lang="pug">
+.settlement-mine
+    h3 {{$lang.g.mimestate}}
+    .content
+        .chart: AnswerLineBarChart(:answers='ans' :width='330' :height='330')
+        ul.info
+            li.ranking: ScoreRanking(:score='score' :ranking='ranking')
+            li.card: UserCard(:uuid='uuid')
 </template>
 
 <style lang="scss" scoped>

@@ -11,42 +11,21 @@ const {rank, mine} = toRefs(props);
 const toggle = ref(true);
 </script>
 
-<template>
-    <div class="settlement-rank" :iscollapsed="toggle">
-        <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
-        <h3>{{$lang.g.rank}}</h3>
-        <ul class="rank">
-            <li v-for="({uuid, ranking, answers, score}) in rank"
-                :key="uuid"
-                :ismine="uuid==mine"
-                :ranking="ranking"
-                @click="$emit('ch',uuid)"
-            >
-                <ul class="info">
-                    <li class="ranking">
-                        <ScoreRanking :score="score" :ranking="ranking" />
-                    </li>
-                    <li class="card">
-                        <UserCard :uuid="uuid" />
-                    </li>
-                </ul>
-                <ul class="scores">
-                    <li v-for="({value, answer}, idx) in answers"
-                        :key="idx"
-                        :gt0="value>0"
-                        :title="`Q${idx+1}: ${answer}`"
-                    >
-                        <span :style="`opacity: ${
-                            Math.min(1, Math.abs(value/3)) || 0
-                        };`"></span>
-                        {{value>0?'+':''}}{{value}}
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <button @click="toggle=!toggle" collapse v-if="!toggle">{{$lang.g.collapse}}</button>
-        <button @click="toggle=!toggle" expand   v-if="toggle">{{$lang.g.expand}}</button>
-    </div>
+<template lang="pug">
+.settlement-rank(:iscollapsed='toggle')
+    button(@click='toggle=!toggle' collapse v-if='!toggle') {{$lang.g.collapse}}
+    h3 {{$lang.g.rank}}
+    ul.rank
+        li(v-for='({uuid, ranking, answers, score}) in rank' :key='uuid' :ismine='uuid==mine' :ranking='ranking' @click='$emit("ch",uuid)')
+            ul.info
+                li.ranking: ScoreRanking(:score='score' :ranking='ranking')
+                li.card: UserCard(:uuid='uuid')
+            ul.scores
+                li(v-for='({value, answer}, idx) in answers' :key='idx' :gt0='value>0' :title='`Q${idx+1}: ${answer}`')
+                    span(:style='`opacity: ${Math.min(1, Math.abs(value/3)) || 0};`')
+                    | {{value>0?'+':''}}{{value}}
+    button(@click='toggle=!toggle' expand v-if='toggle') {{$lang.g.expand}}
+    button(@click='toggle=!toggle' collapse v-else) {{$lang.g.collapse}}
 </template>
 
 <style lang="scss" scoped>

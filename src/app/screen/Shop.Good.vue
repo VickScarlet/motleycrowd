@@ -20,35 +20,18 @@ const item = { type, id };
 const grade = $core.sheet.get(type, id, 'grade');
 </script>
 
-<template>
-    <ul class="good" :grade="grade">
-        <li class="type">
-            {{$lang.g[`good_${item.type}`]}}
-        </li>
-        <li class="item">
-            <Card class="card" v-if="item.type=='card'" :card="item.id">
-                {{$core.sheet.get('card', item.id, 'name')}}
-            </Card>
-            <Badge class="badge" v-if="item.type=='badge'" :badge="item.id"/>
-        </li>
-        <li class="price">
-            <Price :price="price" :original="original" :discount="discount" />
-        </li>
-        <li class="button">
-            <button v-if="owned" disabled>
-                {{$lang.g.already_owned}}
-            </button>
-            <button v-if="!owned&&!enough" disabled>
-                {{$lang.g.asset_not_enough}}
-            </button>
-            <button v-if="!owned&&enough" @click="$emit('buy')">
-                {{$lang.g.buy}}
-            </button>
-        </li>
-        <li class="grade">
-            <Grade :grade="grade" />
-        </li>
-    </ul>
+<template lang="pug">
+ul.good(:grade='grade')
+    li.type {{$lang.g[`good_${item.type}`]}}
+    li.item
+        Card.card(v-if='item.type=="card"' :card='item.id') {{$core.sheet.get('card', item.id, 'name')}}
+        Badge.badge(v-if='item.type=="badge"' :badge='item.id')
+    li.price: Price(:price='price' :original='original' :discount='discount')
+    li.button
+        button(v-if='owned' disabled) {{$lang.g.already_owned}}
+        button(v-if='!owned&&!enough' disabled) {{$lang.g.asset_not_enough}}
+        button(v-if='!owned&&enough' @click='$emit("buy")') {{$lang.g.buy}}
+    li.grade: Grade(:grade='grade')
 </template>
 
 <style lang="scss" scoped>

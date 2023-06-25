@@ -40,50 +40,29 @@ onActivated(async ()=>{
 });
 </script>
 
-<template>
-    <div class="accessory">
-        <div class="header">
-            <div class="item">
-                <UserCard :uuid="uuid" :p_card="card" :p_badge="badge" />
-            </div>
-            <div class="buttons">
-                <button class="back" @click="$app.switch('Index')">{{$lang.g.back}}</button>
-                <button @click="accessory">{{$lang.g.apply_accessory}}</button>
-            </div>
-        </div>
-        <div class="list">
-            <div class="card">
-                <p v-if="cards.length==0">{{$lang.g.no_card}}</p>
-                <ul v-if="cards.length!=0">
-                    <li v-for="id in cards" :key="id">
-                        <input type="radio" name="card"
-                            :id="`c${id}`"
-                            :value="id"
-                            v-model="card"
-                        /><label :for="`c${id}`">
-                            <Card :card="id">
-                                {{$core.sheet.get('card', id, 'name')}}
-                            </Card>
-                        </label>
-                    </li>
-                </ul>
-            </div>
-            <div class="badge">
-                <p v-if="badges.length==0">{{$lang.g.no_badge}}</p>
-                <ul v-if="badges.length!=0">
-                    <li v-for="id in badges" :key="id">
-                        <input type="radio" name="badge"
-                            :id="`c${id}`"
-                            :value="id"
-                            v-model="badge"
-                        /><label :for="`c${id}`">
-                            <Badge :badge="id" />
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<template lang="pug">
+.accessory
+    .header
+        .item
+            UserCard(:uuid='uuid' :p_card='card' :p_badge='badge')
+        .buttons
+            button.back(@click='$app.switch("Index")') {{$lang.g.back}}
+            button(@click='accessory') {{$lang.g.apply_accessory}}
+    .list
+        .card
+            p(v-if='cards.length==0') {{$lang.g.no_card}}
+            ul(v-else)
+                li(v-for='id in cards' :key='id')
+                    input(type='radio' name='card' v-model='card' :id='`c${id}`' :value='id')
+                    label(:for='`c${id}`')
+                        card(:card='id') {{$core.sheet.get('card', id, 'name')}}
+        .badge
+            p(v-if='badges.length==0') {{$lang.g.no_badge}}
+            ul(v-else)
+                li(v-for='id in badges' :key='id')
+                    input(type='radio' name='badge' v-model='badge' :id='`c${id}`' :value='id')
+                    label(:for='`c${id}`')
+                        badge(:badge='id')
 </template>
 
 <style lang="scss" scoped>

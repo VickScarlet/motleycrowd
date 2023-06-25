@@ -1,5 +1,4 @@
 <script setup>
-const {title, subtitle, auth_regi, guestmode} = $lang.g;
 const auth = ()=>$app.switch('Authentication');
 const guest = async ()=>{
     $app.loading(true);
@@ -10,13 +9,11 @@ const guest = async ()=>{
 };
 </script>
 
-<template>
-    <ul class="welcome">
-        <li>
-            <h1>{{title}}</h1>
-            <h3 class="subtitle">{{subtitle}}</h3>
-        </li>
-        <li><button type="button" @click="auth">{{auth_regi}}</button></li>
-        <li><button type="button" @click="guest">{{guestmode}}</button></li>
-    </ul>
+<template lang="pug">
+ul.welcome
+    li
+        h1 {{$lang.g.title}}
+        h3.subtitle {{$lang.g.subtitle}}
+    li: button(type='button' @click='auth') {{$lang.g.auth_regi}}
+    li: button(type='button' @click='guest') {{$lang.g.guestmode}}
 </template>

@@ -27,23 +27,14 @@ if(data.value) d(data.value);
 else if(id.value) i(id.value);
 </script>
 
-<template>
-    <div class="settlement">
-        <div class="header">
-            <button @click="ok?ok():$app.switch('Index')">{{$lang.g.ok}}</button>
-        </div>
-        <ul class="content">
-            <li class="card">
-                <Mine v-bind="mine" />
-            </li>
-            <li class="card">
-                <Rank v-bind="rank" @ch="u=>$debug ?update($core.game.format(data, u)) :1" />
-            </li>
-            <li v-for="[idx, data] in questions" :key="idx" class="card">
-                <Question v-bind="data" />
-            </li>
-        </ul>
-    </div>
+<template lang="pug">
+.settlement
+    .header: button(@click='ok?ok():$app.switch("Index")') {{$lang.g.ok}}
+    ul.content
+        li.card: Mine(v-bind='mine')
+        li.card: Rank(v-bind='rank' @ch='u=>$debug ?update($core.game.format(data, u)) :1')
+        li.card(v-for='[idx, data] in questions' :key='idx')
+            Question(v-bind='data')
 </template>
 
 <style lang="scss" scoped>

@@ -5,8 +5,8 @@ const props = defineProps({grade: {type: Number, required: true}});
 const grade = toRef(props, 'grade');
 </script>
 
-<template>
-    <span class="grade" :grade="grade">{{$lang.g[`grade_${grade}`]}}</span>
+<template lang="pug">
+span.grade(:grade='grade') {{$lang.g[`grade_${grade}`]}}
 </template>
 
 <style lang="scss" scoped>

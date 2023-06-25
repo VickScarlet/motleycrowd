@@ -1,23 +1,6 @@
-<template>
-    <div class="loader">
-        <div class="loader-inner">
-            <div class="loader-line-wrap">
-                <div class="loader-line"></div>
-            </div>
-            <div class="loader-line-wrap">
-                <div class="loader-line"></div>
-            </div>
-            <div class="loader-line-wrap">
-                <div class="loader-line"></div>
-            </div>
-            <div class="loader-line-wrap">
-                <div class="loader-line"></div>
-            </div>
-            <div class="loader-line-wrap">
-                <div class="loader-line"></div>
-            </div>
-        </div>
-    </div>
+<template lang="pug">
+.loader: .loader-inner: each i in [1, 2, 3, 4, 5]
+    .loader-line-wrap: .loader-line
 </template>
 
 <style scoped lang="scss">
@@ -54,9 +37,7 @@ div.loader {
         top: 0;
         width: 100px;
         .loader-line-wrap {
-            animation:
-                spin 2000ms cubic-bezier(.175, .885, .32, 1.275) infinite
-            ;
+            animation: spin 2000ms cubic-bezier(.175, .885, .32, 1.275) infinite;
             box-sizing: border-box;
             height: 50px;
             left: 0;
@@ -133,20 +114,12 @@ div.loader {
 }
 
 @keyframes opac {
-    0%, 80% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+    0%, 80% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 @keyframes spin {
-    0%, 15% {
-        transform: rotate(0);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+    0%, 15% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
 }
 </style>

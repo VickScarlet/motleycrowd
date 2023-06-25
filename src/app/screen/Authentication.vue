@@ -31,69 +31,27 @@ const regi = async e => {
 };
 </script>
 
-<template>
-    <a @click="back" class="back">&lt; {{$lang.g.back}}</a>
-    <form v-show="isauth" @submit="auth">
-        <ul>
-            <li><input type="text"
-                :placeholder="$lang.g.username"
-                autoComplete="username"
-                v-model.trim="username"
-            /></li>
-            <li><input type="password"
-                :placeholder="$lang.g.password"
-                autoComplete="current-password"
-                v-model.trim="password"
-            /></li>
-            <li><div class="checkbox">
-                <input id="autologin1"
-                    type="checkbox"
-                    :placeholder="$lang.g.autologin"
-                    v-model.trim="autologin"
-                />
-                <label for="autologin1">{{
-                    autologin?
-                        $lang.g.autologin_open:
-                        $lang.g.autologin_close
-                }}</label>
-            </div></li>
-            <li><button type="submit">{{$lang.g.authenticate}}</button></li>
-            <li><a @click="isauth=false">{{$lang.g.no_account}}</a></li>
-        </ul>
-    </form>
-    <form v-show="!isauth" @submit="regi">
-        <ul>
-            <li><input type="text"
-                :placeholder="$lang.g.username"
-                autoComplete="username"
-                v-model.trim="username"
-            /></li>
-            <li><input type="password"
-                :placeholder="$lang.g.password"
-                autoComplete="new-password"
-                v-model.trim="password"
-            /></li>
-            <li><input type="password"
-                :placeholder="$lang.g.password_check"
-                autoComplete="new-password"
-                v-model.trim="check"
-            /></li>
-            <li><div class="checkbox">
-                <input id="autologin2"
-                    type="checkbox"
-                    :placeholder="$lang.g.autologin"
-                    v-model.trim="autologin"
-                />
-                <label for="autologin2">{{
-                    autologin?
-                        $lang.g.autologin_open:
-                        $lang.g.autologin_close
-                }}</label>
-            </div></li>
-            <li><button type="submit">{{$lang.g.register}}</button><br /></li>
-            <li><a @click="isauth=true">{{$lang.g.has_account}}</a></li>
-        </ul>
-    </form>
+<template lang="pug">
+a.back(@click='back') &lt; {{$lang.g.back}}
+
+form(v-if='isauth' @submit='auth'): ul
+    li: input(type='text' :placeholder='$lang.g.username' autoComplete='username' v-model.trim='username')
+    li: input(type='password' :placeholder='$lang.g.password' autoComplete='current-password' v-model.trim='password')
+    li: .checkbox
+        input#autologin1(type='checkbox' :placeholder='$lang.g.autologin' v-model.trim='autologin')
+        label(for='autologin1') {{$lang.g['autologin_'+(autologin?'open':'close')]}}
+    li: button(type='submit') {{$lang.g.authenticate}}
+    li: a(@click='isauth=false') {{$lang.g.no_account}}
+
+form(v-else @submit='regi'): ul
+    li: input(type='text' :placeholder='$lang.g.username' autoComplete='username' v-model.trim='username')
+    li: input(type='password' :placeholder='$lang.g.password' autoComplete='new-password' v-model.trim='password')
+    li: input(type='password' :placeholder='$lang.g.password_check' autoComplete='new-password' v-model.trim='check')
+    li: .checkbox
+        input#autologin2(type='checkbox' :placeholder='$lang.g.autologin' v-model.trim='autologin')
+        label(for='autologin2') {{$lang.g['autologin_'+(autologin?'open':'close')]}}
+    li: button(type='submit') {{$lang.g.register}}
+    li: a(@click='isauth=true') {{$lang.g.has_account}}
 </template>
 
 <style lang="scss" scoped>
